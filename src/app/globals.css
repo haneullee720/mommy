@@ -1,0 +1,119 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+    "Malgun Gothic", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+
+  --color-brand-50: #eefbf7;
+  --color-brand-100: #d5f5ec;
+  --color-brand-200: #aeead9;
+  --color-brand-300: #78d9c1;
+  --color-brand-400: #43c0a4;
+  --color-brand-500: #1fa88c;
+  --color-brand-600: #128872;
+  --color-brand-700: #106d5d;
+  --color-brand-800: #11574c;
+  --color-brand-900: #114840;
+  --color-brand-950: #042a26;
+
+  --color-ink-50: #f6f7f9;
+  --color-ink-100: #eceef2;
+  --color-ink-200: #d5dae3;
+  --color-ink-300: #b0b9c9;
+  --color-ink-400: #8593aa;
+  --color-ink-500: #667590;
+  --color-ink-600: #515e76;
+  --color-ink-700: #434d60;
+  --color-ink-800: #3a4251;
+  --color-ink-900: #1d2430;
+  --color-ink-950: #0e131c;
+
+  --color-lemon-400: #ffd84d;
+  --color-lemon-500: #ffc61a;
+}
+
+:root {
+  color-scheme: light;
+  --header-h: 64px;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: #ffffff;
+  color: var(--color-ink-900);
+  font-family: var(--font-sans);
+  letter-spacing: -0.01em;
+  word-break: keep-all;
+}
+
+/* 숫자 카운터·금액 정렬용 */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+.container-page {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+@media (max-width: 640px) {
+  .container-page {
+    padding-inline: 16px;
+  }
+}
+
+.card {
+  background: #fff;
+  border: 1px solid var(--color-ink-200);
+  border-radius: 18px;
+}
+
+.shadow-soft {
+  box-shadow: 0 1px 2px rgb(14 19 28 / 0.04), 0 8px 24px -12px rgb(14 19 28 / 0.14);
+}
+
+.shadow-lift {
+  box-shadow: 0 2px 4px rgb(14 19 28 / 0.05), 0 18px 40px -18px rgb(14 19 28 / 0.25);
+}
+
+/* 히어로 배경 */
+.hero-mesh {
+  background:
+    radial-gradient(60rem 30rem at 12% -10%, #d5f5ec 0%, transparent 60%),
+    radial-gradient(48rem 26rem at 92% 6%, #e8f1ff 0%, transparent 62%),
+    linear-gradient(180deg, #f9fbfb 0%, #ffffff 70%);
+}
+
+.stripe-divider {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--color-brand-100) 0 10px,
+    transparent 10px 20px
+  );
+}
+
+input[type="range"] {
+  accent-color: var(--color-brand-600);
+}
+
+::selection {
+  background: var(--color-brand-200);
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+.animate-rise {
+  animation: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
