@@ -1,5 +1,6 @@
 import "server-only";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { DEFAULT_FEE_RATES } from "./fees";
 import type { DB } from "./types";
@@ -10,8 +11,24 @@ import type { DB } from "./types";
  * 운영 단계에서 Postgres/Prisma 어댑터로 교체해도 상위 코드는 그대로 둘 수 있다.
  */
 
-const DATA_DIR = process.env.CM_DATA_DIR || path.join(process.cwd(), "data");
+/**
+ * 쓰기 가능한 데이터 경로를 고른다.
+ * 서버리스(Vercel 등)는 프로젝트 디렉터리가 읽기 전용이므로 임시 디렉터리를 쓴다.
+ * 임시 디렉터리의 데이터는 인스턴스가 재활용되면 사라지므로 데모 용도로만 유효하다.
+ */
+function resolveDataDir(): string {
+  if (process.env.CM_DATA_DIR) return process.env.CM_DATA_DIR;
+  if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
+    return path.join(os.tmpdir(), "cheongsomoa");
+  }
+  return path.join(process.cwd(), "data");
+}
+
+const DATA_DIR = resolveDataDir();
 const DB_FILE = path.join(DATA_DIR, "db.json");
+
+/** 배포 번들에 함께 실리는 읽기 전용 초기 스냅샷 (빌드 시 scripts/seed.mjs 가 생성) */
+const SEED_FILE = path.join(process.cwd(), "data", "db.json");
 
 const EMPTY: DB = {
   users: [],
@@ -38,10 +55,12 @@ function ensureDir() {
 export function readDB(): DB {
   ensureDir();
   if (!fs.existsSync(DB_FILE)) {
-    fs.writeFileSync(DB_FILE, JSON.stringify(EMPTY, null, 2), "utf8");
-    cache = structuredClone(EMPTY);
-    cacheMtime = fs.statSync(DB_FILE).mtimeMs;
-    return cache;
+    // 초기 스냅샷이 있으면 그것으로 시작하고, 없으면 빈 상태로 만든다.
+    const initial =
+      SEED_FILE !== DB_FILE && fs.existsSync(SEED_FILE)
+        ? fs.readFileSync(SEED_FILE, "utf8")
+        : JSON.stringify(EMPTY, null, 2);
+    fs.writeFileSync(DB_FILE, initial, "utf8");
   }
   const mtime = fs.statSync(DB_FILE).mtimeMs;
   if (cache && mtime === cacheMtime) return cache;
