@@ -5,7 +5,7 @@ import { useActionState, useMemo, useState } from "react";
 import { createRequestAction } from "@/actions/request";
 import { Alert, Field, inputClass } from "@/components/ui";
 import { SubmitButton } from "@/components/submit-button";
-import { OPTIONS, PROPERTY_TYPES, REGIONS, REGION_LIST, SERVICES, SERVICE_MAP } from "@/lib/catalog";
+import { DEFAULT_PROPERTY, OPTIONS, PROPERTY_TYPES, REGIONS, REGION_LIST, SERVICES, SERVICE_MAP } from "@/lib/catalog";
 import { estimate } from "@/lib/estimate";
 import { manwon } from "@/lib/format";
 import { idle } from "@/lib/form";
@@ -117,7 +117,10 @@ export function RequestForm({ defaults, user }: Props) {
                     <button
                       key={s.slug}
                       type="button"
-                      onClick={() => setService(s.slug)}
+                      onClick={() => {
+                        setService(s.slug);
+                        setPropertyType(DEFAULT_PROPERTY[s.slug]);
+                      }}
                       className={cn(
                         "flex items-start gap-3 rounded-2xl border p-4 text-left transition",
                         active ? "border-brand-500 bg-brand-50 ring-2 ring-brand-100" : "border-ink-200 hover:border-ink-300",

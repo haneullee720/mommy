@@ -22,9 +22,10 @@ export default async function PartnerQuotesPage({ searchParams }: { searchParams
   const ctx = await currentPartner();
   if (!ctx) redirect("/partner-signup");
 
-  const quotes = listQuotesByPartner(ctx.partner.id);
-  const accepted = quotes.filter((q) => q.status === "accepted").length;
-  const rate = quotes.length ? Math.round((accepted / quotes.length) * 100) : 0;
+  const allQuotes = listQuotesByPartner(ctx.partner.id);
+  const quotes = allQuotes.slice(0, 30);
+  const accepted = allQuotes.filter((q) => q.status === "accepted").length;
+  const rate = allQuotes.length ? Math.round((accepted / allQuotes.length) * 100) : 0;
 
   return (
     <div className="space-y-6">
@@ -32,7 +33,7 @@ export default async function PartnerQuotesPage({ searchParams }: { searchParams
         <div>
           <h1 className="text-[24px] font-extrabold text-ink-900">보낸 견적</h1>
           <p className="tnum mt-1 text-sm text-ink-500">
-            총 {quotes.length}건 · 낙찰 {accepted}건 · 낙찰률 {rate}%
+            총 {allQuotes.length}건 · 낙찰 {accepted}건 · 낙찰률 {rate}%
           </p>
         </div>
         <LinkButton href="/partner/requests" variant="secondary">새 요청 보기</LinkButton>
@@ -40,7 +41,7 @@ export default async function PartnerQuotesPage({ searchParams }: { searchParams
 
       {sp.sent && <Alert tone="success">견적을 보냈습니다. 고객이 선택하면 알림을 보내드릴게요.</Alert>}
 
-      {quotes.length === 0 ? (
+      {allQuotes.length === 0 ? (
         <EmptyState icon="📤" title="아직 보낸 견적이 없습니다" desc="새 요청에서 조건을 확인하고 견적을 보내보세요." action={<LinkButton href="/partner/requests" className="mt-2">새 요청 보기</LinkButton>} />
       ) : (
         <ul className="space-y-3">
@@ -79,6 +80,11 @@ export default async function PartnerQuotesPage({ searchParams }: { searchParams
               </li>
             );
           })}
+          {allQuotes.length > quotes.length && (
+            <li className="tnum py-4 text-center text-[13px] text-ink-400">
+              최근 {quotes.length}건을 보여드리고 있습니다 (전체 {allQuotes.length}건)
+            </li>
+          )}
         </ul>
       )}
     </div>

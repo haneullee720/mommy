@@ -4,9 +4,9 @@
   "private": true,
   "description": "청소모아 - 청소 도급 중개 플랫폼",
   "scripts": {
-    "dev": "next dev",
+    "dev": "node scripts/ensure-seed.mjs && next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "node scripts/ensure-seed.mjs && next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "seed": "node scripts/seed.mjs"

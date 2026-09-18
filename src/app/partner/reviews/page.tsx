@@ -13,9 +13,10 @@ export default async function PartnerReviewsPage() {
   const ctx = await currentPartner();
   if (!ctx) redirect("/partner-signup");
 
-  const reviews = listReviewsByPartner(ctx.partner.id);
+  const allReviews = listReviewsByPartner(ctx.partner.id);
+  const reviews = allReviews.slice(0, 25);
   const avg = (key: "kindness" | "detail" | "punctuality") =>
-    reviews.length ? (reviews.reduce((s, r) => s + r.scores[key], 0) / reviews.length).toFixed(1) : "-";
+    allReviews.length ? (allReviews.reduce((s, r) => s + r.scores[key], 0) / allReviews.length).toFixed(1) : "-";
 
   return (
     <div className="space-y-6">
@@ -44,7 +45,7 @@ export default async function PartnerReviewsPage() {
         ))}
       </div>
 
-      {reviews.length === 0 ? (
+      {allReviews.length === 0 ? (
         <EmptyState icon="⭐" title="아직 후기가 없습니다" desc="첫 작업을 완료하면 고객이 후기를 남길 수 있습니다." />
       ) : (
         <ul className="space-y-3">

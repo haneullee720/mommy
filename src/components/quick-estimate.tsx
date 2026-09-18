@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { OPTIONS, PROPERTY_TYPES, SERVICES, SERVICE_MAP } from "@/lib/catalog";
+import { DEFAULT_PROPERTY, OPTIONS, PROPERTY_TYPES, SERVICE_MAP } from "@/lib/catalog";
 import { estimate } from "@/lib/estimate";
 import { manwon } from "@/lib/format";
 import { cn } from "@/lib/cn";
@@ -49,7 +49,10 @@ export function QuickEstimate() {
                 <button
                   key={slug}
                   type="button"
-                  onClick={() => setService(slug)}
+                  onClick={() => {
+                    setService(slug);
+                    setPropertyType(DEFAULT_PROPERTY[slug]);
+                  }}
                   className={cn(
                     "rounded-xl border px-2 py-3 text-center transition",
                     active

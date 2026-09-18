@@ -18,7 +18,8 @@ export default async function SettlementPage() {
 
   const db = readDB();
   const rates = db.settings.feeRates;
-  const orders = listOrdersByPartner(partner.id).filter((o) => o.paidAt);
+  const allOrders = listOrdersByPartner(partner.id).filter((o) => o.paidAt);
+  const orders = allOrders;
 
   const pending = orders.filter((o) => ["escrow", "in_progress", "completed"].includes(o.status));
   const settled = orders.filter((o) => o.status === "settled");
@@ -106,7 +107,7 @@ export default async function SettlementPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-ink-100">
-                {orders.map((o) => {
+                {orders.slice(0, 30).map((o) => {
                   const req = getRequest(o.requestId);
                   return (
                     <tr key={o.id} className="text-[13px]">

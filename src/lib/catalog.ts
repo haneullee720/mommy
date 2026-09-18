@@ -170,6 +170,18 @@ export const OPTIONS: OptionDef[] = [
 
 export const OPTION_MAP: Record<string, OptionDef> = Object.fromEntries(OPTIONS.map((o) => [o.key, o]));
 
+/** 서비스 선택 시 자동으로 맞춰지는 기본 건물 유형 */
+export const DEFAULT_PROPERTY: Record<ServiceSlug, PropertyType> = {
+  "move-in": "apartment",
+  "move-out": "apartment",
+  stairs: "villa",
+  office: "office",
+  commercial: "store",
+  construction: "store",
+  "home-regular": "apartment",
+  special: "apartment",
+};
+
 export const REGIONS: Record<string, string[]> = {
   서울: ["강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구", "도봉구", "동대문구", "동작구", "마포구", "서대문구", "서초구", "성동구", "성북구", "송파구", "양천구", "영등포구", "용산구", "은평구", "종로구", "중구", "중랑구"],
   경기: ["수원시", "성남시", "고양시", "용인시", "부천시", "안산시", "안양시", "남양주시", "화성시", "평택시", "의정부시", "시흥시", "파주시", "김포시", "광명시", "광주시", "군포시", "하남시"],

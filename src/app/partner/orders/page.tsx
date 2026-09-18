@@ -14,7 +14,8 @@ export default async function PartnerOrdersPage() {
   const ctx = await currentPartner();
   if (!ctx) redirect("/partner-signup");
 
-  const orders = listOrdersByPartner(ctx.partner.id).filter((o) => o.status !== "pending_payment");
+  const allOrders = listOrdersByPartner(ctx.partner.id).filter((o) => o.status !== "pending_payment");
+  const orders = allOrders.slice(0, 20);
 
   return (
     <div className="space-y-6">
@@ -23,7 +24,7 @@ export default async function PartnerOrdersPage() {
         <p className="mt-1 text-sm text-ink-500">결제가 완료된 건만 표시됩니다. 노쇼 걱정 없이 일정만 챙기세요.</p>
       </div>
 
-      {orders.length === 0 ? (
+      {allOrders.length === 0 ? (
         <EmptyState
           icon="🧹"
           title="아직 수주한 작업이 없습니다"
@@ -94,6 +95,11 @@ export default async function PartnerOrdersPage() {
               </li>
             );
           })}
+          {allOrders.length > orders.length && (
+            <li className="tnum py-4 text-center text-[13px] text-ink-400">
+              최근 {orders.length}건을 보여드리고 있습니다 (전체 {allOrders.length}건)
+            </li>
+          )}
         </ul>
       )}
     </div>
