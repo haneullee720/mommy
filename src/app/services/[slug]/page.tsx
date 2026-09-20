@@ -8,6 +8,7 @@ import { estimate } from "@/lib/estimate";
 import { Badge, LinkButton, Stars, TierBadge } from "@/components/ui";
 import { Faq } from "@/components/faq";
 import type { ServiceSlug } from "@/lib/types";
+import { Icon } from "@/components/icons";
 
 export const dynamic = "force-dynamic";
 
@@ -38,7 +39,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
 
   return (
     <>
-      <section className="hero-mesh border-b border-ink-100 py-14">
+      <section className="border-b border-ink-100 py-14">
         <div className="container-page">
           <nav className="mb-5 flex items-center gap-2 text-[13px] font-semibold text-ink-400">
             <Link href="/services" className="hover:text-ink-700">청소 서비스</Link>
@@ -48,8 +49,8 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
 
           <div className="grid gap-10 lg:grid-cols-[1fr_360px]">
             <div>
-              <span className="text-4xl">{def.emoji}</span>
-              <h1 className="mt-3 text-[32px] font-extrabold leading-tight text-ink-900 sm:text-[40px]">{def.name}</h1>
+              <Icon name={def.icon} className="h-8 w-8 text-ink-400" />
+              <h1 className="mt-3 text-[32px] font-bold leading-tight text-ink-900 sm:text-[40px]">{def.name}</h1>
               <p className="mt-4 max-w-xl text-[15.5px] leading-relaxed text-ink-500">{def.description}</p>
 
               <div className="mt-6 flex flex-wrap gap-2">
@@ -66,7 +67,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
 
             <div className="card p-6">
               <p className="text-[13px] font-bold text-ink-400">기준 단가</p>
-              <p className="tnum mt-1 text-[26px] font-extrabold text-ink-900">
+              <p className="tnum mt-1 text-[26px] font-bold text-ink-900">
                 {def.unit === "month" ? "월 " : "평당 "}
                 {manwon(def.unitPriceMin)}~{manwon(def.unitPriceMax)}
               </p>
@@ -76,7 +77,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
               <ul className="mt-2 space-y-2">
                 {def.includes.map((i) => (
                   <li key={i} className="flex items-start gap-2 text-[13.5px] text-ink-600">
-                    <span className="mt-0.5 text-brand-600">✓</span>
+                    <Icon name="check" className="mt-1 h-3 w-3 shrink-0 text-brand-600" />
                     {i}
                   </li>
                 ))}
@@ -87,7 +88,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
       </section>
 
       <section className="container-page py-16">
-        <h2 className="text-[22px] font-extrabold text-ink-900">평수별 예상 가격표</h2>
+        <h2 className="text-[22px] font-bold text-ink-900">평수별 예상 가격표</h2>
         <p className="mt-2 text-[14.5px] text-ink-500">
           아파트 기준 예상 범위입니다. 실제 금액은 업체 견적으로 확정되며, 보통 이 범위 안에서 결정됩니다.
         </p>
@@ -122,13 +123,13 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
         </div>
 
         <div className="mt-8">
-          <h3 className="text-[16px] font-extrabold text-ink-900">자주 추가되는 옵션</h3>
+          <h3 className="text-[16px] font-bold text-ink-900">자주 추가되는 옵션</h3>
           <ul className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
             {OPTIONS.slice(0, 8).map((o) => (
-              <li key={o.key} className="rounded-xl border border-ink-200 bg-white p-4">
+              <li key={o.key} className="rounded border border-ink-200 bg-white p-4">
                 <p className="text-[13.5px] font-bold text-ink-900">{o.label}</p>
                 <p className="mt-0.5 text-[12px] text-ink-400">{o.note}</p>
-                <p className="tnum mt-2 text-[13px] font-extrabold text-brand-700">
+                <p className="tnum mt-2 text-[13px] font-semibold text-brand-700">
                   {o.addFlat ? `+${manwon(o.addFlat)}` : `+${Math.round((o.addRate ?? 0) * 100)}%`}
                 </p>
               </li>
@@ -140,14 +141,14 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
       {partners.length > 0 && (
         <section className="border-y border-ink-100 bg-ink-50/60 py-16">
           <div className="container-page">
-            <h2 className="text-[22px] font-extrabold text-ink-900">{def.name} 가능한 업체</h2>
+            <h2 className="text-[22px] font-bold text-ink-900">{def.name} 가능한 업체</h2>
             <p className="mt-2 text-[14.5px] text-ink-500">요청서를 보내면 이 업체들이 견적을 보냅니다.</p>
             <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {partners.map((p) => (
                 <li key={p.id}>
                   <Link href={`/partners/${p.id}`} className="card block p-5 transition hover:border-brand-300 hover:shadow-soft">
                     <div className="flex items-center justify-between gap-2">
-                      <p className="text-[15px] font-extrabold text-ink-900">{p.companyName}</p>
+                      <p className="text-[15px] font-bold text-ink-900">{p.companyName}</p>
                       <TierBadge tier={p.tier} />
                     </div>
                     <div className="mt-1.5 flex items-center gap-1.5">
@@ -165,7 +166,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
       )}
 
       <section className="container-page py-16">
-        <h2 className="text-[22px] font-extrabold text-ink-900">{def.name} 자주 묻는 질문</h2>
+        <h2 className="text-[22px] font-bold text-ink-900">{def.name} 자주 묻는 질문</h2>
         <div className="mt-6 max-w-3xl">
           <Faq
             items={[
@@ -197,9 +198,10 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
             <li key={s.slug}>
               <Link
                 href={`/services/${s.slug}`}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-ink-200 bg-white px-4 py-2.5 text-[13.5px] font-semibold text-ink-700 transition hover:border-brand-300 hover:text-brand-700"
+                className="inline-flex items-center gap-1.5 rounded border border-ink-200 bg-white px-4 py-2.5 text-[13.5px] font-semibold text-ink-700 transition hover:border-brand-300 hover:text-brand-700"
               >
-                {s.emoji} {s.name}
+                <Icon name={s.icon} className="h-3.5 w-3.5" />
+                      {s.name}
               </Link>
             </li>
           ))}

@@ -1,10 +1,11 @@
+import type { IconName } from "@/components/icons";
 import type { PropertyType, ServiceSlug } from "./types";
 
 export interface ServiceDef {
   slug: ServiceSlug;
   name: string;
   short: string;
-  emoji: string;
+  icon: IconName;
   description: string;
   unit: "pyeong" | "month" | "floor";
   /** 평당(또는 단위당) 기준 단가 범위 (원) */
@@ -22,7 +23,7 @@ export const SERVICES: ServiceDef[] = [
     slug: "move-in",
     name: "입주청소",
     short: "이사 전 새집처럼",
-    emoji: "🏠",
+    icon: "home",
     description:
       "이사 들어가기 전, 빈집 상태에서 진행하는 전체 청소입니다. 새시·베란다·주방 후드·화장실 물때까지 전 구간을 손닦음으로 마감합니다.",
     unit: "pyeong",
@@ -37,7 +38,7 @@ export const SERVICES: ServiceDef[] = [
     slug: "move-out",
     name: "이사청소",
     short: "퇴거 후 원상복구",
-    emoji: "📦",
+    icon: "box",
     description: "퇴거 시 보증금 분쟁을 줄이기 위한 원상복구 중심 청소입니다. 잔짐 정리와 폐기물 배출까지 함께 처리할 수 있습니다.",
     unit: "pyeong",
     unitPriceMin: 9000,
@@ -50,7 +51,7 @@ export const SERVICES: ServiceDef[] = [
     slug: "stairs",
     name: "계단청소",
     short: "공동주택 정기 관리",
-    emoji: "🪜",
+    icon: "stairs",
     description: "빌라·오피스텔·상가 계단과 복도를 주 1~4회 정기 관리합니다. 관리비 절감형 월 단위 도급 계약이 가능합니다.",
     unit: "month",
     unitPriceMin: 60000,
@@ -64,7 +65,7 @@ export const SERVICES: ServiceDef[] = [
     slug: "office",
     name: "사무실청소",
     short: "상주·정기·야간",
-    emoji: "🏢",
+    icon: "building",
     description: "업무 공간의 일상 청소부터 대청소까지. 상주 미화, 주 2~3회 정기, 야간 청소 등 운영 형태에 맞춰 도급 계약합니다.",
     unit: "pyeong",
     unitPriceMin: 4000,
@@ -78,7 +79,7 @@ export const SERVICES: ServiceDef[] = [
     slug: "commercial",
     name: "상가·매장청소",
     short: "영업 전후 시간대",
-    emoji: "🏪",
+    icon: "store",
     description: "카페·식당·매장 등 영업장 청소. 주방 기름때, 바닥 왁스, 유리 외벽까지 업종에 맞춰 견적합니다.",
     unit: "pyeong",
     unitPriceMin: 7000,
@@ -91,7 +92,7 @@ export const SERVICES: ServiceDef[] = [
     slug: "construction",
     name: "준공청소",
     short: "신축·인테리어 후",
-    emoji: "🧱",
+    icon: "wall",
     description: "인테리어·신축 공사 후 남은 먼지, 실리콘, 보양재, 스티커를 제거하는 1차·2차 준공청소입니다.",
     unit: "pyeong",
     unitPriceMin: 13000,
@@ -104,7 +105,7 @@ export const SERVICES: ServiceDef[] = [
     slug: "home-regular",
     name: "가정 정기청소",
     short: "주 1회 생활 관리",
-    emoji: "🧺",
+    icon: "repeat",
     description: "주 1회 또는 격주로 방문하는 생활 청소. 같은 담당자가 지속 방문하도록 배정합니다.",
     unit: "month",
     unitPriceMin: 200000,
@@ -117,7 +118,7 @@ export const SERVICES: ServiceDef[] = [
     slug: "special",
     name: "특수청소",
     short: "곰팡이·유품·폐기물",
-    emoji: "🧪",
+    icon: "flask",
     description: "곰팡이 제거, 흡연 냄새 탈취, 유품 정리, 대형 폐기물 처리 등 전문 장비가 필요한 청소입니다.",
     unit: "pyeong",
     unitPriceMin: 18000,

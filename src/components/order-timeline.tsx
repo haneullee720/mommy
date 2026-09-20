@@ -19,7 +19,7 @@ export function OrderTimeline({ status }: { status: OrderStatus }) {
         return (
           <li key={s.key} className="relative">
             <div className={cn("h-1.5 rounded-full transition", done ? "bg-brand-600" : "bg-ink-200")} />
-            <p className={cn("mt-2.5 text-[13px] font-extrabold", isCurrent ? "text-brand-700" : done ? "text-ink-800" : "text-ink-300")}>
+            <p className={cn("mt-2.5 text-[13px] font-semibold", isCurrent ? "text-brand-700" : done ? "text-ink-800" : "text-ink-300")}>
               {done && !isCurrent ? "✓ " : ""}
               {s.label}
             </p>

@@ -4,6 +4,7 @@ import { TIER_LABEL, TIER_RULE } from "@/lib/fees";
 import { won } from "@/lib/format";
 import { Badge, LinkButton, SectionHeading } from "@/components/ui";
 import { Faq } from "@/components/faq";
+import { Icon } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "요금·수수료 정책",
@@ -19,7 +20,7 @@ export default async function PricingPage() {
 
   return (
     <>
-      <section className="hero-mesh border-b border-ink-100 py-16">
+      <section className="border-b border-ink-100 py-16">
         <div className="container-page">
           <SectionHeading
             align="left"
@@ -34,14 +35,14 @@ export default async function PricingPage() {
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="card p-7">
             <Badge tone="brand">고객</Badge>
-            <p className="mt-4 text-[22px] font-extrabold text-ink-900">이용료 0원</p>
+            <p className="mt-4 text-[22px] font-bold text-ink-900">이용료 0원</p>
             <p className="mt-2 text-[14.5px] leading-relaxed text-ink-500">
               요청서 작성, 견적 비교, 업체 선택, 안전결제까지 모두 무료입니다. 결제하는 금액은 업체가 제시한 시공 금액뿐입니다.
             </p>
             <ul className="mt-5 space-y-2.5">
               {["요청서 작성 무료", "견적 비교 무료", "취소 수수료 없음 (작업 3일 전까지)", "안전결제·분쟁조정 무료"].map((t) => (
                 <li key={t} className="flex items-start gap-2.5 text-[14px] font-medium text-ink-700">
-                  <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-brand-100 text-[11px] font-black text-brand-700">✓</span>
+                  <Icon name="check" className="mt-1.5 h-3 w-3 shrink-0 text-brand-600" />
                   {t}
                 </li>
               ))}
@@ -51,14 +52,14 @@ export default async function PricingPage() {
 
           <div className="card p-7">
             <Badge tone="dark">업체</Badge>
-            <p className="mt-4 text-[22px] font-extrabold text-ink-900">성사된 건만 {Math.round(rates.premium * 100)}~{Math.round(rates.basic * 100)}%</p>
+            <p className="mt-4 text-[22px] font-bold text-ink-900">성사된 건만 {Math.round(rates.premium * 100)}~{Math.round(rates.basic * 100)}%</p>
             <p className="mt-2 text-[14.5px] leading-relaxed text-ink-500">
               입점비·월 이용료·견적 제출 비용은 모두 0원입니다. 실제로 계약이 성사되고 결제가 완료된 건에만 수수료가 발생합니다.
             </p>
             <ul className="mt-5 space-y-2.5">
               {["입점비 0원 / 월 이용료 0원", "견적 제출 무제한 무료", "카드·이체 수수료는 플랫폼 부담", "미낙찰 건은 비용 없음"].map((t) => (
                 <li key={t} className="flex items-start gap-2.5 text-[14px] font-medium text-ink-700">
-                  <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-ink-900 text-[11px] font-black text-white">✓</span>
+                  <Icon name="check" className="mt-1.5 h-3 w-3 shrink-0 text-ink-900" />
                   {t}
                 </li>
               ))}
@@ -70,7 +71,7 @@ export default async function PricingPage() {
 
       <section className="border-y border-ink-100 bg-ink-50/60 py-16">
         <div className="container-page">
-          <h2 className="text-[24px] font-extrabold text-ink-900">등급별 수수료</h2>
+          <h2 className="text-[24px] font-bold text-ink-900">등급별 수수료</h2>
           <p className="mt-2 text-[14.5px] text-ink-500">실적과 평점이 쌓일수록 수수료가 내려갑니다. 등급은 매 작업 완료 시 자동으로 재계산됩니다.</p>
 
           <div className="mt-8 grid gap-4 md:grid-cols-3">
@@ -79,10 +80,10 @@ export default async function PricingPage() {
               return (
                 <div key={t} className={t === "premium" ? "card border-2 border-brand-500 p-6" : "card p-6"}>
                   <div className="flex items-center justify-between">
-                    <p className="text-[16px] font-extrabold text-ink-900">{TIER_LABEL[t]}</p>
+                    <p className="text-[16px] font-bold text-ink-900">{TIER_LABEL[t]}</p>
                     {t === "premium" && <Badge tone="dark">최대 혜택</Badge>}
                   </div>
-                  <p className="tnum mt-3 text-[34px] font-extrabold leading-none text-brand-700">
+                  <p className="tnum mt-3 text-[34px] font-bold leading-none text-brand-700">
                     {Math.round(rates[t] * 100)}
                     <span className="text-[18px]">%</span>
                   </p>
@@ -98,7 +99,7 @@ export default async function PricingPage() {
                     </div>
                     <div className="flex items-baseline justify-between border-t border-ink-100 pt-2">
                       <dt className="text-[14px] font-bold text-ink-900">실 정산액</dt>
-                      <dd className="text-[18px] font-extrabold text-ink-900">{won(EXAMPLE - fee)}</dd>
+                      <dd className="text-[18px] font-bold text-ink-900">{won(EXAMPLE - fee)}</dd>
                     </div>
                   </dl>
                 </div>
@@ -110,7 +111,7 @@ export default async function PricingPage() {
       </section>
 
       <section className="container-page py-16">
-        <h2 className="text-[24px] font-extrabold text-ink-900">수수료 관련 자주 묻는 질문</h2>
+        <h2 className="text-[24px] font-bold text-ink-900">수수료 관련 자주 묻는 질문</h2>
         <div className="mt-6 max-w-3xl">
           <Faq
             items={[

@@ -18,7 +18,7 @@ export default async function AdminPartnersPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-[24px] font-extrabold text-ink-900">업체 심사</h1>
+        <h1 className="text-[24px] font-bold text-ink-900">업체 심사</h1>
         <p className="mt-1 text-sm text-ink-500">
           사업자등록증과 배상책임보험을 확인한 뒤 승인하세요. 승인된 업체만 견적을 제출할 수 있습니다.
         </p>
@@ -30,7 +30,7 @@ export default async function AdminPartnersPage() {
           return (
             <li key={p.id} className="card p-5">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-[16px] font-extrabold text-ink-900">{p.companyName}</span>
+                <span className="text-[16px] font-bold text-ink-900">{p.companyName}</span>
                 <Badge tone={STATUS_TONE[p.status]}>{STATUS_LABEL[p.status]}</Badge>
                 <TierBadge tier={p.tier} />
                 {p.hasInsurance ? <Badge tone="blue">보험 가입</Badge> : <Badge tone="red">보험 미가입</Badge>}
@@ -53,7 +53,7 @@ export default async function AdminPartnersPage() {
                 ))}
               </dl>
 
-              {p.intro && <p className="mt-3 rounded-xl bg-ink-50 p-3.5 text-[13px] leading-relaxed text-ink-600">{p.intro}</p>}
+              {p.intro && <p className="mt-3 rounded bg-ink-50 p-3.5 text-[13px] leading-relaxed text-ink-600">{p.intro}</p>}
 
               <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-ink-100 pt-4">
                 <div className="flex items-center gap-2">

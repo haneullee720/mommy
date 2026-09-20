@@ -6,6 +6,7 @@ import { countQuotesByRequest, listOpenRequestsForPartner, listQuotesByPartner }
 import { OPTION_MAP, SERVICE_MAP } from "@/lib/catalog";
 import { manwon, timeAgo, untilDeadline } from "@/lib/format";
 import { Badge, EmptyState } from "@/components/ui";
+import { Icon } from "@/components/icons";
 
 export const metadata: Metadata = { title: "새 요청" };
 export const dynamic = "force-dynamic";
@@ -22,7 +23,7 @@ export default async function PartnerRequestsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-[24px] font-extrabold text-ink-900">새 요청</h1>
+        <h1 className="text-[24px] font-bold text-ink-900">새 요청</h1>
         <p className="mt-1 text-sm text-ink-500">
           담당 지역({ctx.partner.regions.join(", ")})과 취급 종목에 맞는 요청만 보여드립니다.
         </p>
@@ -30,7 +31,7 @@ export default async function PartnerRequestsPage() {
 
       {open.length === 0 ? (
         <EmptyState
-          icon="🔕"
+          icon={<Icon name="bellOff" className="h-7 w-7" />}
           title="지금은 매칭되는 요청이 없습니다"
           desc="새 요청이 들어오면 알림으로 알려드립니다. 담당 지역을 넓히면 더 많은 기회를 받을 수 있어요."
         />
@@ -44,14 +45,15 @@ export default async function PartnerRequestsPage() {
                 <Link href={`/partner/requests/${r.id}`} className="card block p-5 transition hover:border-brand-300 hover:shadow-soft">
                   <div className="flex flex-wrap items-center gap-2">
                     <Badge tone="brand">
-                      {SERVICE_MAP[r.service].emoji} {SERVICE_MAP[r.service].name}
+                      <Icon name={SERVICE_MAP[r.service].icon} className="h-3.5 w-3.5" />
+                      {SERVICE_MAP[r.service].name}
                     </Badge>
                     {r.dateFlexible && <Badge tone="green">일정 조율</Badge>}
                     {mine && mine.status === "submitted" && <Badge tone="blue">견적 제출함</Badge>}
                     <span className="ml-auto text-[12px] font-semibold text-ink-400">{untilDeadline(r.expiresAt)}</span>
                   </div>
 
-                  <p className="tnum mt-2.5 text-[15.5px] font-extrabold text-ink-900">
+                  <p className="tnum mt-2.5 text-[15.5px] font-bold text-ink-900">
                     {r.region} {r.district} · {r.areaPyeong}평
                   </p>
                   <p className="tnum mt-1 text-[13px] text-ink-500">

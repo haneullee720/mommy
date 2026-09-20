@@ -8,6 +8,7 @@ import { SubmitButton } from "@/components/submit-button";
 import { REGION_LIST, SERVICES } from "@/lib/catalog";
 import { idle } from "@/lib/form";
 import { cn } from "@/lib/cn";
+import { Icon } from "@/components/icons";
 
 const BANKS = ["국민", "신한", "우리", "하나", "농협", "기업", "카카오뱅크", "토스뱅크", "새마을금고", "우체국"];
 
@@ -30,7 +31,7 @@ export function PartnerSignupForm() {
       {state.error && <Alert tone="error">{state.error}</Alert>}
 
       <section className="card p-6">
-        <h2 className="text-[17px] font-extrabold text-ink-900">사업자 정보</h2>
+        <h2 className="text-[17px] font-bold text-ink-900">사업자 정보</h2>
         <p className="mt-1 text-[13px] text-ink-500">입력하신 정보로 사업자 진위 확인을 진행합니다.</p>
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
           <Field label="업체명" required>
@@ -49,7 +50,7 @@ export function PartnerSignupForm() {
             <input name="crewSize" type="number" min={1} defaultValue={3} className={cn(inputClass, "tnum")} />
           </Field>
           <Field label="배상책임보험">
-            <label className="flex h-[46px] items-center gap-2.5 rounded-xl border border-ink-200 px-3.5">
+            <label className="flex h-[46px] items-center gap-2.5 rounded border border-ink-200 px-3.5">
               <input type="checkbox" name="hasInsurance" className="h-4 w-4 accent-brand-600" defaultChecked />
               <span className="text-sm font-semibold text-ink-700">가입되어 있습니다</span>
             </label>
@@ -63,7 +64,7 @@ export function PartnerSignupForm() {
       </section>
 
       <section className="card p-6">
-        <h2 className="text-[17px] font-extrabold text-ink-900">서비스 범위</h2>
+        <h2 className="text-[17px] font-bold text-ink-900">서비스 범위</h2>
         <p className="mt-1 text-[13px] text-ink-500">선택한 지역·종목의 요청만 알림으로 받습니다. 나중에 변경할 수 있습니다.</p>
 
         <div className="mt-5">
@@ -79,11 +80,12 @@ export function PartnerSignupForm() {
                   type="button"
                   onClick={() => toggle(services, setServices, s.slug)}
                   className={cn(
-                    "rounded-xl border px-3.5 py-2.5 text-sm font-semibold transition",
+                    "rounded border px-3.5 py-2.5 text-sm font-semibold transition",
                     active ? "border-brand-500 bg-brand-600 text-white" : "border-ink-200 text-ink-600 hover:border-ink-300",
                   )}
                 >
-                  {s.emoji} {s.name}
+                  <Icon name={s.icon} className="h-3.5 w-3.5" />
+                      {s.name}
                 </button>
               );
             })}
@@ -103,7 +105,7 @@ export function PartnerSignupForm() {
                   type="button"
                   onClick={() => toggle(regions, setRegions, r)}
                   className={cn(
-                    "rounded-lg border px-3 py-2 text-[13px] font-semibold transition",
+                    "rounded border px-3 py-2 text-[13px] font-semibold transition",
                     active ? "border-brand-500 bg-brand-50 text-brand-700" : "border-ink-200 text-ink-500 hover:border-ink-300",
                   )}
                 >
@@ -116,7 +118,7 @@ export function PartnerSignupForm() {
       </section>
 
       <section className="card p-6">
-        <h2 className="text-[17px] font-extrabold text-ink-900">정산 계좌</h2>
+        <h2 className="text-[17px] font-bold text-ink-900">정산 계좌</h2>
         <p className="mt-1 text-[13px] text-ink-500">작업 확인 후 영업일 3일 내 이 계좌로 입금됩니다.</p>
         <div className="mt-5 grid gap-4 sm:grid-cols-3">
           <Field label="은행">
@@ -136,7 +138,7 @@ export function PartnerSignupForm() {
       </section>
 
       <section className="card p-6">
-        <h2 className="text-[17px] font-extrabold text-ink-900">로그인 계정</h2>
+        <h2 className="text-[17px] font-bold text-ink-900">로그인 계정</h2>
         <div className="mt-5 grid gap-4 sm:grid-cols-3">
           <Field label="이메일" required>
             <input name="email" type="email" className={inputClass} placeholder="company@example.com" />

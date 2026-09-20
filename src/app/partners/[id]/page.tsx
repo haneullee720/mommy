@@ -6,6 +6,7 @@ import { SERVICE_MAP } from "@/lib/catalog";
 import { TIER_LABEL } from "@/lib/fees";
 import { dateFull } from "@/lib/format";
 import { Badge, EmptyState, LinkButton, Stars, TierBadge } from "@/components/ui";
+import { Icon } from "@/components/icons";
 
 export const dynamic = "force-dynamic";
 
@@ -30,7 +31,7 @@ export default async function PartnerDetailPage({ params }: { params: Promise<{ 
 
   return (
     <>
-      <section className="hero-mesh border-b border-ink-100 py-12">
+      <section className="border-b border-ink-100 py-12">
         <div className="container-page">
           <nav className="mb-5 flex items-center gap-2 text-[13px] font-semibold text-ink-400">
             <Link href="/partners" className="hover:text-ink-700">등록 업체</Link>
@@ -39,12 +40,12 @@ export default async function PartnerDetailPage({ params }: { params: Promise<{ 
           </nav>
 
           <div className="flex flex-wrap items-start gap-5">
-            <div className="grid h-16 w-16 place-items-center rounded-2xl bg-brand-600 text-2xl font-extrabold text-white">
+            <div className="grid h-16 w-16 place-items-center rounded bg-brand-600 text-2xl font-bold text-white">
               {partner.companyName.slice(0, 1)}
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <h1 className="text-[26px] font-extrabold text-ink-900">{partner.companyName}</h1>
+                <h1 className="text-[26px] font-bold text-ink-900">{partner.companyName}</h1>
                 <TierBadge tier={partner.tier} />
                 {partner.hasInsurance && <Badge tone="blue">배상책임보험</Badge>}
                 {partner.status === "approved" && <Badge tone="green">사업자 확인 완료</Badge>}
@@ -52,7 +53,7 @@ export default async function PartnerDetailPage({ params }: { params: Promise<{ 
               <div className="mt-2 flex flex-wrap items-center gap-3">
                 <span className="flex items-center gap-1.5">
                   <Stars rating={partner.rating} size={16} />
-                  <span className="tnum text-[15px] font-extrabold text-ink-900">{partner.rating.toFixed(1)}</span>
+                  <span className="tnum text-[15px] font-bold text-ink-900">{partner.rating.toFixed(1)}</span>
                 </span>
                 <span className="tnum text-[13px] text-ink-500">후기 {partner.reviewCount}개 · 완료 {partner.completedJobs}건</span>
               </div>
@@ -66,14 +67,14 @@ export default async function PartnerDetailPage({ params }: { params: Promise<{ 
       <div className="container-page grid gap-8 py-12 lg:grid-cols-[1fr_320px]">
         <div className="space-y-8">
           <section>
-            <h2 className="text-[18px] font-extrabold text-ink-900">가능한 청소 종류</h2>
+            <h2 className="text-[18px] font-bold text-ink-900">가능한 청소 종류</h2>
             <ul className="mt-4 grid gap-2 sm:grid-cols-2">
               {partner.services.map((s) => {
                 const def = SERVICE_MAP[s];
                 return (
                   <li key={s}>
-                    <Link href={`/services/${s}`} className="flex items-center gap-3 rounded-xl border border-ink-200 bg-white p-4 transition hover:border-brand-300">
-                      <span className="text-xl">{def.emoji}</span>
+                    <Link href={`/services/${s}`} className="flex items-center gap-3 rounded border border-ink-200 bg-white p-4 transition hover:border-brand-300">
+                      <Icon name={def.icon} className="h-5 w-5 text-ink-400" />
                       <span>
                         <span className="block text-[14px] font-bold text-ink-900">{def.name}</span>
                         <span className="block text-[12px] text-ink-400">{def.short}</span>
@@ -86,10 +87,10 @@ export default async function PartnerDetailPage({ params }: { params: Promise<{ 
           </section>
 
           <section>
-            <h2 className="text-[18px] font-extrabold text-ink-900">고객 후기 {allReviews.length}개</h2>
+            <h2 className="text-[18px] font-bold text-ink-900">고객 후기 {allReviews.length}개</h2>
             {reviews.length === 0 ? (
               <div className="mt-4">
-                <EmptyState icon="⭐" title="아직 후기가 없습니다" desc="작업이 완료된 고객만 후기를 남길 수 있습니다." />
+                <EmptyState icon={<Icon name="star" className="h-7 w-7" />} title="아직 후기가 없습니다" desc="작업이 완료된 고객만 후기를 남길 수 있습니다." />
               </div>
             ) : (
               <>
@@ -99,9 +100,9 @@ export default async function PartnerDetailPage({ params }: { params: Promise<{ 
                     ["꼼꼼함", avg("detail")],
                     ["시간 준수", avg("punctuality")],
                   ].map(([k, v]) => (
-                    <div key={k} className="rounded-xl border border-ink-200 bg-white px-4 py-3">
+                    <div key={k} className="rounded border border-ink-200 bg-white px-4 py-3">
                       <p className="text-[12.5px] text-ink-400">{k}</p>
-                      <p className="tnum mt-0.5 text-[17px] font-extrabold text-ink-900">{v}</p>
+                      <p className="tnum mt-0.5 text-[17px] font-bold text-ink-900">{v}</p>
                     </div>
                   ))}
                 </div>
@@ -118,7 +119,7 @@ export default async function PartnerDetailPage({ params }: { params: Promise<{ 
                         </div>
                         <p className="mt-2.5 whitespace-pre-line text-[14px] leading-relaxed text-ink-700">{r.content}</p>
                         {r.reply && (
-                          <div className="mt-3 rounded-xl border-l-2 border-brand-400 bg-brand-50/60 p-3.5">
+                          <div className="mt-3 rounded border-l-2 border-brand-400 bg-brand-50/60 p-3.5">
                             <p className="text-[12px] font-bold text-brand-700">업체 답변</p>
                             <p className="mt-1 text-[13.5px] text-ink-700">{r.reply}</p>
                           </div>
@@ -172,7 +173,7 @@ export default async function PartnerDetailPage({ params }: { params: Promise<{ 
               <ul className="mt-2 space-y-1.5">
                 {partner.certifications.map((c) => (
                   <li key={c} className="flex items-start gap-2 text-[13px] text-ink-600">
-                    <span className="mt-0.5 text-brand-600">✓</span>
+                    <Icon name="check" className="mt-1 h-3 w-3 shrink-0 text-brand-600" />
                     {c}
                   </li>
                 ))}
@@ -180,7 +181,7 @@ export default async function PartnerDetailPage({ params }: { params: Promise<{ 
             </div>
           )}
 
-          <div className="rounded-2xl border border-brand-200 bg-brand-50/60 p-5">
+          <div className="rounded border border-brand-200 bg-brand-50/60 p-5">
             <p className="text-[13px] leading-relaxed text-brand-800">
               특정 업체를 지정해 요청할 수는 없지만, 요청서를 보내면 이 업체를 포함한 조건에 맞는 업체들이 견적을 보냅니다.
             </p>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LinkButton, SectionHeading } from "@/components/ui";
+import { Icon } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "안심 보장 제도",
@@ -16,7 +17,7 @@ const FLOW = [
 
 const POLICIES = [
   {
-    emoji: "🔒",
+    icon: "lock",
     title: "안전결제 (에스크로)",
     items: [
       "결제 금액은 작업 확인 전까지 청소모아가 보관합니다.",
@@ -25,7 +26,7 @@ const POLICIES = [
     ],
   },
   {
-    emoji: "📄",
+    icon: "certificate",
     title: "업체 검증",
     items: [
       "사업자등록증과 대표자 실명을 확인한 업체만 등록됩니다.",
@@ -34,7 +35,7 @@ const POLICIES = [
     ],
   },
   {
-    emoji: "🔁",
+    icon: "rotate",
     title: "무상 재작업 A/S",
     items: [
       "모든 견적에는 최소 7일의 무상 A/S가 포함됩니다.",
@@ -43,7 +44,7 @@ const POLICIES = [
     ],
   },
   {
-    emoji: "⚖️",
+    icon: "gavel",
     title: "분쟁 조정",
     items: [
       "협의가 되지 않으면 청소모아 분쟁조정팀이 개입합니다.",
@@ -51,7 +52,7 @@ const POLICIES = [
       "조정 결과에 따라 전액 환불·부분 환불·정산 진행 중 하나로 처리됩니다.",
     ],
   },
-];
+] as const;
 
 const REFUND = [
   ["작업 3일 전까지", "전액 환불", "위약금 없음"],
@@ -66,7 +67,7 @@ export default function SafetyPage() {
       <section className="border-b border-ink-100 bg-ink-900 py-16 text-white">
         <div className="container-page">
           <p className="mb-3 text-sm font-bold tracking-wide text-brand-300">TRUST &amp; SAFETY</p>
-          <h1 className="max-w-2xl text-[32px] font-extrabold leading-tight sm:text-[42px]">
+          <h1 className="max-w-2xl text-[32px] font-bold leading-tight sm:text-[42px]">
             모르는 업체에 선결제,
             <br />
             불안하지 않게 만들었습니다
@@ -82,8 +83,8 @@ export default function SafetyPage() {
         <ol className="mt-8 grid gap-3 md:grid-cols-5">
           {FLOW.map((f, i) => (
             <li key={f.t} className="card p-5">
-              <span className="tnum text-[12px] font-extrabold text-brand-300">STEP {i + 1}</span>
-              <p className="mt-2 text-[15px] font-extrabold text-ink-900">{f.t}</p>
+              <span className="tnum text-[12px] font-semibold text-brand-300">STEP {i + 1}</span>
+              <p className="mt-2 text-[15px] font-bold text-ink-900">{f.t}</p>
               <p className="mt-2 text-[13px] leading-relaxed text-ink-500">{f.d}</p>
             </li>
           ))}
@@ -96,8 +97,8 @@ export default function SafetyPage() {
           <div className="mt-8 grid gap-4 md:grid-cols-2">
             {POLICIES.map((p) => (
               <div key={p.title} className="card p-6">
-                <span className="text-2xl">{p.emoji}</span>
-                <p className="mt-3 text-[17px] font-extrabold text-ink-900">{p.title}</p>
+                <Icon name={p.icon} className="h-6 w-6 text-ink-400" />
+                <p className="mt-3 text-[17px] font-bold text-ink-900">{p.title}</p>
                 <ul className="mt-3 space-y-2">
                   {p.items.map((i) => (
                     <li key={i} className="flex items-start gap-2 text-[13.5px] leading-relaxed text-ink-600">
@@ -135,8 +136,8 @@ export default function SafetyPage() {
           </table>
         </div>
 
-        <div className="mt-10 rounded-2xl bg-gradient-to-br from-brand-600 to-brand-800 px-8 py-10 text-white">
-          <p className="text-[20px] font-extrabold">안심하고 맡기세요</p>
+        <div className="mt-10 rounded bg-gradient-to-br from-brand-600 to-brand-800 px-8 py-10 text-white">
+          <p className="text-[20px] font-bold">안심하고 맡기세요</p>
           <p className="mt-2 max-w-lg text-[14.5px] leading-relaxed text-brand-100">
             견적 비교는 무료, 결제는 안전하게. 문제가 생기면 청소모아가 예치금을 쥔 채로 조정합니다.
           </p>

@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SERVICES } from "@/lib/catalog";
 import { manwon } from "@/lib/format";
+import { Icon } from "@/components/icons";
 import { Badge, LinkButton, SectionHeading } from "@/components/ui";
 
 export const metadata: Metadata = {
@@ -12,77 +13,79 @@ export const metadata: Metadata = {
 export default function ServicesPage() {
   return (
     <>
-      <section className="hero-mesh border-b border-ink-100 py-16">
+      <section className="section-sm">
         <div className="container-page">
           <SectionHeading
-            align="left"
-            eyebrow="SERVICES"
+            eyebrow="Services"
             title="청소 서비스와 실제 시공 단가"
             desc="업체마다 부르는 값이 다른 이유는 포함 범위가 다르기 때문입니다. 청소모아는 카테고리별 기준 단가와 포함 작업을 먼저 공개합니다."
           />
-          <div className="mt-6">
+          <div className="mt-8">
             <LinkButton href="/request/new" size="lg">내 조건으로 견적 받기</LinkButton>
           </div>
         </div>
       </section>
 
-      <div className="container-page py-16">
-        <ul className="space-y-4">
+      <div className="container-page pb-24">
+        <div className="border-t border-ink-100">
           {SERVICES.map((s) => (
-            <li key={s.slug} className="card p-6 transition hover:border-brand-300 hover:shadow-soft sm:p-8">
-              <div className="grid gap-6 lg:grid-cols-[1fr_280px]">
-                <div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-2xl">{s.emoji}</span>
-                    <h2 className="text-[20px] font-extrabold text-ink-900">{s.name}</h2>
-                    {s.popular && <Badge tone="amber">인기</Badge>}
-                  </div>
-                  <p className="mt-3 text-[14.5px] leading-relaxed text-ink-500">{s.description}</p>
-
-                  <p className="mt-5 text-[13px] font-bold text-ink-800">기본 포함 작업</p>
-                  <ul className="mt-2 flex flex-wrap gap-1.5">
-                    {s.includes.map((i) => (
-                      <li key={i} className="rounded-md bg-brand-50 px-2.5 py-1.5 text-[12.5px] font-semibold text-brand-700">
-                        ✓ {i}
-                      </li>
-                    ))}
-                  </ul>
+            <section key={s.slug} className="grid gap-8 border-b border-ink-100 py-12 lg:grid-cols-[1fr_300px] lg:gap-16">
+              <div>
+                <div className="flex items-center gap-3">
+                  <Icon name={s.icon} className="h-6 w-6 text-ink-400" />
+                  <h2 className="t-h3 text-[22px] text-ink-900">{s.name}</h2>
+                  {s.popular && <Badge tone="amber">인기</Badge>}
                 </div>
+                <p className="mt-1.5 text-[14px] text-ink-400">{s.short}</p>
 
-                <div className="rounded-2xl bg-ink-50 p-5">
-                  <p className="text-[12.5px] font-semibold text-ink-400">
-                    {s.unit === "month" ? "월 기준" : "평당"} 시공 단가
-                  </p>
-                  <p className="tnum mt-1 text-[22px] font-extrabold text-ink-900">
-                    {manwon(s.unitPriceMin)} ~ {manwon(s.unitPriceMax)}
-                  </p>
-                  <dl className="tnum mt-4 space-y-2 border-t border-ink-200 pt-4 text-[13px]">
-                    <div className="flex justify-between">
-                      <dt className="text-ink-400">최소 시공가</dt>
-                      <dd className="font-semibold text-ink-800">{manwon(s.minPrice)}</dd>
-                    </div>
-                    <div className="flex justify-between">
-                      <dt className="text-ink-400">평균 소요</dt>
-                      <dd className="font-semibold text-ink-800">{s.duration}</dd>
-                    </div>
-                  </dl>
-                  <Link
-                    href={`/services/${s.slug}`}
-                    className="mt-4 flex h-11 items-center justify-center rounded-xl bg-white text-[14px] font-bold text-ink-900 ring-1 ring-ink-200 transition hover:ring-brand-300"
-                  >
-                    자세히 보기
-                  </Link>
+                <p className="mt-5 max-w-2xl text-[15px] leading-[1.8] text-ink-600">{s.description}</p>
+
+                <p className="t-eyebrow mt-8">기본 포함 작업</p>
+                <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-2.5">
+                  {s.includes.map((i) => (
+                    <li key={i} className="flex items-center gap-2 text-[13.5px] text-ink-600">
+                      <Icon name="check" className="h-3 w-3 shrink-0 text-brand-600" />
+                      {i}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="lg:border-l lg:border-ink-100 lg:pl-10">
+                <p className="t-eyebrow">{s.unit === "month" ? "월 기준 단가" : "평당 단가"}</p>
+                <p className="tnum mt-2 text-[24px] font-bold tracking-[-0.03em] text-ink-900">
+                  {manwon(s.unitPriceMin)} ~ {manwon(s.unitPriceMax)}
+                </p>
+
+                <dl className="tnum mt-6 space-y-2.5 border-t border-ink-100 pt-5 text-[13.5px]">
+                  <div className="flex justify-between">
+                    <dt className="text-ink-400">최소 시공가</dt>
+                    <dd className="font-semibold text-ink-800">{manwon(s.minPrice)}</dd>
+                  </div>
+                  <div className="flex justify-between">
+                    <dt className="text-ink-400">평균 소요</dt>
+                    <dd className="font-semibold text-ink-800">{s.duration}</dd>
+                  </div>
+                </dl>
+
+                <div className="mt-6 flex flex-col gap-2">
                   <Link
                     href={`/request/new?service=${s.slug}`}
-                    className="mt-2 flex h-11 items-center justify-center rounded-xl bg-brand-600 text-[14px] font-bold text-white transition hover:bg-brand-700"
+                    className="inline-flex h-11 items-center justify-center rounded-md bg-brand-600 text-[14px] font-semibold text-white transition-colors hover:bg-brand-700"
                   >
                     견적 요청
                   </Link>
+                  <Link
+                    href={`/services/${s.slug}`}
+                    className="inline-flex h-11 items-center justify-center rounded-md border border-ink-200 text-[14px] font-semibold text-ink-900 transition-colors hover:border-ink-400"
+                  >
+                    자세히 보기
+                  </Link>
                 </div>
               </div>
-            </li>
+            </section>
           ))}
-        </ul>
+        </div>
       </div>
     </>
   );

@@ -38,7 +38,7 @@ export default async function AdminHome() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-[24px] font-extrabold text-ink-900">운영 현황</h1>
+        <h1 className="text-[24px] font-bold text-ink-900">운영 현황</h1>
         <p className="mt-1 text-sm text-ink-500">플랫폼 전체 거래와 정산 상태를 한눈에 확인합니다.</p>
       </div>
 
@@ -46,7 +46,7 @@ export default async function AdminHome() {
         {CARDS.map((c) => (
           <div key={c.label} className="card p-5">
             <p className="text-[12.5px] font-semibold text-ink-400">{c.label}</p>
-            <p className="tnum mt-1.5 text-[21px] font-extrabold text-ink-900">{c.value}</p>
+            <p className="tnum mt-1.5 text-[21px] font-bold text-ink-900">{c.value}</p>
             <p className="tnum mt-0.5 text-[12px] text-ink-400">{c.note}</p>
           </div>
         ))}
@@ -59,9 +59,9 @@ export default async function AdminHome() {
           ["요청당 평균 견적", `${stats.avgQuotesPerRequest}개`],
           ["평균 평점", `${stats.avgRating}점`],
         ].map(([k, v]) => (
-          <div key={k} className="rounded-2xl border border-ink-200 bg-white px-5 py-4">
+          <div key={k} className="rounded border border-ink-200 bg-white px-5 py-4">
             <p className="text-[12.5px] text-ink-400">{k}</p>
-            <p className="tnum mt-1 text-[17px] font-extrabold text-ink-900">{v}</p>
+            <p className="tnum mt-1 text-[17px] font-bold text-ink-900">{v}</p>
           </div>
         ))}
       </div>
@@ -69,7 +69,7 @@ export default async function AdminHome() {
       <div className="grid gap-6 lg:grid-cols-2">
         <section className="card p-5">
           <div className="flex items-center justify-between">
-            <p className="text-[16px] font-extrabold text-ink-900">승인 대기 업체</p>
+            <p className="text-[16px] font-bold text-ink-900">승인 대기 업체</p>
             <Link href="/admin/partners" className="text-[13px] font-bold text-brand-700 hover:underline">전체 →</Link>
           </div>
           {pendingPartners.length === 0 ? (
@@ -77,7 +77,7 @@ export default async function AdminHome() {
           ) : (
             <ul className="mt-4 space-y-2">
               {pendingPartners.map((p) => (
-                <li key={p.id} className="flex items-center justify-between gap-2 rounded-xl bg-ink-50 px-4 py-3">
+                <li key={p.id} className="flex items-center justify-between gap-2 rounded bg-ink-50 px-4 py-3">
                   <span className="min-w-0">
                     <span className="block truncate text-[14px] font-bold text-ink-900">{p.companyName}</span>
                     <span className="tnum block text-[12px] text-ink-500">{p.bizNo} · {timeAgo(p.createdAt)}</span>
@@ -90,7 +90,7 @@ export default async function AdminHome() {
         </section>
 
         <section className="card p-5">
-          <p className="text-[16px] font-extrabold text-ink-900">서비스별 요청 분포</p>
+          <p className="text-[16px] font-bold text-ink-900">서비스별 요청 분포</p>
           <ul className="mt-4 space-y-2.5">
             {byService.map(({ service, count }) => (
               <li key={service}>
@@ -111,7 +111,7 @@ export default async function AdminHome() {
 
       <section className="card p-5">
         <div className="flex items-center justify-between">
-          <p className="text-[16px] font-extrabold text-ink-900">최근 거래</p>
+          <p className="text-[16px] font-bold text-ink-900">최근 거래</p>
           <Link href="/admin/orders" className="text-[13px] font-bold text-brand-700 hover:underline">전체 →</Link>
         </div>
         <div className="mt-4 overflow-x-auto">

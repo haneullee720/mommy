@@ -14,12 +14,12 @@ const ITEMS = [
 export default function PrivacyPage() {
   return (
     <div className="container-page max-w-3xl py-16">
-      <h1 className="text-[28px] font-extrabold text-ink-900">개인정보 처리방침</h1>
+      <h1 className="text-[28px] font-bold text-ink-900">개인정보 처리방침</h1>
       <p className="mt-2 text-[13.5px] text-ink-400">데모용으로 작성된 예시 문안입니다. 실제 서비스 운영 시에는 법률 검토가 필요합니다.</p>
       <div className="mt-10 space-y-8">
         {ITEMS.map((s) => (
           <section key={s.h}>
-            <h2 className="text-[16px] font-extrabold text-ink-900">{s.h}</h2>
+            <h2 className="text-[16px] font-bold text-ink-900">{s.h}</h2>
             <p className="mt-2 text-[14.5px] leading-relaxed text-ink-600">{s.p}</p>
           </section>
         ))}

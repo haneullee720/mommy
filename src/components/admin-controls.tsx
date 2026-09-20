@@ -15,17 +15,17 @@ export function PartnerStatusForm({ partnerId, status }: { partnerId: string; st
       <input type="hidden" name="partnerId" value={partnerId} />
       {state.error && <span className="text-[12px] text-red-600">{state.error}</span>}
       {status !== "approved" && (
-        <button name="status" value="approved" className="rounded-lg bg-brand-600 px-3 py-2 text-[12.5px] font-bold text-white hover:bg-brand-700">
+        <button name="status" value="approved" className="rounded bg-brand-600 px-3 py-2 text-[12.5px] font-bold text-white hover:bg-brand-700">
           승인
         </button>
       )}
       {status !== "suspended" && (
-        <button name="status" value="suspended" className="rounded-lg border border-red-200 px-3 py-2 text-[12.5px] font-bold text-red-600 hover:bg-red-50">
+        <button name="status" value="suspended" className="rounded border border-red-200 px-3 py-2 text-[12.5px] font-bold text-red-600 hover:bg-red-50">
           이용 정지
         </button>
       )}
       {status === "suspended" && (
-        <button name="status" value="pending" className="rounded-lg border border-ink-200 px-3 py-2 text-[12.5px] font-bold text-ink-600 hover:bg-ink-50">
+        <button name="status" value="pending" className="rounded border border-ink-200 px-3 py-2 text-[12.5px] font-bold text-ink-600 hover:bg-ink-50">
           심사 대기로
         </button>
       )}

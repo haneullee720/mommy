@@ -6,6 +6,7 @@ import { SERVICE_MAP } from "@/lib/catalog";
 import { TIER_LABEL, TIER_RULE } from "@/lib/fees";
 import { dateFull, won } from "@/lib/format";
 import { Badge, EmptyState, TierBadge } from "@/components/ui";
+import { Icon } from "@/components/icons";
 
 export const metadata: Metadata = { title: "정산" };
 export const dynamic = "force-dynamic";
@@ -30,7 +31,7 @@ export default async function SettlementPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-[24px] font-extrabold text-ink-900">정산</h1>
+        <h1 className="text-[24px] font-bold text-ink-900">정산</h1>
         <p className="mt-1 text-sm text-ink-500">
           고객 작업 확인 후 영업일 3일 내 등록 계좌로 입금됩니다. 카드·이체 수수료는 청소모아가 부담합니다.
         </p>
@@ -44,7 +45,7 @@ export default async function SettlementPage() {
         ].map((s) => (
           <div key={s.label} className="card p-5">
             <p className="text-[12.5px] font-semibold text-ink-400">{s.label}</p>
-            <p className="tnum mt-1.5 text-[21px] font-extrabold text-ink-900">{s.value}</p>
+            <p className="tnum mt-1.5 text-[21px] font-bold text-ink-900">{s.value}</p>
             <p className="tnum mt-0.5 text-[12px] text-ink-400">{s.note}</p>
           </div>
         ))}
@@ -52,7 +53,7 @@ export default async function SettlementPage() {
 
       <section className="card p-5">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-[15px] font-extrabold text-ink-900">수수료 등급</p>
+          <p className="text-[15px] font-bold text-ink-900">수수료 등급</p>
           <TierBadge tier={partner.tier} />
         </div>
         <ul className="mt-4 grid gap-2 sm:grid-cols-3">
@@ -61,17 +62,17 @@ export default async function SettlementPage() {
               key={t}
               className={
                 partner.tier === t
-                  ? "rounded-xl border-2 border-brand-500 bg-brand-50 p-4"
-                  : "rounded-xl border border-ink-200 p-4"
+                  ? "rounded border-2 border-brand-500 bg-brand-50 p-4"
+                  : "rounded border border-ink-200 p-4"
               }
             >
-              <p className="text-[13.5px] font-extrabold text-ink-900">{TIER_LABEL[t]}</p>
-              <p className="tnum mt-1 text-[20px] font-extrabold text-brand-700">{Math.round(rates[t] * 100)}%</p>
+              <p className="text-[13.5px] font-semibold text-ink-900">{TIER_LABEL[t]}</p>
+              <p className="tnum mt-1 text-[20px] font-bold text-brand-700">{Math.round(rates[t] * 100)}%</p>
               <p className="mt-1 text-[11.5px] leading-relaxed text-ink-500">{TIER_RULE[t]}</p>
             </li>
           ))}
         </ul>
-        <p className="tnum mt-4 rounded-xl bg-ink-50 p-4 text-[13px] text-ink-600">
+        <p className="tnum mt-4 rounded bg-ink-50 p-4 text-[13px] text-ink-600">
           현재 완료 {partner.completedJobs}건 · 평점 {partner.rating.toFixed(1)} —{" "}
           {partner.tier === "premium"
             ? "최고 등급입니다. 수수료 10%가 계속 적용됩니다."
@@ -82,16 +83,16 @@ export default async function SettlementPage() {
       </section>
 
       <section className="card p-5">
-        <p className="text-[15px] font-extrabold text-ink-900">입금 계좌</p>
+        <p className="text-[15px] font-bold text-ink-900">입금 계좌</p>
         <p className="tnum mt-2 text-[14px] text-ink-600">
           {partner.bankAccount.bank || "미등록"} {partner.bankAccount.number} ({partner.bankAccount.holder})
         </p>
       </section>
 
       <section>
-        <p className="mb-3 text-[16px] font-extrabold text-ink-900">정산 내역</p>
+        <p className="mb-3 text-[16px] font-bold text-ink-900">정산 내역</p>
         {orders.length === 0 ? (
-          <EmptyState icon="💰" title="정산 내역이 없습니다" desc="작업이 완료되면 이곳에 정산 내역이 쌓입니다." />
+          <EmptyState icon={<Icon name="wallet" className="h-7 w-7" />} title="정산 내역이 없습니다" desc="작업이 완료되면 이곳에 정산 내역이 쌓입니다." />
         ) : (
           <div className="card overflow-x-auto">
             <table className="w-full min-w-[640px] text-left">
@@ -117,7 +118,7 @@ export default async function SettlementPage() {
                         -{won(o.feeAmount)}
                         <span className="ml-1 text-[11px] text-ink-400">({Math.round(o.feeRate * 100)}%)</span>
                       </td>
-                      <td className="tnum px-4 py-3 text-right font-extrabold text-ink-900">{won(o.payoutAmount)}</td>
+                      <td className="tnum px-4 py-3 text-right font-bold text-ink-900">{won(o.payoutAmount)}</td>
                       <td className="px-4 py-3">
                         {o.status === "settled" ? (
                           <span className="tnum text-[12px] font-semibold text-emerald-600">{dateFull(o.settledAt!)} 지급</span>

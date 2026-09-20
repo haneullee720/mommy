@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LinkButton, SectionHeading } from "@/components/ui";
+import { Icon } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "파트너 운영 가이드",
@@ -30,7 +31,7 @@ const RULES = [
 export default function PartnerGuidePage() {
   return (
     <>
-      <section className="hero-mesh border-b border-ink-100 py-14">
+      <section className="border-b border-ink-100 py-14">
         <div className="container-page">
           <SectionHeading
             align="left"
@@ -42,15 +43,15 @@ export default function PartnerGuidePage() {
       </section>
 
       <section className="container-page py-14">
-        <h2 className="text-[22px] font-extrabold text-ink-900">견적 작성 5원칙</h2>
+        <h2 className="text-[22px] font-bold text-ink-900">견적 작성 5원칙</h2>
         <ol className="mt-6 space-y-3">
           {WIN_TIPS.map((t, i) => (
             <li key={t.t} className="card flex gap-4 p-5">
-              <span className="tnum grid h-8 w-8 shrink-0 place-items-center rounded-full bg-brand-50 text-[14px] font-extrabold text-brand-700">
+              <span className="tnum grid h-8 w-8 shrink-0 place-items-center rounded-full bg-brand-50 text-[14px] font-semibold text-brand-700">
                 {i + 1}
               </span>
               <div>
-                <p className="text-[15.5px] font-extrabold text-ink-900">{t.t}</p>
+                <p className="text-[15.5px] font-bold text-ink-900">{t.t}</p>
                 <p className="mt-1.5 text-[13.5px] leading-relaxed text-ink-500">{t.d}</p>
               </div>
             </li>
@@ -60,14 +61,14 @@ export default function PartnerGuidePage() {
 
       <section className="border-y border-ink-100 bg-ink-50/60 py-14">
         <div className="container-page">
-          <h2 className="text-[22px] font-extrabold text-ink-900">등급 올리기</h2>
+          <h2 className="text-[22px] font-bold text-ink-900">등급 올리기</h2>
           <p className="mt-2 text-[14.5px] text-ink-500">등급은 작업이 완료될 때마다 자동으로 재계산됩니다.</p>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             {GRADE.map((g) => (
               <div key={g.t} className="card p-6">
-                <p className="text-[16px] font-extrabold text-ink-900">{g.t}</p>
+                <p className="text-[16px] font-bold text-ink-900">{g.t}</p>
                 <p className="mt-2 text-[13.5px] text-ink-500">{g.d}</p>
-                <p className="tnum mt-4 text-[20px] font-extrabold text-brand-700">{g.fee}</p>
+                <p className="tnum mt-4 text-[20px] font-bold text-brand-700">{g.fee}</p>
               </div>
             ))}
           </div>
@@ -75,11 +76,11 @@ export default function PartnerGuidePage() {
       </section>
 
       <section className="container-page py-14">
-        <h2 className="text-[22px] font-extrabold text-ink-900">지켜야 할 운영 규정</h2>
+        <h2 className="text-[22px] font-bold text-ink-900">지켜야 할 운영 규정</h2>
         <ul className="mt-6 space-y-2.5">
           {RULES.map((r) => (
-            <li key={r} className="flex items-start gap-3 rounded-xl border border-ink-200 bg-white p-4 text-[14px] leading-relaxed text-ink-700">
-              <span className="mt-0.5 text-brand-600">⚠️</span>
+            <li key={r} className="flex items-start gap-3 rounded border border-ink-200 bg-white p-4 text-[14px] leading-relaxed text-ink-700">
+              <Icon name="certificate" className="mt-0.5 h-4 w-4 shrink-0 text-ink-400" />
               {r}
             </li>
           ))}

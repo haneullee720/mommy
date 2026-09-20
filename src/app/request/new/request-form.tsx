@@ -11,6 +11,7 @@ import { manwon } from "@/lib/format";
 import { idle } from "@/lib/form";
 import { cn } from "@/lib/cn";
 import type { PropertyType, ServiceSlug } from "@/lib/types";
+import { Icon } from "@/components/icons";
 
 const STEP_LABELS = ["청소 종류", "공간 정보", "일정·옵션", "연락처 확인"];
 
@@ -108,7 +109,7 @@ export function RequestForm({ defaults, user }: Props) {
           {/* --------------------------------------------- 1. 청소 종류 */}
           {step === 0 && (
             <div className="animate-rise">
-              <h2 className="text-xl font-extrabold text-ink-900">어떤 청소가 필요하세요?</h2>
+              <h2 className="text-xl font-bold text-ink-900">어떤 청소가 필요하세요?</h2>
               <p className="mt-1.5 text-sm text-ink-500">종류에 따라 견적을 보낼 업체가 달라집니다.</p>
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 {SERVICES.map((s) => {
@@ -122,13 +123,13 @@ export function RequestForm({ defaults, user }: Props) {
                         setPropertyType(DEFAULT_PROPERTY[s.slug]);
                       }}
                       className={cn(
-                        "flex items-start gap-3 rounded-2xl border p-4 text-left transition",
+                        "flex items-start gap-3 rounded border p-4 text-left transition",
                         active ? "border-brand-500 bg-brand-50 ring-2 ring-brand-100" : "border-ink-200 hover:border-ink-300",
                       )}
                     >
-                      <span className="text-2xl">{s.emoji}</span>
+                      <Icon name={s.icon} className="h-6 w-6 text-ink-400" />
                       <span className="min-w-0">
-                        <span className="block text-[15px] font-extrabold text-ink-900">{s.name}</span>
+                        <span className="block text-[15px] font-bold text-ink-900">{s.name}</span>
                         <span className="mt-0.5 block text-[12.5px] text-ink-500">{s.short}</span>
                         <span className="tnum mt-1.5 block text-[12px] font-bold text-brand-700">
                           {s.unit === "month" ? "월 " : "평당 "}
@@ -146,7 +147,7 @@ export function RequestForm({ defaults, user }: Props) {
           {step === 1 && (
             <div className="animate-rise space-y-6">
               <div>
-                <h2 className="text-xl font-extrabold text-ink-900">공간 정보를 알려주세요</h2>
+                <h2 className="text-xl font-bold text-ink-900">공간 정보를 알려주세요</h2>
                 <p className="mt-1.5 text-sm text-ink-500">면적이 정확할수록 견적 편차가 줄어듭니다.</p>
               </div>
 
@@ -158,7 +159,7 @@ export function RequestForm({ defaults, user }: Props) {
                       type="button"
                       onClick={() => setPropertyType(p.value)}
                       className={cn(
-                        "rounded-xl border px-3.5 py-2.5 text-sm font-semibold transition",
+                        "rounded border px-3.5 py-2.5 text-sm font-semibold transition",
                         propertyType === p.value ? "border-brand-500 bg-brand-600 text-white" : "border-ink-200 text-ink-600 hover:border-ink-300",
                       )}
                     >
@@ -176,7 +177,7 @@ export function RequestForm({ defaults, user }: Props) {
                     min={1}
                     value={area}
                     onChange={(e) => setArea(Math.max(1, Number(e.target.value)))}
-                    className="tnum w-24 rounded-xl border border-ink-200 px-3 py-2.5 text-center text-sm font-bold"
+                    className="tnum w-24 rounded border border-ink-200 px-3 py-2.5 text-center text-sm font-bold"
                   />
                 </div>
               </Field>
@@ -205,7 +206,7 @@ export function RequestForm({ defaults, user }: Props) {
                 </Field>
               </div>
 
-              <Field label="상세 주소" required hint="🔒 결제가 완료된 업체에게만 공개됩니다.">
+              <Field label="상세 주소" required hint="결제가 완료된 업체에게만 공개됩니다.">
                 <input
                   value={addressDetail}
                   onChange={(e) => setAddressDetail(e.target.value)}
@@ -220,7 +221,7 @@ export function RequestForm({ defaults, user }: Props) {
           {step === 2 && (
             <div className="animate-rise space-y-6">
               <div>
-                <h2 className="text-xl font-extrabold text-ink-900">언제, 어떻게 해드릴까요?</h2>
+                <h2 className="text-xl font-bold text-ink-900">언제, 어떻게 해드릴까요?</h2>
                 <p className="mt-1.5 text-sm text-ink-500">일정을 조율할 수 있으면 더 좋은 가격이 나옵니다.</p>
               </div>
 
@@ -237,7 +238,7 @@ export function RequestForm({ defaults, user }: Props) {
                 <div className="flex items-end">
                   <label
                     className={cn(
-                      "flex w-full cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 transition",
+                      "flex w-full cursor-pointer items-center gap-3 rounded border px-4 py-3 transition",
                       dateFlexible ? "border-brand-500 bg-brand-50" : "border-ink-200",
                     )}
                   >
@@ -265,7 +266,7 @@ export function RequestForm({ defaults, user }: Props) {
                         type="button"
                         onClick={() => toggleOption(o.key)}
                         className={cn(
-                          "flex items-center justify-between gap-2 rounded-xl border px-3.5 py-3 text-left transition",
+                          "flex items-center justify-between gap-2 rounded border px-3.5 py-3 text-left transition",
                           active ? "border-brand-500 bg-brand-50" : "border-ink-200 hover:border-ink-300",
                         )}
                       >
@@ -298,7 +299,7 @@ export function RequestForm({ defaults, user }: Props) {
           {step === 3 && (
             <div className="animate-rise space-y-6">
               <div>
-                <h2 className="text-xl font-extrabold text-ink-900">어디로 연락드릴까요?</h2>
+                <h2 className="text-xl font-bold text-ink-900">어디로 연락드릴까요?</h2>
                 <p className="mt-1.5 text-sm text-ink-500">견적이 도착하면 알려드립니다. 업체에는 결제 전까지 공개되지 않습니다.</p>
               </div>
 
@@ -318,8 +319,8 @@ export function RequestForm({ defaults, user }: Props) {
               </div>
 
               {!user && (
-                <div className="rounded-2xl border border-brand-200 bg-brand-50/60 p-5">
-                  <p className="text-sm font-extrabold text-brand-800">간편 가입하고 견적 받기</p>
+                <div className="rounded border border-brand-200 bg-brand-50/60 p-5">
+                  <p className="text-sm font-semibold text-brand-800">간편 가입하고 견적 받기</p>
                   <p className="mt-1 text-[12.5px] text-brand-700">
                     견적 비교·안전결제 내역을 확인하려면 계정이 필요합니다. 아래 두 칸이면 끝납니다.
                   </p>
@@ -338,8 +339,8 @@ export function RequestForm({ defaults, user }: Props) {
                 </div>
               )}
 
-              <div className="rounded-2xl bg-ink-50 p-5">
-                <p className="text-sm font-extrabold text-ink-900">요청 내용 확인</p>
+              <div className="rounded bg-ink-50 p-5">
+                <p className="text-sm font-semibold text-ink-900">요청 내용 확인</p>
                 <dl className="mt-3 space-y-2 text-[13.5px]">
                   {[
                     ["청소 종류", def.name],
@@ -367,7 +368,7 @@ export function RequestForm({ defaults, user }: Props) {
                 setStep((s) => Math.max(0, s - 1));
               }}
               disabled={step === 0}
-              className="rounded-xl px-4 py-3 text-sm font-semibold text-ink-500 transition hover:bg-ink-100 disabled:opacity-0"
+              className="rounded px-4 py-3 text-sm font-semibold text-ink-500 transition hover:bg-ink-100 disabled:opacity-0"
             >
               ← 이전
             </button>
@@ -376,7 +377,7 @@ export function RequestForm({ defaults, user }: Props) {
               <button
                 type="button"
                 onClick={next}
-                className="inline-flex h-12 items-center rounded-xl bg-brand-600 px-7 text-[15px] font-extrabold text-white shadow-soft transition hover:bg-brand-700"
+                className="inline-flex h-12 items-center rounded bg-brand-600 px-7 text-[15px] font-bold text-white shadow-soft transition hover:bg-brand-700"
               >
                 다음
               </button>
@@ -394,7 +395,7 @@ export function RequestForm({ defaults, user }: Props) {
         <div className="card overflow-hidden shadow-soft">
           <div className="bg-ink-900 px-5 py-5 text-white">
             <p className="text-[12.5px] font-semibold text-ink-300">예상 견적 범위</p>
-            <p className="tnum mt-1 text-[25px] font-extrabold leading-tight">
+            <p className="tnum mt-1 text-[25px] font-bold leading-tight">
               {manwon(est.min)} ~ {manwon(est.max)}
             </p>
           </div>
@@ -413,12 +414,12 @@ export function RequestForm({ defaults, user }: Props) {
           </div>
         </div>
 
-        <div className="mt-4 rounded-2xl border border-ink-200 bg-white p-5">
-          <p className="text-sm font-extrabold text-ink-900">{def.name}에 포함되는 작업</p>
+        <div className="mt-4 rounded border border-ink-200 bg-white p-5">
+          <p className="text-sm font-semibold text-ink-900">{def.name}에 포함되는 작업</p>
           <ul className="mt-3 space-y-2">
             {def.includes.map((t) => (
               <li key={t} className="flex items-start gap-2 text-[13px] text-ink-600">
-                <span className="mt-1 text-brand-600">✓</span>
+                <Icon name="check" className="mt-1.5 h-3 w-3 shrink-0 text-brand-600" />
                 {t}
               </li>
             ))}

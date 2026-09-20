@@ -56,7 +56,7 @@ const PARTNER_STEPS = [
 export default function HowItWorksPage() {
   return (
     <>
-      <section className="hero-mesh border-b border-ink-100 py-16">
+      <section className="border-b border-ink-100 py-16">
         <div className="container-page">
           <SectionHeading
             align="left"
@@ -72,15 +72,15 @@ export default function HowItWorksPage() {
       </section>
 
       <section className="container-page py-16">
-        <h2 className="text-[24px] font-extrabold text-ink-900">고객 이용 흐름</h2>
+        <h2 className="text-[24px] font-bold text-ink-900">고객 이용 흐름</h2>
         <ol className="mt-8 space-y-4">
           {CUSTOMER_STEPS.map((s) => (
             <li key={s.n} className="card flex gap-5 p-6">
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-brand-600 text-[15px] font-extrabold text-white">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-brand-600 text-[15px] font-bold text-white">
                 {s.n}
               </span>
               <div className="min-w-0">
-                <p className="text-[17px] font-extrabold text-ink-900">{s.title}</p>
+                <p className="text-[17px] font-bold text-ink-900">{s.title}</p>
                 <p className="mt-2 text-[14.5px] leading-relaxed text-ink-500">{s.desc}</p>
                 <ul className="mt-3 space-y-1.5">
                   {s.detail.map((d) => (
@@ -98,12 +98,12 @@ export default function HowItWorksPage() {
 
       <section className="border-y border-ink-100 bg-ink-50/60 py-16">
         <div className="container-page">
-          <h2 className="text-[24px] font-extrabold text-ink-900">업체 이용 흐름</h2>
+          <h2 className="text-[24px] font-bold text-ink-900">업체 이용 흐름</h2>
           <ol className="mt-8 grid gap-4 md:grid-cols-5">
             {PARTNER_STEPS.map((s) => (
               <li key={s.n} className="card p-5">
-                <span className="tnum text-sm font-extrabold text-brand-300">STEP {s.n}</span>
-                <p className="mt-2 text-[15.5px] font-extrabold text-ink-900">{s.title}</p>
+                <span className="tnum text-sm font-semibold text-brand-300">STEP {s.n}</span>
+                <p className="mt-2 text-[15.5px] font-bold text-ink-900">{s.title}</p>
                 <p className="mt-2 text-[13px] leading-relaxed text-ink-500">{s.desc}</p>
               </li>
             ))}

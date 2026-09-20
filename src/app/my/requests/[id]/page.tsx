@@ -8,6 +8,7 @@ import { manwon, timeAgo, untilDeadline, won } from "@/lib/format";
 import { Alert, Badge, EmptyState, LinkButton, RequestStatusBadge, Stars, TierBadge } from "@/components/ui";
 import { AcceptQuoteForm } from "@/components/accept-quote";
 import { CancelRequestButton } from "@/components/cancel-request";
+import { Icon } from "@/components/icons";
 
 export const metadata: Metadata = { title: "견적 비교" };
 export const dynamic = "force-dynamic";
@@ -56,8 +57,8 @@ export default async function RequestDetailPage({
       {/* 요청 요약 */}
       <section className="card p-6">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xl">{def.emoji}</span>
-          <h1 className="text-[20px] font-extrabold text-ink-900">{def.name}</h1>
+          <Icon name={def.icon} className="h-5 w-5 text-ink-400" />
+          <h1 className="text-[20px] font-bold text-ink-900">{def.name}</h1>
           <RequestStatusBadge status={req.status} />
           <span className="tnum ml-auto text-[12.5px] font-semibold text-ink-400">{req.code}</span>
         </div>
@@ -87,13 +88,13 @@ export default async function RequestDetailPage({
         )}
 
         {req.description && (
-          <p className="mt-4 whitespace-pre-line rounded-xl bg-ink-50 p-4 text-[13.5px] leading-relaxed text-ink-600">
+          <p className="mt-4 whitespace-pre-line rounded bg-ink-50 p-4 text-[13.5px] leading-relaxed text-ink-600">
             {req.description}
           </p>
         )}
 
         <p className="mt-4 text-[12.5px] text-ink-400">
-          🔒 상세 주소와 연락처는 <strong className="text-ink-600">결제가 완료된 업체에게만</strong> 공개됩니다.
+          상세 주소와 연락처는 <strong className="text-ink-600">결제가 완료된 업체에게만</strong> 공개됩니다.
         </p>
 
         {req.status === "open" && (
@@ -107,7 +108,7 @@ export default async function RequestDetailPage({
       {/* 견적 목록 */}
       <section>
         <div className="mb-4 flex items-end justify-between gap-3">
-          <h2 className="text-[18px] font-extrabold text-ink-900">
+          <h2 className="text-[18px] font-bold text-ink-900">
             도착한 견적 <span className="tnum text-brand-700">{quotes.length}</span>개
           </h2>
           {quotes.length > 1 && <p className="text-[12.5px] text-ink-400">금액이 낮은 순으로 정렬됩니다</p>}
@@ -115,7 +116,7 @@ export default async function RequestDetailPage({
 
         {quotes.length === 0 ? (
           <EmptyState
-            icon="📭"
+            icon={<Icon name="inbox" className="h-7 w-7" />}
             title="아직 도착한 견적이 없어요"
             desc="보통 30분 ~ 3시간 안에 첫 견적이 도착합니다. 도착하면 문자로 알려드릴게요."
           />
@@ -131,7 +132,7 @@ export default async function RequestDetailPage({
                   <div className="flex flex-col gap-5 p-5 sm:flex-row">
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        <Link href={`/partners/${p.id}`} className="text-[16px] font-extrabold text-ink-900 hover:underline">
+                        <Link href={`/partners/${p.id}`} className="text-[16px] font-bold text-ink-900 hover:underline">
                           {p.companyName}
                         </Link>
                         <TierBadge tier={p.tier} />
@@ -156,7 +157,7 @@ export default async function RequestDetailPage({
                           ["작업 가능일", q.availableDate],
                           ["무상 A/S", `${q.warrantyDays}일`],
                         ].map(([k, v]) => (
-                          <div key={k} className="rounded-lg bg-ink-50 px-3 py-2">
+                          <div key={k} className="rounded bg-ink-50 px-3 py-2">
                             <dt className="text-[11.5px] text-ink-400">{k}</dt>
                             <dd className="text-[13px] font-bold text-ink-800">{v}</dd>
                           </div>
@@ -177,7 +178,7 @@ export default async function RequestDetailPage({
                     <div className="flex w-full shrink-0 flex-col justify-between gap-3 border-t border-ink-100 pt-4 sm:w-52 sm:border-l sm:border-t-0 sm:pl-5 sm:pt-0">
                       <div className="text-right">
                         <p className="text-[12px] text-ink-400">부가세 포함 총액</p>
-                        <p className="tnum text-[24px] font-extrabold leading-tight text-ink-900">{won(q.amount)}</p>
+                        <p className="tnum text-[24px] font-bold leading-tight text-ink-900">{won(q.amount)}</p>
                         {req.estimateMax > 0 && q.amount < req.estimateMax && (
                           <p className="tnum mt-0.5 text-[12px] font-bold text-emerald-600">
                             예상 상한 대비 {manwon(req.estimateMax - q.amount)} 절약
@@ -195,8 +196,8 @@ export default async function RequestDetailPage({
         )}
       </section>
 
-      <section className="rounded-2xl border border-ink-200 bg-white p-5">
-        <p className="text-sm font-extrabold text-ink-900">업체를 선택하면 어떻게 되나요?</p>
+      <section className="rounded border border-ink-200 bg-white p-5">
+        <p className="text-sm font-semibold text-ink-900">업체를 선택하면 어떻게 되나요?</p>
         <ol className="mt-3 space-y-2 text-[13.5px] text-ink-600">
           <li>1. 결제 페이지로 이동합니다. 이 시점까지 비용은 발생하지 않습니다.</li>
           <li>2. 결제하면 금액은 청소모아가 보관(에스크로)하고, 업체에 상세 주소와 연락처가 전달됩니다.</li>

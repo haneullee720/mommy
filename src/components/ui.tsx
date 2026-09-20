@@ -4,25 +4,26 @@ import { cn } from "@/lib/cn";
 import type { OrderStatus, PartnerTier, RequestStatus } from "@/lib/types";
 import { ORDER_STATUS_LABEL, REQUEST_STATUS_LABEL } from "@/lib/format";
 import { TIER_LABEL } from "@/lib/fees";
+import { Icon } from "./icons";
 
 type ButtonVariant = "primary" | "secondary" | "ghost" | "dark" | "danger";
 type ButtonSize = "sm" | "md" | "lg";
 
 const BASE =
-  "inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600";
+  "inline-flex items-center justify-center gap-2 rounded-md font-semibold transition-colors duration-150 disabled:opacity-40 disabled:pointer-events-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600";
 
 const VARIANT: Record<ButtonVariant, string> = {
-  primary: "bg-brand-600 text-white hover:bg-brand-700 shadow-soft",
-  secondary: "bg-white text-ink-900 border border-ink-200 hover:border-ink-300 hover:bg-ink-50",
-  ghost: "text-ink-600 hover:text-ink-900 hover:bg-ink-100",
+  primary: "bg-brand-600 text-white hover:bg-brand-700",
+  secondary: "bg-white text-ink-900 border border-ink-200 hover:border-ink-400",
+  ghost: "text-ink-600 hover:text-ink-900",
   dark: "bg-ink-900 text-white hover:bg-ink-800",
   danger: "bg-white text-red-600 border border-red-200 hover:bg-red-50",
 };
 
 const SIZE: Record<ButtonSize, string> = {
   sm: "h-9 px-3.5 text-[13px]",
-  md: "h-11 px-5 text-[15px]",
-  lg: "h-14 px-7 text-base",
+  md: "h-11 px-5 text-[14.5px]",
+  lg: "h-13 px-7 text-[15px]",
 };
 
 export function buttonClass(variant: ButtonVariant = "primary", size: ButtonSize = "md", extra?: string) {
@@ -78,16 +79,22 @@ export function Badge({
   className?: string;
 }) {
   const tones = {
-    neutral: "bg-ink-100 text-ink-600",
-    brand: "bg-brand-50 text-brand-700 ring-1 ring-brand-200",
-    green: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200",
-    amber: "bg-amber-50 text-amber-700 ring-1 ring-amber-200",
-    red: "bg-red-50 text-red-600 ring-1 ring-red-200",
-    blue: "bg-blue-50 text-blue-700 ring-1 ring-blue-200",
-    dark: "bg-ink-900 text-white",
+    neutral: "text-ink-500 ring-ink-200",
+    brand: "text-brand-700 ring-brand-300",
+    green: "text-brand-700 ring-brand-300",
+    amber: "text-amber-700 ring-amber-300",
+    red: "text-red-600 ring-red-200",
+    blue: "text-ink-700 ring-ink-300",
+    dark: "bg-ink-900 text-white ring-ink-900",
   } as const;
   return (
-    <span className={cn("inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold", tones[tone], className)}>
+    <span
+      className={cn(
+        "inline-flex items-center gap-1 rounded px-2 py-0.5 text-[11.5px] font-semibold ring-1 ring-inset",
+        tones[tone],
+        className,
+      )}
+    >
       {children}
     </span>
   );
@@ -121,16 +128,10 @@ export function OrderStatusBadge({ status }: { status: OrderStatus }) {
 }
 
 export function TierBadge({ tier }: { tier: PartnerTier }) {
-  const tone = tier === "premium" ? "dark" : tier === "good" ? "brand" : "neutral";
-  return (
-    <Badge tone={tone}>
-      {tier === "premium" ? "👑 " : tier === "good" ? "⭐ " : ""}
-      {TIER_LABEL[tier]}
-    </Badge>
-  );
+  return <Badge tone={tier === "premium" ? "dark" : tier === "good" ? "brand" : "neutral"}>{TIER_LABEL[tier]}</Badge>;
 }
 
-export function Stars({ rating, size = 14 }: { rating: number; size?: number }) {
+export function Stars({ rating, size = 13 }: { rating: number; size?: number }) {
   const pct = Math.max(0, Math.min(100, (rating / 5) * 100));
   return (
     <span className="relative inline-block leading-none" style={{ fontSize: size }} aria-label={`별점 ${rating}점`}>
@@ -142,11 +143,22 @@ export function Stars({ rating, size = 14 }: { rating: number; size?: number }) 
   );
 }
 
+/** 별점 + 수치. 수치가 의미를 지고 별은 보조한다. */
+export function Rating({ value, count, className }: { value: number; count?: number; className?: string }) {
+  return (
+    <span className={cn("inline-flex items-baseline gap-1.5", className)}>
+      <Stars rating={value} />
+      <span className="tnum text-[13px] font-semibold text-ink-900">{value.toFixed(1)}</span>
+      {count !== undefined && <span className="tnum text-[12px] text-ink-400">({count})</span>}
+    </span>
+  );
+}
+
 export function SectionHeading({
   eyebrow,
   title,
   desc,
-  align = "center",
+  align = "left",
 }: {
   eyebrow?: string;
   title: ReactNode;
@@ -154,11 +166,61 @@ export function SectionHeading({
   align?: "center" | "left";
 }) {
   return (
-    <div className={cn("max-w-2xl", align === "center" ? "mx-auto text-center" : "")}>
-      {eyebrow && <p className="mb-3 text-sm font-bold tracking-wide text-brand-600">{eyebrow}</p>}
-      <h2 className="text-2xl font-extrabold leading-tight text-ink-900 sm:text-[32px]">{title}</h2>
-      {desc && <p className="mt-3 text-[15px] leading-relaxed text-ink-500 sm:text-base">{desc}</p>}
+    <div className={cn("max-w-2xl", align === "center" && "mx-auto text-center")}>
+      {eyebrow && <p className="t-eyebrow mb-4">{eyebrow}</p>}
+      <h2 className="t-h2 text-ink-900">{title}</h2>
+      {desc && <p className="t-lead mt-4">{desc}</p>}
     </div>
+  );
+}
+
+/**
+ * 헤어라인 리스트의 한 행.
+ * 카드 대신 쓰는 기본 구조 — 테두리 4개 대신 아래쪽 선 하나로 구분한다.
+ */
+export function Row({
+  href,
+  leading,
+  title,
+  meta,
+  trailing,
+  className,
+}: {
+  href?: string;
+  leading?: ReactNode;
+  title: ReactNode;
+  meta?: ReactNode;
+  trailing?: ReactNode;
+  className?: string;
+}) {
+  const inner = (
+    <div
+      className={cn(
+        "group flex items-center gap-5 border-b border-ink-100 py-5 transition-colors",
+        href && "hover:bg-white",
+        className,
+      )}
+    >
+      {leading && <div className="shrink-0 text-ink-400 transition-colors group-hover:text-brand-600">{leading}</div>}
+      <div className="min-w-0 flex-1">
+        <div className="t-h3 text-ink-900">{title}</div>
+        {meta && <div className="mt-1 text-[13.5px] leading-relaxed text-ink-500">{meta}</div>}
+      </div>
+      {trailing && <div className="shrink-0 text-right">{trailing}</div>}
+      {href && (
+        <Icon
+          name="arrowRight"
+          className="h-4 w-4 shrink-0 text-ink-300 transition-transform group-hover:translate-x-0.5 group-hover:text-brand-600"
+        />
+      )}
+    </div>
+  );
+  return href ? (
+    <Link href={href} className="block">
+      {inner}
+    </Link>
+  ) : (
+    inner
   );
 }
 
@@ -177,35 +239,35 @@ export function Field({
 }) {
   return (
     <label className={cn("block", className)}>
-      <span className="mb-1.5 flex items-center gap-1 text-sm font-semibold text-ink-800">
+      <span className="mb-2 flex items-center gap-1 text-[13px] font-semibold text-ink-700">
         {label}
         {required && <span className="text-brand-600">*</span>}
       </span>
       {children}
-      {hint && <span className="mt-1.5 block text-xs text-ink-400">{hint}</span>}
+      {hint && <span className="mt-2 block text-[12.5px] leading-relaxed text-ink-400">{hint}</span>}
     </label>
   );
 }
 
 export const inputClass =
-  "w-full rounded-xl border border-ink-200 bg-white px-3.5 py-3 text-[15px] text-ink-900 placeholder:text-ink-300 outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100";
+  "w-full rounded border border-ink-200 bg-white px-3.5 py-3 text-[15px] text-ink-900 placeholder:text-ink-300 outline-none transition-colors focus:border-brand-600";
 
 export function Alert({ tone = "info", children }: { tone?: "info" | "warn" | "error" | "success"; children: ReactNode }) {
   const tones = {
-    info: "bg-blue-50 text-blue-800 border-blue-100",
-    warn: "bg-amber-50 text-amber-800 border-amber-100",
-    error: "bg-red-50 text-red-700 border-red-100",
-    success: "bg-emerald-50 text-emerald-800 border-emerald-100",
+    info: "border-ink-200 bg-white text-ink-700",
+    warn: "border-amber-300 bg-amber-50/60 text-amber-900",
+    error: "border-red-200 bg-red-50/60 text-red-700",
+    success: "border-brand-300 bg-brand-50/60 text-brand-800",
   } as const;
-  return <div className={cn("rounded-xl border px-4 py-3 text-sm font-medium", tones[tone])}>{children}</div>;
+  return <div className={cn("rounded border px-4 py-3 text-[14px] leading-relaxed", tones[tone])}>{children}</div>;
 }
 
-export function EmptyState({ icon, title, desc, action }: { icon: string; title: string; desc?: string; action?: ReactNode }) {
+export function EmptyState({ icon, title, desc, action }: { icon?: ReactNode; title: string; desc?: string; action?: ReactNode }) {
   return (
-    <div className="card flex flex-col items-center gap-3 px-6 py-14 text-center">
-      <div className="text-4xl">{icon}</div>
-      <p className="text-base font-bold text-ink-900">{title}</p>
-      {desc && <p className="max-w-sm text-sm text-ink-500">{desc}</p>}
+    <div className="flex flex-col items-center gap-3 border border-ink-100 bg-white px-6 py-20 text-center">
+      {icon && <div className="text-ink-300">{icon}</div>}
+      <p className="t-h3 text-ink-900">{title}</p>
+      {desc && <p className="max-w-sm text-[14px] leading-relaxed text-ink-500">{desc}</p>}
       {action}
     </div>
   );

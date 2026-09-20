@@ -60,7 +60,7 @@ export function QuoteForm({
             min={10000}
             value={amount}
             onChange={(e) => setAmount(Number(e.target.value))}
-            className={cn(inputClass, "tnum text-right text-lg font-extrabold")}
+            className={cn(inputClass, "tnum text-right text-lg font-bold")}
           />
           <span className="shrink-0 text-sm font-bold text-ink-500">원</span>
         </div>
@@ -70,7 +70,7 @@ export function QuoteForm({
               key={d}
               type="button"
               onClick={() => setAmount((a) => Math.max(10000, a + d))}
-              className="tnum rounded-lg border border-ink-200 px-2.5 py-1.5 text-[12px] font-bold text-ink-600 hover:border-ink-300"
+              className="tnum rounded border border-ink-200 px-2.5 py-1.5 text-[12px] font-bold text-ink-600 hover:border-ink-300"
             >
               {d > 0 ? "+" : ""}
               {(d / 10000).toLocaleString("ko-KR")}만
@@ -79,7 +79,7 @@ export function QuoteForm({
         </div>
       </Field>
 
-      <div className="rounded-2xl bg-ink-900 p-5 text-white">
+      <div className="rounded bg-ink-900 p-5 text-white">
         <p className="text-[12.5px] font-semibold text-ink-300">이 금액으로 낙찰되면</p>
         <dl className="tnum mt-3 space-y-2 text-[13.5px]">
           <div className="flex justify-between">
@@ -92,7 +92,7 @@ export function QuoteForm({
           </div>
           <div className="flex items-baseline justify-between border-t border-white/15 pt-2">
             <dt className="text-[14px] font-bold">실 정산액</dt>
-            <dd className="text-[20px] font-extrabold text-brand-300">{won(payout)}</dd>
+            <dd className="text-[20px] font-bold text-brand-300">{won(payout)}</dd>
           </div>
         </dl>
         <p className="mt-2 text-[11.5px] text-ink-400">카드·이체 수수료는 청소모아가 부담합니다.</p>
@@ -151,7 +151,7 @@ export function QuoteForm({
               key={i}
               type="button"
               onClick={() => setMessage(t.replace("{company}", companyName))}
-              className="rounded-lg border border-ink-200 px-2.5 py-1.5 text-[11.5px] font-semibold text-ink-500 hover:border-brand-300 hover:text-brand-700"
+              className="rounded border border-ink-200 px-2.5 py-1.5 text-[11.5px] font-semibold text-ink-500 hover:border-brand-300 hover:text-brand-700"
             >
               템플릿 {i + 1}
             </button>

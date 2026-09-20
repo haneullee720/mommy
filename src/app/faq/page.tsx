@@ -29,7 +29,7 @@ const PARTNER = [
 export default function FaqPage() {
   return (
     <>
-      <section className="hero-mesh border-b border-ink-100 py-14">
+      <section className="border-b border-ink-100 py-14">
         <div className="container-page">
           <SectionHeading align="left" eyebrow="FAQ" title="자주 묻는 질문" desc="찾는 답이 없으면 고객센터로 문의해 주세요." />
         </div>
@@ -37,18 +37,18 @@ export default function FaqPage() {
 
       <div className="container-page grid gap-10 py-14 lg:grid-cols-2">
         <section>
-          <h2 className="mb-5 text-[20px] font-extrabold text-ink-900">고객</h2>
+          <h2 className="mb-5 text-[20px] font-bold text-ink-900">고객</h2>
           <Faq items={CUSTOMER} />
         </section>
         <section>
-          <h2 className="mb-5 text-[20px] font-extrabold text-ink-900">청소 업체</h2>
+          <h2 className="mb-5 text-[20px] font-bold text-ink-900">청소 업체</h2>
           <Faq items={PARTNER} />
         </section>
       </div>
 
       <div className="container-page pb-20">
         <div className="card flex flex-col items-center gap-4 p-10 text-center">
-          <p className="text-[18px] font-extrabold text-ink-900">아직 궁금한 점이 남았나요?</p>
+          <p className="text-[18px] font-bold text-ink-900">아직 궁금한 점이 남았나요?</p>
           <p className="text-[14px] text-ink-500">이용 방법과 안심 보장 제도 페이지에 더 자세한 내용이 있습니다.</p>
           <div className="flex flex-wrap justify-center gap-2">
             <LinkButton href="/how-it-works" variant="secondary">이용 방법</LinkButton>

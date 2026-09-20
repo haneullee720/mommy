@@ -21,7 +21,7 @@ export function MobileNav({ links, isLoggedIn }: { links: { href: string; label:
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="grid h-10 w-10 place-items-center rounded-xl border border-ink-200 text-ink-700 md:hidden"
+        className="grid h-10 w-10 place-items-center rounded border border-ink-200 text-ink-700 md:hidden"
         aria-label="메뉴 열기"
         aria-expanded={open}
       >
@@ -41,20 +41,20 @@ export function MobileNav({ links, isLoggedIn }: { links: { href: string; label:
               <Link
                 key={l.href}
                 href={l.href}
-                className="rounded-xl px-3 py-3.5 text-[15px] font-semibold text-ink-800 hover:bg-ink-50"
+                className="rounded px-3 py-3.5 text-[15px] font-semibold text-ink-800 hover:bg-ink-50"
               >
                 {l.label}
               </Link>
             ))}
             <div className="mt-2 grid grid-cols-2 gap-2">
               {!isLoggedIn && (
-                <Link href="/login" className="rounded-xl border border-ink-200 px-3 py-3 text-center text-sm font-semibold text-ink-800">
+                <Link href="/login" className="rounded border border-ink-200 px-3 py-3 text-center text-sm font-semibold text-ink-800">
                   로그인
                 </Link>
               )}
               <Link
                 href="/request/new"
-                className={`rounded-xl bg-brand-600 px-3 py-3 text-center text-sm font-bold text-white ${isLoggedIn ? "col-span-2" : ""}`}
+                className={`rounded bg-brand-600 px-3 py-3 text-center text-sm font-bold text-white ${isLoggedIn ? "col-span-2" : ""}`}
               >
                 무료 견적받기
               </Link>

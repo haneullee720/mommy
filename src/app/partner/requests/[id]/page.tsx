@@ -7,6 +7,7 @@ import { OPTION_MAP, PROPERTY_LABEL, SERVICE_MAP } from "@/lib/catalog";
 import { manwon, maskAddress, timeAgo, untilDeadline, won } from "@/lib/format";
 import { Alert, Badge } from "@/components/ui";
 import { QuoteForm } from "@/components/quote-form";
+import { Icon } from "@/components/icons";
 
 export const metadata: Metadata = { title: "견적 제출" };
 export const dynamic = "force-dynamic";
@@ -39,7 +40,7 @@ export default async function PartnerRequestDetail({ params }: { params: Promise
 
       <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
         <section className="card p-6">
-          <h1 className="text-[18px] font-extrabold text-ink-900">
+          <h1 className="text-[18px] font-bold text-ink-900">
             {mine ? "견적 수정" : "견적 제출"}
           </h1>
           <p className="mt-1 text-sm text-ink-500">금액과 조건을 정확히 적을수록 선택될 확률이 높아집니다.</p>
@@ -60,8 +61,8 @@ export default async function PartnerRequestDetail({ params }: { params: Promise
         <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
           <div className="card p-5">
             <div className="flex items-center gap-2">
-              <span className="text-lg">{def.emoji}</span>
-              <p className="text-[15.5px] font-extrabold text-ink-900">{def.name}</p>
+              <Icon name={def.icon} className="h-[18px] w-[18px] text-ink-400" />
+              <p className="text-[15.5px] font-bold text-ink-900">{def.name}</p>
             </div>
             <p className="mt-1 text-[12px] font-semibold text-brand-700">{untilDeadline(req.expiresAt)}</p>
 
@@ -90,13 +91,13 @@ export default async function PartnerRequestDetail({ params }: { params: Promise
             )}
 
             {req.description && (
-              <p className="mt-3 whitespace-pre-line rounded-xl bg-ink-50 p-3.5 text-[13px] leading-relaxed text-ink-600">
+              <p className="mt-3 whitespace-pre-line rounded bg-ink-50 p-3.5 text-[13px] leading-relaxed text-ink-600">
                 {req.description}
               </p>
             )}
 
             <p className="mt-3 text-[11.5px] text-ink-400">
-              🔒 고객 상세 주소와 연락처는 낙찰·결제 완료 후 공개됩니다.
+              고객 상세 주소와 연락처는 낙찰·결제 완료 후 공개됩니다.
             </p>
           </div>
 

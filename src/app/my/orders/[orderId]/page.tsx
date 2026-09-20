@@ -8,6 +8,7 @@ import { dateFull, maskPhone, won } from "@/lib/format";
 import { Alert, Badge, LinkButton, OrderStatusBadge, Stars, TierBadge } from "@/components/ui";
 import { OrderTimeline } from "@/components/order-timeline";
 import { ConfirmWorkButton, ReviewForm } from "@/components/order-actions";
+import { Icon } from "@/components/icons";
 
 export const metadata: Metadata = { title: "주문 상세" };
 export const dynamic = "force-dynamic";
@@ -51,8 +52,8 @@ export default async function OrderDetailPage({
 
       <section className="card p-6">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xl">{def.emoji}</span>
-          <h1 className="text-[20px] font-extrabold text-ink-900">{def.name}</h1>
+          <Icon name={def.icon} className="h-5 w-5 text-ink-400" />
+          <h1 className="text-[20px] font-bold text-ink-900">{def.name}</h1>
           <OrderStatusBadge status={order.status} />
           <span className="tnum ml-auto text-[12.5px] font-semibold text-ink-400">{order.code}</span>
         </div>
@@ -64,8 +65,8 @@ export default async function OrderDetailPage({
       <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
         <div className="space-y-6">
           {order.status === "completed" && (
-            <section className="rounded-2xl border border-amber-200 bg-amber-50/70 p-5">
-              <p className="text-[15px] font-extrabold text-amber-900">업체가 작업 완료를 보고했습니다</p>
+            <section className="rounded border border-amber-200 bg-amber-50/70 p-5">
+              <p className="text-[15px] font-bold text-amber-900">업체가 작업 완료를 보고했습니다</p>
               <p className="mt-1.5 text-[13.5px] leading-relaxed text-amber-800">
                 결과를 확인하고 문제가 없으면 아래 버튼을 눌러주세요. 확인하면 수수료를 제외한 금액이 업체에 정산됩니다.
                 <br />
@@ -84,7 +85,7 @@ export default async function OrderDetailPage({
           )}
 
           <section className="card p-6">
-            <h2 className="text-[16px] font-extrabold text-ink-900">작업 정보</h2>
+            <h2 className="text-[16px] font-bold text-ink-900">작업 정보</h2>
             <dl className="mt-4 grid gap-x-6 gap-y-3 sm:grid-cols-2">
               {[
                 ["공간", `${PROPERTY_LABEL[req.propertyType]} · ${req.areaPyeong}평`],
@@ -106,7 +107,7 @@ export default async function OrderDetailPage({
               </div>
             )}
             {req.description && (
-              <p className="mt-4 whitespace-pre-line rounded-xl bg-ink-50 p-4 text-[13.5px] leading-relaxed text-ink-600">
+              <p className="mt-4 whitespace-pre-line rounded bg-ink-50 p-4 text-[13.5px] leading-relaxed text-ink-600">
                 {req.description}
               </p>
             )}
@@ -114,13 +115,13 @@ export default async function OrderDetailPage({
 
           {(order.status === "settled" || myReview) && (
             <section className="card p-6">
-              <h2 className="text-[16px] font-extrabold text-ink-900">{myReview ? "작성한 후기" : "후기 남기기"}</h2>
+              <h2 className="text-[16px] font-bold text-ink-900">{myReview ? "작성한 후기" : "후기 남기기"}</h2>
               {myReview ? (
-                <div className="mt-4 rounded-xl bg-ink-50 p-4">
+                <div className="mt-4 rounded bg-ink-50 p-4">
                   <Stars rating={myReview.rating} size={16} />
                   <p className="mt-2 whitespace-pre-line text-[14px] leading-relaxed text-ink-700">{myReview.content}</p>
                   {myReview.reply && (
-                    <div className="mt-3 rounded-lg border-l-2 border-brand-400 bg-white p-3">
+                    <div className="mt-3 rounded border-l-2 border-brand-400 bg-white p-3">
                       <p className="text-[12px] font-bold text-brand-700">업체 답변</p>
                       <p className="mt-1 text-[13px] text-ink-600">{myReview.reply}</p>
                     </div>
@@ -139,7 +140,7 @@ export default async function OrderDetailPage({
           <div className="card p-5">
             <p className="text-[13px] font-bold text-ink-400">시공 업체</p>
             <div className="mt-2 flex flex-wrap items-center gap-2">
-              <Link href={`/partners/${partner.id}`} className="text-[16px] font-extrabold text-ink-900 hover:underline">
+              <Link href={`/partners/${partner.id}`} className="text-[16px] font-bold text-ink-900 hover:underline">
                 {partner.companyName}
               </Link>
               <TierBadge tier={partner.tier} />
@@ -173,7 +174,7 @@ export default async function OrderDetailPage({
               </div>
               <div className="flex items-baseline justify-between border-t border-ink-100 pt-2">
                 <dt className="text-[14px] font-bold text-ink-900">총 결제 금액</dt>
-                <dd className="text-[18px] font-extrabold text-ink-900">{won(order.amount)}</dd>
+                <dd className="text-[18px] font-bold text-ink-900">{won(order.amount)}</dd>
               </div>
             </dl>
             <p className="mt-3 text-[11.5px] leading-relaxed text-ink-400">

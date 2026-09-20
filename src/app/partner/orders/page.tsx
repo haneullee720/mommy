@@ -6,6 +6,7 @@ import { OPTION_MAP, PROPERTY_LABEL, SERVICE_MAP } from "@/lib/catalog";
 import { dateFull, won } from "@/lib/format";
 import { Badge, EmptyState, LinkButton, OrderStatusBadge } from "@/components/ui";
 import { ReportDoneButton, StartWorkButton } from "@/components/partner-order-actions";
+import { Icon } from "@/components/icons";
 
 export const metadata: Metadata = { title: "수주 작업" };
 export const dynamic = "force-dynamic";
@@ -26,13 +27,13 @@ export default async function PartnerOrdersPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-[24px] font-extrabold text-ink-900">수주 작업</h1>
+        <h1 className="text-[24px] font-bold text-ink-900">수주 작업</h1>
         <p className="mt-1 text-sm text-ink-500">결제가 완료된 건만 표시됩니다. 노쇼 걱정 없이 일정만 챙기세요.</p>
       </div>
 
       {allOrders.length === 0 ? (
         <EmptyState
-          icon="🧹"
+          icon={<Icon name="broom" className="h-7 w-7" />}
           title="아직 수주한 작업이 없습니다"
           desc="견적을 보내고 고객에게 선택되면 이곳에 표시됩니다."
           action={<LinkButton href="/partner/requests" className="mt-2">새 요청 보기</LinkButton>}
@@ -47,8 +48,9 @@ export default async function PartnerOrdersPage() {
               <li key={o.id} className="card p-5">
                 <div className="flex flex-wrap items-center gap-2">
                   {req && (
-                    <span className="text-[15.5px] font-extrabold text-ink-900">
-                      {SERVICE_MAP[req.service].emoji} {SERVICE_MAP[req.service].name}
+                    <span className="text-[15.5px] font-bold text-ink-900">
+                      <Icon name={SERVICE_MAP[req.service].icon} className="h-3.5 w-3.5" />
+                      {SERVICE_MAP[req.service].name}
                     </span>
                   )}
                   <OrderStatusBadge status={o.status} />
@@ -80,7 +82,7 @@ export default async function PartnerOrdersPage() {
                 )}
 
                 {req?.description && (
-                  <p className="mt-3 whitespace-pre-line rounded-xl bg-ink-50 p-3.5 text-[13px] leading-relaxed text-ink-600">
+                  <p className="mt-3 whitespace-pre-line rounded bg-ink-50 p-3.5 text-[13px] leading-relaxed text-ink-600">
                     {req.description}
                   </p>
                 )}

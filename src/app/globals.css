@@ -1,40 +1,51 @@
 @import "tailwindcss";
 
+/*
+ * 청소모아 디자인 토큰 — 에디토리얼 미니멀
+ *
+ * 색은 CTA·핵심 수치·작은 강조에만 쓴다. 나머지 구조는 전부 무채색과 헤어라인으로 만든다.
+ * 위계는 색면이 아니라 타이포그래피 대비가 만든다.
+ */
+
 @theme {
   --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
     "Malgun Gothic", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
 
-  --color-brand-50: #eefbf7;
-  --color-brand-100: #d5f5ec;
-  --color-brand-200: #aeead9;
-  --color-brand-300: #78d9c1;
-  --color-brand-400: #43c0a4;
-  --color-brand-500: #1fa88c;
-  --color-brand-600: #128872;
-  --color-brand-700: #106d5d;
-  --color-brand-800: #11574c;
-  --color-brand-900: #114840;
-  --color-brand-950: #042a26;
+  /* 무채색 — 먹빛에서 오프화이트까지. 미세하게 따뜻한 쪽으로 기울였다. */
+  --color-ink-950: #08080a;
+  --color-ink-900: #111113;
+  --color-ink-800: #26262a;
+  --color-ink-700: #3a3a40;
+  --color-ink-600: #55555c;
+  --color-ink-500: #6b6b70;
+  --color-ink-400: #8a8a90;
+  --color-ink-300: #b4b2ae;
+  --color-ink-200: #d9d6d1;
+  --color-ink-100: #e6e4e0;  /* 헤어라인 */
+  --color-ink-50: #f2f0ec;
+  --color-ink-25: #faf9f7;   /* 본문 배경 */
 
-  --color-ink-50: #f6f7f9;
-  --color-ink-100: #eceef2;
-  --color-ink-200: #d5dae3;
-  --color-ink-300: #b0b9c9;
-  --color-ink-400: #8593aa;
-  --color-ink-500: #667590;
-  --color-ink-600: #515e76;
-  --color-ink-700: #434d60;
-  --color-ink-800: #3a4251;
-  --color-ink-900: #1d2430;
-  --color-ink-950: #0e131c;
+  /* 액센트 — 딥 파인 그린. 오프화이트 위에서 거의 검정처럼 읽히다가 CTA 에서만 색으로 드러난다. */
+  --color-brand-50: #eef2ef;
+  --color-brand-100: #dce5e0;
+  --color-brand-200: #bfcfc6;
+  --color-brand-300: #94afa1;
+  --color-brand-400: #5f8471;
+  --color-brand-500: #2f6b52;
+  --color-brand-600: #1c5c46;
+  --color-brand-700: #164a38;
+  --color-brand-800: #123a2c;
+  --color-brand-900: #0e2d23;
+  --color-brand-950: #081a13;
 
-  --color-lemon-400: #ffd84d;
-  --color-lemon-500: #ffc61a;
+  /* 별점 전용 — 채도를 낮춘 금색 */
+  --color-lemon-400: #d6ab4a;
+  --color-lemon-500: #c8992f;
 }
 
 :root {
   color-scheme: light;
-  --header-h: 64px;
+  --header-h: 72px;
 }
 
 html {
@@ -43,76 +54,132 @@ html {
 }
 
 body {
-  background: #ffffff;
+  background: var(--color-ink-25);
   color: var(--color-ink-900);
   font-family: var(--font-sans);
-  letter-spacing: -0.01em;
+  font-size: 15px;
+  line-height: 1.75;
+  letter-spacing: -0.011em;
   word-break: keep-all;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* 숫자 카운터·금액 정렬용 */
+/* ---------------------------------------------------------------- 타이포 */
+/* 큰 제목일수록 자간을 조인다. 한글은 기본 자간이 넓어 크게 쓸수록 헐거워 보인다. */
+
+.t-display {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+  font-weight: 700;
+}
+
+.t-h2 {
+  font-size: clamp(1.625rem, 3.2vw, 2.5rem);
+  line-height: 1.22;
+  letter-spacing: -0.032em;
+  font-weight: 700;
+}
+
+.t-h3 {
+  font-size: 1.1875rem;
+  line-height: 1.4;
+  letter-spacing: -0.022em;
+  font-weight: 600;
+}
+
+.t-lead {
+  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  line-height: 1.72;
+  letter-spacing: -0.014em;
+  color: var(--color-ink-500);
+}
+
+.t-caption {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  letter-spacing: 0;
+  color: var(--color-ink-400);
+}
+
+/* 섹션 라벨 — 대문자 소형 자간 */
+.t-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ink-400);
+}
+
+/* 숫자·금액 정렬 */
 .tnum {
   font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
 }
+
+/* ---------------------------------------------------------------- 레이아웃 */
 
 .container-page {
   width: 100%;
   max-width: 1200px;
   margin-inline: auto;
-  padding-inline: 20px;
+  padding-inline: 32px;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .container-page {
-    padding-inline: 16px;
+    padding-inline: 20px;
   }
 }
 
+/* 섹션 여백 리듬 — 전부 같은 값을 쓰지 않는다 */
+.section { padding-block: 96px; }
+.section-lg { padding-block: 128px; }
+.section-sm { padding-block: 64px; }
+
+@media (max-width: 768px) {
+  .section { padding-block: 64px; }
+  .section-lg { padding-block: 80px; }
+  .section-sm { padding-block: 48px; }
+}
+
+/* ---------------------------------------------------------------- 표면 */
+
 .card {
   background: #fff;
-  border: 1px solid var(--color-ink-200);
-  border-radius: 18px;
+  border: 1px solid var(--color-ink-100);
+  border-radius: 4px;
 }
 
-.shadow-soft {
-  box-shadow: 0 1px 2px rgb(14 19 28 / 0.04), 0 8px 24px -12px rgb(14 19 28 / 0.14);
-}
+/* 헤어라인 리스트 — 카드 대신 쓰는 기본 구조 */
+.rule-top { border-top: 1px solid var(--color-ink-100); }
+.rule-bottom { border-bottom: 1px solid var(--color-ink-100); }
 
-.shadow-lift {
-  box-shadow: 0 2px 4px rgb(14 19 28 / 0.05), 0 18px 40px -18px rgb(14 19 28 / 0.25);
-}
+/* 떠 있어야 하는 것에만. 나머지는 헤어라인으로 해결한다. */
+.shadow-soft { box-shadow: none; }
+.shadow-lift { box-shadow: 0 12px 32px -16px rgb(17 17 19 / 0.18); }
 
-/* 히어로 배경 */
-.hero-mesh {
-  background:
-    radial-gradient(60rem 30rem at 12% -10%, #d5f5ec 0%, transparent 60%),
-    radial-gradient(48rem 26rem at 92% 6%, #e8f1ff 0%, transparent 62%),
-    linear-gradient(180deg, #f9fbfb 0%, #ffffff 70%);
-}
-
-.stripe-divider {
-  background-image: repeating-linear-gradient(
-    -45deg,
-    var(--color-brand-100) 0 10px,
-    transparent 10px 20px
-  );
+::selection {
+  background: var(--color-brand-600);
+  color: #fff;
 }
 
 input[type="range"] {
   accent-color: var(--color-brand-600);
 }
 
-::selection {
-  background: var(--color-brand-200);
-}
-
 @keyframes rise {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: none; }
 }
 
 .animate-rise {
-  animation: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise { animation: none; }
+  html { scroll-behavior: auto; }
 }
 
 .no-scrollbar::-webkit-scrollbar { display: none; }

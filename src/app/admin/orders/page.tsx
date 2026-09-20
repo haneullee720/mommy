@@ -10,6 +10,7 @@ import { SERVICE_MAP } from "@/lib/catalog";
 import { dateFull, won } from "@/lib/format";
 import { EmptyState, OrderStatusBadge } from "@/components/ui";
 import { ForceSettleButton } from "@/components/admin-controls";
+import { Icon } from "@/components/icons";
 
 export const metadata: Metadata = { title: "거래·정산" };
 export const dynamic = "force-dynamic";
@@ -25,14 +26,14 @@ export default async function AdminOrdersPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-[24px] font-extrabold text-ink-900">거래·정산</h1>
+        <h1 className="text-[24px] font-bold text-ink-900">거래·정산</h1>
         <p className="mt-1 text-sm text-ink-500">
           고객 확인이 지연된 건은 자동 구매확정 기간({settings.autoConfirmDays}일) 이후 강제 정산할 수 있습니다.
         </p>
       </div>
 
       {orders.length === 0 ? (
-        <EmptyState icon="💳" title="거래 내역이 없습니다" />
+        <EmptyState icon={<Icon name="card" className="h-7 w-7" />} title="거래 내역이 없습니다" />
       ) : (
         <div className="card overflow-x-auto">
           <table className="w-full min-w-[860px] text-left">

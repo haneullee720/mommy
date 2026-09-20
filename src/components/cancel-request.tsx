@@ -20,7 +20,7 @@ export function CancelRequestButton({ requestId }: { requestId: string }) {
       <button
         type="submit"
         disabled={pending}
-        className="rounded-lg px-3 py-2 text-[13px] font-semibold text-ink-400 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+        className="rounded px-3 py-2 text-[13px] font-semibold text-ink-400 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
       >
         {pending ? "취소 중..." : "요청 취소"}
       </button>

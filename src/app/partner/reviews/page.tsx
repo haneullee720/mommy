@@ -5,6 +5,7 @@ import { getUsersByIds, listReviewsByPartner } from "@/lib/service";
 import { dateFull } from "@/lib/format";
 import { EmptyState, Stars } from "@/components/ui";
 import { ReviewReplyForm } from "@/components/review-reply";
+import { Icon } from "@/components/icons";
 
 export const metadata: Metadata = { title: "후기 관리" };
 export const dynamic = "force-dynamic";
@@ -22,14 +23,14 @@ export default async function PartnerReviewsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-[24px] font-extrabold text-ink-900">후기 관리</h1>
+        <h1 className="text-[24px] font-bold text-ink-900">후기 관리</h1>
         <p className="mt-1 text-sm text-ink-500">답변을 남기면 신뢰도가 올라가고, 다음 고객의 선택 확률이 높아집니다.</p>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-4">
         <div className="card p-5">
           <p className="text-[12.5px] font-semibold text-ink-400">종합 평점</p>
-          <p className="tnum mt-1.5 text-[21px] font-extrabold text-ink-900">{ctx.partner.rating.toFixed(1)}</p>
+          <p className="tnum mt-1.5 text-[21px] font-bold text-ink-900">{ctx.partner.rating.toFixed(1)}</p>
           <div className="mt-1">
             <Stars rating={ctx.partner.rating} />
           </div>
@@ -41,13 +42,13 @@ export default async function PartnerReviewsPage() {
         ].map(([k, v]) => (
           <div key={k} className="card p-5">
             <p className="text-[12.5px] font-semibold text-ink-400">{k}</p>
-            <p className="tnum mt-1.5 text-[21px] font-extrabold text-ink-900">{v}</p>
+            <p className="tnum mt-1.5 text-[21px] font-bold text-ink-900">{v}</p>
           </div>
         ))}
       </div>
 
       {allReviews.length === 0 ? (
-        <EmptyState icon="⭐" title="아직 후기가 없습니다" desc="첫 작업을 완료하면 고객이 후기를 남길 수 있습니다." />
+        <EmptyState icon={<Icon name="star" className="h-7 w-7" />} title="아직 후기가 없습니다" desc="첫 작업을 완료하면 고객이 후기를 남길 수 있습니다." />
       ) : (
         <ul className="space-y-3">
           {reviews.map((r) => {
@@ -69,7 +70,7 @@ export default async function PartnerReviewsPage() {
                   <span>시간 {r.scores.punctuality}</span>
                 </div>
                 {r.reply ? (
-                  <div className="mt-3 rounded-xl border-l-2 border-brand-400 bg-brand-50/60 p-3.5">
+                  <div className="mt-3 rounded border-l-2 border-brand-400 bg-brand-50/60 p-3.5">
                     <p className="text-[12px] font-bold text-brand-700">내 답변</p>
                     <p className="mt-1 text-[13.5px] text-ink-700">{r.reply}</p>
                   </div>

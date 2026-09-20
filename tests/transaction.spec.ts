@@ -91,9 +91,10 @@ test("비회원 요청이 접수되고, 다시 불러와도 남아 있다", asyn
   const guest = await guestCtx.newPage();
   const partner = await partnerCtx.newPage();
 
+  // 히어로 하단의 예상 견적 바에서 종류를 고르고 요청서로 넘어간다.
   await guest.goto("/");
-  await guest.getByRole("button", { name: /사무실청소/ }).click();
-  await guest.getByRole("link", { name: /견적 무료로 받아보기/ }).click();
+  await guest.locator("select").first().selectOption("office");
+  await guest.getByRole("link", { name: "견적 요청", exact: true }).click();
   await guest.waitForURL("**/request/new**");
 
   await guest.getByRole("button", { name: "다음" }).click();

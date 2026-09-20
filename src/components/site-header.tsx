@@ -17,16 +17,16 @@ export async function SiteHeader() {
   const home = user?.role === "partner" ? "/partner" : user?.role === "admin" ? "/admin" : "/my";
 
   return (
-    <header className="sticky top-0 z-50 border-b border-ink-100 bg-white/85 backdrop-blur-md">
-      <div className="container-page flex h-16 items-center justify-between gap-4">
-        <div className="flex items-center gap-8">
+    <header className="sticky top-0 z-50 border-b border-ink-100 bg-ink-25/90 backdrop-blur-sm">
+      <div className="container-page flex h-[72px] items-center justify-between gap-6">
+        <div className="flex items-center gap-10">
           <Logo />
-          <nav className="hidden items-center gap-1 md:flex">
+          <nav className="hidden items-center gap-7 md:flex">
             {LINKS.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
-                className="rounded-lg px-3 py-2 text-[14.5px] font-semibold text-ink-600 transition hover:bg-ink-50 hover:text-ink-900"
+                className="text-[14px] font-medium text-ink-500 transition-colors hover:text-ink-900"
               >
                 {l.label}
               </Link>
@@ -34,32 +34,26 @@ export async function SiteHeader() {
           </nav>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-5">
           {user ? (
             <>
-              <Link
-                href={home}
-                className="hidden rounded-lg px-3 py-2 text-[14.5px] font-semibold text-ink-700 hover:bg-ink-50 sm:inline-flex"
-              >
+              <Link href={home} className="hidden text-[14px] font-medium text-ink-700 hover:text-ink-900 sm:inline">
                 {user.name}님
               </Link>
               <form action={logoutAction} className="hidden sm:block">
-                <button type="submit" className="rounded-lg px-3 py-2 text-[14.5px] font-semibold text-ink-400 hover:text-ink-700">
+                <button type="submit" className="text-[14px] font-medium text-ink-400 transition-colors hover:text-ink-700">
                   로그아웃
                 </button>
               </form>
             </>
           ) : (
-            <Link
-              href="/login"
-              className="hidden rounded-lg px-3 py-2 text-[14.5px] font-semibold text-ink-700 hover:bg-ink-50 sm:inline-flex"
-            >
+            <Link href="/login" className="hidden text-[14px] font-medium text-ink-700 hover:text-ink-900 sm:inline">
               로그인
             </Link>
           )}
           <Link
             href="/request/new"
-            className="hidden h-10 items-center rounded-xl bg-brand-600 px-4 text-[14.5px] font-bold text-white shadow-soft transition hover:bg-brand-700 sm:inline-flex"
+            className="hidden h-10 items-center rounded-md bg-ink-900 px-4 text-[14px] font-semibold text-white transition-colors hover:bg-brand-700 sm:inline-flex"
           >
             무료 견적받기
           </Link>

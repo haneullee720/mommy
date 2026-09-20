@@ -71,7 +71,7 @@ export function ReviewForm({ orderId }: { orderId: string }) {
 
       <div className="grid gap-3 sm:grid-cols-3">
         {SCORE_LABELS.map((s) => (
-          <label key={s.key} className="rounded-xl border border-ink-200 p-3">
+          <label key={s.key} className="rounded border border-ink-200 p-3">
             <span className="flex items-center justify-between text-[13px] font-semibold text-ink-700">
               {s.label}
               <span className="tnum text-brand-700">{scores[s.key]}</span>
