@@ -1,23 +1,23 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { readDB, mutate, uid } from "@/lib/db";
+import { db, uid } from "@/lib/db";
 import { createSession, createUser, destroySession, verifyPassword } from "@/lib/auth";
 import { type ActionState, bool, list, num, str, toMessage } from "@/lib/form";
-import { DEFAULT_FEE_RATES } from "@/lib/fees";
-import type { Partner, ServiceSlug } from "@/lib/types";
+import type { ServiceSlug } from "@/lib/types";
 
 export async function loginAction(_prev: ActionState, fd: FormData): Promise<ActionState> {
   const email = str(fd, "email").toLowerCase();
   const password = str(fd, "password");
   const next = str(fd, "next");
 
-  const user = readDB().users.find((u) => u.email === email);
-  if (!user || !verifyPassword(password, user.passwordHash)) {
+  const rows = await db()`select id, role, password_hash from users where email = ${email}`;
+  const user = rows[0];
+  if (!user || !verifyPassword(password, user.passwordHash as string)) {
     return { error: "이메일 또는 비밀번호가 올바르지 않습니다." };
   }
-  await createSession(user.id);
-  redirect(next || defaultHome(user.role));
+  await createSession(user.id as string);
+  redirect(next || defaultHome(user.role as string));
 }
 
 export async function signupAction(_prev: ActionState, fd: FormData): Promise<ActionState> {
@@ -34,7 +34,7 @@ export async function signupAction(_prev: ActionState, fd: FormData): Promise<Ac
 
   let userId: string;
   try {
-    const user = createUser({ role: "customer", name, email, phone, password });
+    const user = await createUser({ role: "customer", name, email, phone, password });
     userId = user.id;
   } catch (err) {
     return { error: toMessage(err) };
@@ -63,38 +63,27 @@ export async function partnerSignupAction(_prev: ActionState, fd: FormData): Pro
 
   let userId: string;
   try {
-    const user = createUser({ role: "partner", name, email, phone, password });
+    const user = await createUser({ role: "partner", name, email, phone, password });
     userId = user.id;
   } catch (err) {
     return { error: toMessage(err) };
   }
 
-  mutate((db) => {
-    const partner: Partner = {
-      id: uid("ptn"),
-      userId,
-      companyName,
-      bizNo,
-      ceoName: name,
-      regions,
-      services,
-      intro: str(fd, "intro"),
-      since: num(fd, "since", new Date().getFullYear()),
-      crewSize: num(fd, "crewSize", 2),
-      hasInsurance: bool(fd, "hasInsurance"),
-      certifications: list(fd, "certifications"),
-      status: "pending",
-      tier: "basic",
-      rating: 0,
-      reviewCount: 0,
-      completedJobs: 0,
-      responseMinutes: 60,
-      bankAccount: { bank: str(fd, "bank"), number: str(fd, "bankNumber"), holder: str(fd, "bankHolder") || companyName },
-      createdAt: new Date().toISOString(),
-    };
-    db.partners.push(partner);
-    if (!db.settings?.feeRates) db.settings = { feeRates: { ...DEFAULT_FEE_RATES }, escrowHoldDays: 3, autoConfirmDays: 7 };
-  });
+  const sql = db();
+  await sql`
+    insert into partners (
+      id, user_id, company_name, biz_no, ceo_name, regions, services, intro, since,
+      crew_size, has_insurance, certifications, status, tier, response_minutes, bank_account
+    ) values (
+      ${uid("ptn")}, ${userId}, ${companyName}, ${bizNo}, ${name}, ${regions}, ${services},
+      ${str(fd, "intro")}, ${num(fd, "since", new Date().getFullYear())}, ${num(fd, "crewSize", 2)},
+      ${bool(fd, "hasInsurance")}, ${list(fd, "certifications")}, 'pending', 'basic', 60,
+      ${sql.json({
+        bank: str(fd, "bank"),
+        number: str(fd, "bankNumber"),
+        holder: str(fd, "bankHolder") || companyName,
+      })}
+    )`;
 
   await createSession(userId);
   redirect("/partner");

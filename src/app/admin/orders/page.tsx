@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { readDB } from "@/lib/db";
+import {
+  getPartnersByIds,
+  getRequestsByIds,
+  getSettings,
+  getUsersByIds,
+  listAllOrders,
+} from "@/lib/service";
 import { SERVICE_MAP } from "@/lib/catalog";
 import { dateFull, won } from "@/lib/format";
 import { EmptyState, OrderStatusBadge } from "@/components/ui";
@@ -8,16 +14,20 @@ import { ForceSettleButton } from "@/components/admin-controls";
 export const metadata: Metadata = { title: "거래·정산" };
 export const dynamic = "force-dynamic";
 
-export default function AdminOrdersPage() {
-  const db = readDB();
-  const orders = db.orders.slice().sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+export default async function AdminOrdersPage() {
+  const [orders, settings] = await Promise.all([listAllOrders(200), getSettings()]);
+  const [requests, partners, customers] = await Promise.all([
+    getRequestsByIds(orders.map((o) => o.requestId)),
+    getPartnersByIds(orders.map((o) => o.partnerId)),
+    getUsersByIds(orders.map((o) => o.customerId)),
+  ]);
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-[24px] font-extrabold text-ink-900">거래·정산</h1>
         <p className="mt-1 text-sm text-ink-500">
-          고객 확인이 지연된 건은 자동 구매확정 기간({db.settings.autoConfirmDays}일) 이후 강제 정산할 수 있습니다.
+          고객 확인이 지연된 건은 자동 구매확정 기간({settings.autoConfirmDays}일) 이후 강제 정산할 수 있습니다.
         </p>
       </div>
 
@@ -40,9 +50,9 @@ export default function AdminOrdersPage() {
             </thead>
             <tbody className="divide-y divide-ink-100">
               {orders.map((o) => {
-                const req = db.requests.find((r) => r.id === o.requestId);
-                const partner = db.partners.find((p) => p.id === o.partnerId);
-                const customer = db.users.find((u) => u.id === o.customerId);
+                const req = requests.get(o.requestId);
+                const partner = partners.get(o.partnerId);
+                const customer = customers.get(o.customerId);
                 return (
                   <tr key={o.id} className="text-[13px]">
                     <td className="tnum px-4 py-3 font-semibold text-ink-700">

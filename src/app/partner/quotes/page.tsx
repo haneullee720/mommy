@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { currentPartner } from "@/lib/auth";
-import { getRequest, listQuotesByPartner } from "@/lib/service";
+import { getRequestsByIds, listQuotesByPartner } from "@/lib/service";
 import { SERVICE_MAP } from "@/lib/catalog";
 import { timeAgo, won } from "@/lib/format";
 import { Alert, Badge, EmptyState, LinkButton } from "@/components/ui";
@@ -22,8 +22,9 @@ export default async function PartnerQuotesPage({ searchParams }: { searchParams
   const ctx = await currentPartner();
   if (!ctx) redirect("/partner-signup");
 
-  const allQuotes = listQuotesByPartner(ctx.partner.id);
+  const allQuotes = await listQuotesByPartner(ctx.partner.id);
   const quotes = allQuotes.slice(0, 30);
+  const requests = await getRequestsByIds(quotes.map((q) => q.requestId));
   const accepted = allQuotes.filter((q) => q.status === "accepted").length;
   const rate = allQuotes.length ? Math.round((accepted / allQuotes.length) * 100) : 0;
 
@@ -46,7 +47,7 @@ export default async function PartnerQuotesPage({ searchParams }: { searchParams
       ) : (
         <ul className="space-y-3">
           {quotes.map((q) => {
-            const req = getRequest(q.requestId);
+            const req = requests.get(q.requestId);
             const meta = STATUS[q.status];
             return (
               <li key={q.id} className="card p-5">

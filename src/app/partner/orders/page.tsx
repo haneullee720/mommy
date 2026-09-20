@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { currentPartner } from "@/lib/auth";
-import { getRequest, getUser, listOrdersByPartner } from "@/lib/service";
+import { getRequestsByIds, getUsersByIds, listOrdersByPartner } from "@/lib/service";
 import { OPTION_MAP, PROPERTY_LABEL, SERVICE_MAP } from "@/lib/catalog";
 import { dateFull, won } from "@/lib/format";
 import { Badge, EmptyState, LinkButton, OrderStatusBadge } from "@/components/ui";
@@ -14,8 +14,14 @@ export default async function PartnerOrdersPage() {
   const ctx = await currentPartner();
   if (!ctx) redirect("/partner-signup");
 
-  const allOrders = listOrdersByPartner(ctx.partner.id).filter((o) => o.status !== "pending_payment");
+  const allOrders = (await listOrdersByPartner(ctx.partner.id)).filter(
+    (o) => o.status !== "pending_payment",
+  );
   const orders = allOrders.slice(0, 20);
+  const [requests, customers] = await Promise.all([
+    getRequestsByIds(orders.map((o) => o.requestId)),
+    getUsersByIds(orders.map((o) => o.customerId)),
+  ]);
 
   return (
     <div className="space-y-6">
@@ -34,8 +40,8 @@ export default async function PartnerOrdersPage() {
       ) : (
         <ul className="space-y-4">
           {orders.map((o) => {
-            const req = getRequest(o.requestId);
-            const customer = getUser(o.customerId);
+            const req = requests.get(o.requestId);
+            const customer = customers.get(o.customerId);
             const revealed = Boolean(o.paidAt);
             return (
               <li key={o.id} className="card p-5">

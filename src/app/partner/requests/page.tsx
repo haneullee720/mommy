@@ -2,8 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { currentPartner } from "@/lib/auth";
-import { listOpenRequestsForPartner, listQuotesByPartner } from "@/lib/service";
-import { readDB } from "@/lib/db";
+import { countQuotesByRequest, listOpenRequestsForPartner, listQuotesByPartner } from "@/lib/service";
 import { OPTION_MAP, SERVICE_MAP } from "@/lib/catalog";
 import { manwon, timeAgo, untilDeadline } from "@/lib/format";
 import { Badge, EmptyState } from "@/components/ui";
@@ -15,9 +14,9 @@ export default async function PartnerRequestsPage() {
   const ctx = await currentPartner();
   if (!ctx) redirect("/partner-signup");
 
-  const db = readDB();
-  const open = listOpenRequestsForPartner(ctx.partner);
-  const myQuotes = listQuotesByPartner(ctx.partner.id);
+  const open = await listOpenRequestsForPartner(ctx.partner);
+  const competitorCounts = await countQuotesByRequest(open.map((r) => r.id));
+  const myQuotes = await listQuotesByPartner(ctx.partner.id);
   const quotedMap = new Map(myQuotes.map((q) => [q.requestId, q]));
 
   return (
@@ -39,7 +38,7 @@ export default async function PartnerRequestsPage() {
         <ul className="space-y-3">
           {open.map((r) => {
             const mine = quotedMap.get(r.id);
-            const competitors = db.quotes.filter((q) => q.requestId === r.id && q.status !== "withdrawn").length;
+            const competitors = competitorCounts.get(r.id) ?? 0;
             return (
               <li key={r.id}>
                 <Link href={`/partner/requests/${r.id}`} className="card block p-5 transition hover:border-brand-300 hover:shadow-soft">

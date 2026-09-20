@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { readDB } from "@/lib/db";
+import { getSettings } from "@/lib/service";
 import { SettingsForm } from "@/components/admin-controls";
 
 export const metadata: Metadata = { title: "정책 설정" };
 export const dynamic = "force-dynamic";
 
-export default function AdminSettingsPage() {
-  const { settings } = readDB();
+export default async function AdminSettingsPage() {
+  const settings = await getSettings();
 
   return (
     <div className="space-y-6">

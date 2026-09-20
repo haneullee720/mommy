@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { readDB } from "@/lib/db";
-import { platformStats } from "@/lib/service";
+import {
+  escrowSummary,
+  getPartnersByIds,
+  listAllOrders,
+  listPendingPartners,
+  platformStats,
+  requestCountByService,
+} from "@/lib/service";
 import { SERVICE_MAP } from "@/lib/catalog";
 import { manwon, timeAgo, won } from "@/lib/format";
 import { Badge, OrderStatusBadge } from "@/components/ui";
@@ -9,28 +15,24 @@ import { Badge, OrderStatusBadge } from "@/components/ui";
 export const metadata: Metadata = { title: "운영 현황" };
 export const dynamic = "force-dynamic";
 
-export default function AdminHome() {
-  const db = readDB();
-  const stats = platformStats();
+export default async function AdminHome() {
+  const [stats, escrow, pendingPartners, byService, recentOrders] = await Promise.all([
+    platformStats(),
+    escrowSummary(),
+    listPendingPartners(5),
+    requestCountByService(),
+    listAllOrders(8),
+  ]);
+  const orderPartners = await getPartnersByIds(recentOrders.map((o) => o.partnerId));
 
-  const pendingPartners = db.partners.filter((p) => p.status === "pending");
-  const escrowHeld = db.orders.filter((o) => ["escrow", "in_progress", "completed"].includes(o.status));
-  const toSettle = db.orders.filter((o) => o.status === "completed");
-
-  const byService = Object.entries(
-    db.requests.reduce<Record<string, number>>((acc, r) => {
-      acc[r.service] = (acc[r.service] ?? 0) + 1;
-      return acc;
-    }, {}),
-  ).sort((a, b) => b[1] - a[1]);
-
-  const maxCount = byService[0]?.[1] ?? 1;
+  const maxCount = byService[0]?.count ?? 1;
+  const paidCount = stats.gmv > 0 ? stats.completedCount : 0;
 
   const CARDS = [
-    { label: "거래액 (GMV)", value: won(stats.gmv), note: `결제 ${db.orders.filter((o) => o.paidAt).length}건` },
+    { label: "거래액 (GMV)", value: won(stats.gmv), note: `정산 완료 ${paidCount}건` },
     { label: "중개 수수료 매출", value: won(stats.revenue), note: `평균 수수료율 ${stats.gmv ? Math.round((stats.revenue / stats.gmv) * 100) : 0}%` },
-    { label: "에스크로 보관액", value: won(escrowHeld.reduce((s, o) => s + o.amount, 0)), note: `${escrowHeld.length}건 보관 중` },
-    { label: "정산 대기", value: won(toSettle.reduce((s, o) => s + o.payoutAmount, 0)), note: `${toSettle.length}건 지급 예정` },
+    { label: "에스크로 보관액", value: won(escrow.heldAmount), note: `${escrow.heldCount}건 보관 중` },
+    { label: "정산 대기", value: won(escrow.settleAmount), note: `${escrow.settleCount}건 지급 예정` },
   ];
 
   return (
@@ -74,7 +76,7 @@ export default function AdminHome() {
             <p className="mt-4 text-[13.5px] text-ink-400">대기 중인 신청이 없습니다.</p>
           ) : (
             <ul className="mt-4 space-y-2">
-              {pendingPartners.slice(0, 5).map((p) => (
+              {pendingPartners.map((p) => (
                 <li key={p.id} className="flex items-center justify-between gap-2 rounded-xl bg-ink-50 px-4 py-3">
                   <span className="min-w-0">
                     <span className="block truncate text-[14px] font-bold text-ink-900">{p.companyName}</span>
@@ -90,11 +92,11 @@ export default function AdminHome() {
         <section className="card p-5">
           <p className="text-[16px] font-extrabold text-ink-900">서비스별 요청 분포</p>
           <ul className="mt-4 space-y-2.5">
-            {byService.map(([slug, count]) => (
-              <li key={slug}>
+            {byService.map(({ service, count }) => (
+              <li key={service}>
                 <div className="flex items-center justify-between text-[13px]">
                   <span className="font-semibold text-ink-700">
-                    {SERVICE_MAP[slug as keyof typeof SERVICE_MAP]?.name ?? slug}
+                    {SERVICE_MAP[service]?.name ?? service}
                   </span>
                   <span className="tnum font-bold text-ink-900">{count}건</span>
                 </div>
@@ -124,8 +126,8 @@ export default function AdminHome() {
               </tr>
             </thead>
             <tbody className="divide-y divide-ink-100">
-              {db.orders.slice().reverse().slice(0, 8).map((o) => {
-                const partner = db.partners.find((p) => p.id === o.partnerId);
+              {recentOrders.map((o) => {
+                const partner = orderPartners.get(o.partnerId);
                 return (
                   <tr key={o.id} className="text-[13px]">
                     <td className="tnum py-2.5 pr-3 font-semibold text-ink-700">{o.code}</td>

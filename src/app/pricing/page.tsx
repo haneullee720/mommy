@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { readDB } from "@/lib/db";
+import { getSettings } from "@/lib/service";
 import { TIER_LABEL, TIER_RULE } from "@/lib/fees";
 import { won } from "@/lib/format";
 import { Badge, LinkButton, SectionHeading } from "@/components/ui";
@@ -14,8 +14,8 @@ export const dynamic = "force-dynamic";
 
 const EXAMPLE = 420000;
 
-export default function PricingPage() {
-  const rates = readDB().settings.feeRates;
+export default async function PricingPage() {
+  const { feeRates: rates } = await getSettings();
 
   return (
     <>

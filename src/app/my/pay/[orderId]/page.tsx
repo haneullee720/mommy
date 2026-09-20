@@ -15,12 +15,12 @@ export default async function PayPage({ params }: { params: Promise<{ orderId: s
   const { orderId } = await params;
   const user = await requireUser("customer");
 
-  const order = getOrder(orderId);
+  const order = await getOrder(orderId);
   if (!order || order.customerId !== user.id) notFound();
   if (order.status !== "pending_payment") redirect(`/my/orders/${order.id}`);
 
-  const req = getRequest(order.requestId);
-  const partner = getPartner(order.partnerId);
+  const req = await getRequest(order.requestId);
+  const partner = await getPartner(order.partnerId);
   if (!req || !partner) notFound();
 
   const def = SERVICE_MAP[req.service];

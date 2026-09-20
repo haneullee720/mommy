@@ -1,7 +1,7 @@
 import "server-only";
 import crypto from "node:crypto";
 import { cookies } from "next/headers";
-import { mutate, readDB, uid } from "./db";
+import { db, toPartner, toUser, uid } from "./db";
 import type { Partner, Role, User } from "./types";
 
 const COOKIE = "cm_session";
@@ -23,12 +23,14 @@ export function verifyPassword(password: string, stored: string): boolean {
 
 export async function createSession(userId: string): Promise<void> {
   const token = crypto.randomBytes(24).toString("hex");
-  const now = new Date();
-  const expires = new Date(now.getTime() + SESSION_DAYS * 864e5);
-  mutate((db) => {
-    db.sessions = db.sessions.filter((s) => new Date(s.expiresAt) > now);
-    db.sessions.push({ token, userId, createdAt: now.toISOString(), expiresAt: expires.toISOString() });
-  });
+  const expires = new Date(Date.now() + SESSION_DAYS * 864e5);
+
+  const sql = db();
+  await sql`delete from sessions where expires_at < now()`;
+  await sql`
+    insert into sessions (token, user_id, expires_at)
+    values (${token}, ${userId}, ${expires})`;
+
   const jar = await cookies();
   jar.set(COOKIE, token, {
     httpOnly: true,
@@ -42,7 +44,7 @@ export async function createSession(userId: string): Promise<void> {
 export async function destroySession(): Promise<void> {
   const jar = await cookies();
   const token = jar.get(COOKIE)?.value;
-  if (token) mutate((db) => { db.sessions = db.sessions.filter((s) => s.token !== token); });
+  if (token) await db()`delete from sessions where token = ${token}`;
   jar.delete(COOKIE);
 }
 
@@ -50,10 +52,12 @@ export async function currentUser(): Promise<User | null> {
   const jar = await cookies();
   const token = jar.get(COOKIE)?.value;
   if (!token) return null;
-  const db = readDB();
-  const session = db.sessions.find((s) => s.token === token);
-  if (!session || new Date(session.expiresAt) < new Date()) return null;
-  return db.users.find((u) => u.id === session.userId) ?? null;
+
+  const rows = await db()`
+    select u.* from sessions s
+    join users u on u.id = s.user_id
+    where s.token = ${token} and s.expires_at > now()`;
+  return rows[0] ? toUser(rows[0]) : null;
 }
 
 export async function requireUser(role?: Role | Role[]): Promise<User> {
@@ -69,31 +73,31 @@ export async function requireUser(role?: Role | Role[]): Promise<User> {
 export async function currentPartner(): Promise<{ user: User; partner: Partner } | null> {
   const user = await currentUser();
   if (!user || user.role !== "partner") return null;
-  const partner = readDB().partners.find((p) => p.userId === user.id);
-  return partner ? { user, partner } : null;
+  const rows = await db()`select * from partners where user_id = ${user.id}`;
+  return rows[0] ? { user, partner: toPartner(rows[0]) } : null;
 }
 
-export function createUser(input: {
+export async function createUser(input: {
   role: Role;
   name: string;
   email: string;
   phone: string;
   password: string;
-}): User {
-  return mutate((db) => {
-    if (db.users.some((u) => u.email.toLowerCase() === input.email.toLowerCase())) {
+}): Promise<User> {
+  try {
+    const rows = await db()`
+      insert into users (id, role, name, email, phone, password_hash)
+      values (
+        ${uid("usr")}, ${input.role}, ${input.name}, ${input.email.toLowerCase()},
+        ${input.phone}, ${hashPassword(input.password)}
+      )
+      returning *`;
+    return toUser(rows[0]);
+  } catch (err) {
+    // unique_violation — 이미 가입된 이메일
+    if (typeof err === "object" && err !== null && (err as { code?: string }).code === "23505") {
       throw new Error("EMAIL_TAKEN");
     }
-    const user: User = {
-      id: uid("usr"),
-      role: input.role,
-      name: input.name,
-      email: input.email.toLowerCase(),
-      phone: input.phone,
-      passwordHash: hashPassword(input.password),
-      createdAt: new Date().toISOString(),
-    };
-    db.users.push(user);
-    return user;
-  });
+    throw err;
+  }
 }

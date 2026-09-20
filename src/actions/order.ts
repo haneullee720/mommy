@@ -13,7 +13,7 @@ export async function acceptQuoteAction(_prev: ActionState, fd: FormData): Promi
   const requestId = str(fd, "requestId");
   let orderId: string;
   try {
-    const order = acceptQuote(requestId, str(fd, "quoteId"), user.id);
+    const order = await acceptQuote(requestId, str(fd, "quoteId"), user.id);
     orderId = order.id;
   } catch (err) {
     return { error: toMessage(err) };
@@ -28,7 +28,7 @@ export async function payOrderAction(_prev: ActionState, fd: FormData): Promise<
 
   const orderId = str(fd, "orderId");
   try {
-    payOrder(orderId, user.id, str(fd, "method") || "card");
+    await payOrder(orderId, user.id, str(fd, "method") || "card");
   } catch (err) {
     return { error: toMessage(err) };
   }
@@ -40,7 +40,7 @@ export async function confirmOrderAction(_prev: ActionState, fd: FormData): Prom
   const user = await currentUser();
   if (!user) return { error: "로그인이 필요합니다." };
   try {
-    confirmAndSettle(str(fd, "orderId"), user.id, user.role === "admin");
+    await confirmAndSettle(str(fd, "orderId"), user.id, user.role === "admin");
   } catch (err) {
     return { error: toMessage(err) };
   }
@@ -56,7 +56,7 @@ export async function reviewAction(_prev: ActionState, fd: FormData): Promise<Ac
   const content = str(fd, "content");
   if (content.length < 10) return { error: "후기를 10자 이상 남겨주세요." };
   try {
-    createReview({
+    await createReview({
       orderId: str(fd, "orderId"),
       customerId: user.id,
       rating: num(fd, "rating", 5),

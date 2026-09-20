@@ -2,8 +2,13 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { currentPartner } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { listOpenRequestsForPartner, listOrdersByPartner, listQuotesByPartner } from "@/lib/service";
-import { readDB } from "@/lib/db";
+import {
+  countQuotesByRequest,
+  getSettings,
+  listOpenRequestsForPartner,
+  listOrdersByPartner,
+  listQuotesByPartner,
+} from "@/lib/service";
 import { SERVICE_MAP } from "@/lib/catalog";
 import { TIER_LABEL, TIER_RULE } from "@/lib/fees";
 import { manwon, timeAgo, untilDeadline, won } from "@/lib/format";
@@ -17,11 +22,12 @@ export default async function PartnerHome() {
   if (!ctx) redirect("/partner-signup");
   const { partner } = ctx;
 
-  const db = readDB();
-  const feeRate = db.settings.feeRates[partner.tier];
-  const open = listOpenRequestsForPartner(partner);
-  const quotes = listQuotesByPartner(partner.id);
-  const orders = listOrdersByPartner(partner.id);
+  const settings = await getSettings();
+  const feeRate = settings.feeRates[partner.tier];
+  const open = await listOpenRequestsForPartner(partner);
+  const quotes = await listQuotesByPartner(partner.id);
+  const orders = await listOrdersByPartner(partner.id);
+  const competitorCounts = await countQuotesByRequest(open.map((r) => r.id));
 
   const quotedIds = new Set(quotes.filter((q) => q.status === "submitted" || q.status === "accepted").map((q) => q.requestId));
   const newRequests = open.filter((r) => !quotedIds.has(r.id));
@@ -100,7 +106,7 @@ export default async function PartnerHome() {
                       희망일 {r.preferredDate} · 고객 예상 {manwon(r.estimateMin)}~{manwon(r.estimateMax)}
                     </p>
                     <p className="mt-3 border-t border-ink-100 pt-3 text-[12.5px] font-semibold text-ink-400">
-                      {timeAgo(r.createdAt)} 등록 · 견적 {db.quotes.filter((q) => q.requestId === r.id).length}개 경쟁
+                      {timeAgo(r.createdAt)} 등록 · 견적 {competitorCounts.get(r.id) ?? 0}개 경쟁
                     </p>
                   </Link>
                 </li>
@@ -140,7 +146,7 @@ export default async function PartnerHome() {
               {(["basic", "good", "premium"] as const).map((t) => (
                 <li key={t} className={partner.tier === t ? "font-bold text-brand-900" : ""}>
                   {partner.tier === t ? "▶ " : "· "}
-                  {TIER_LABEL[t]} 수수료 {Math.round(db.settings.feeRates[t] * 100)}% — {TIER_RULE[t]}
+                  {TIER_LABEL[t]} 수수료 {Math.round(settings.feeRates[t] * 100)}% — {TIER_RULE[t]}
                 </li>
               ))}
             </ul>

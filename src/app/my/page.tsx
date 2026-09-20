@@ -1,7 +1,12 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { requireUser } from "@/lib/auth";
-import { getOrderByRequest, listOrdersByCustomer, listQuotes, listRequestsByCustomer } from "@/lib/service";
+import {
+  countQuotesByRequest,
+  listOrdersByCustomer,
+  listRequestsByCustomer,
+  minQuoteByRequest,
+} from "@/lib/service";
 import { SERVICE_MAP } from "@/lib/catalog";
 import { manwon, timeAgo, untilDeadline } from "@/lib/format";
 import { EmptyState, LinkButton, OrderStatusBadge, RequestStatusBadge } from "@/components/ui";
@@ -11,8 +16,16 @@ export const dynamic = "force-dynamic";
 
 export default async function MyPage() {
   const user = await requireUser("customer");
-  const requests = listRequestsByCustomer(user.id);
-  const orders = listOrdersByCustomer(user.id);
+  const requests = await listRequestsByCustomer(user.id);
+  const orders = await listOrdersByCustomer(user.id);
+
+  // 목록에서 쓰는 집계는 렌더링 전에 한 번에 모아 온다 (요청 건마다 쿼리하지 않도록).
+  const requestIds = requests.map((r) => r.id);
+  const [quoteCounts, lowestQuotes] = await Promise.all([
+    countQuotesByRequest(requestIds),
+    minQuoteByRequest(requestIds),
+  ]);
+  const orderByRequest = new Map(orders.map((o) => [o.requestId, o]));
 
   const active = orders.filter((o) => ["escrow", "in_progress", "completed"].includes(o.status));
 
@@ -60,9 +73,9 @@ export default async function MyPage() {
       ) : (
         <ul className="space-y-3">
           {requests.map((r) => {
-            const quotes = listQuotes(r.id);
-            const best = quotes[0];
-            const order = getOrderByRequest(r.id);
+            const quoteCount = quoteCounts.get(r.id) ?? 0;
+            const lowest = lowestQuotes.get(r.id);
+            const order = orderByRequest.get(r.id);
             return (
               <li key={r.id}>
                 <Link
@@ -82,11 +95,9 @@ export default async function MyPage() {
 
                   <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-ink-100 pt-3">
                     <div className="flex items-center gap-4">
-                      <span className="tnum text-[13.5px] font-extrabold text-brand-700">견적 {quotes.length}개</span>
-                      {best && (
-                        <span className="tnum text-[13px] text-ink-500">
-                          최저 {manwon(best.amount)}
-                        </span>
+                      <span className="tnum text-[13.5px] font-extrabold text-brand-700">견적 {quoteCount}개</span>
+                      {lowest !== undefined && (
+                        <span className="tnum text-[13px] text-ink-500">최저 {manwon(lowest)}</span>
                       )}
                     </div>
                     <span className="text-[12.5px] font-semibold text-ink-400">

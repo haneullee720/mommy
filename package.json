@@ -4,20 +4,22 @@
   "private": true,
   "description": "청소모아 - 청소 도급 중개 플랫폼",
   "scripts": {
-    "dev": "node scripts/ensure-seed.mjs && next dev",
-    "build": "node scripts/seed.mjs && next build",
-    "start": "node scripts/ensure-seed.mjs && next start",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "seed": "node scripts/seed.mjs"
+    "seed": "node --env-file-if-exists=.env.local scripts/seed.mjs"
   },
   "dependencies": {
     "next": "^15.5.25",
+    "postgres": "^3.4.7",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "server-only": "^0.0.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.56.1",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^22.20.2",
     "@types/react": "^19.3.0",

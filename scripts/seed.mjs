@@ -2,15 +2,18 @@
 /**
  * 청소모아 데모 데이터 시드
  *   npm run seed
- * 기존 data/db.json 을 덮어씁니다.
+ * DATABASE_URL 의 기존 데이터를 모두 지우고 다시 넣습니다.
  */
 import crypto from "node:crypto";
-import fs from "node:fs";
-import path from "node:path";
+import postgres from "postgres";
 
-const DATA_DIR = process.env.CM_DATA_DIR || path.join(process.cwd(), "data");
-const DB_FILE = path.join(DATA_DIR, "db.json");
 const PASSWORD = "cheongso1234";
+
+const DATABASE_URL = process.env.DATABASE_URL;
+if (!DATABASE_URL) {
+  console.error("DATABASE_URL 환경변수가 없습니다. .env.local 을 확인하세요.");
+  process.exit(1);
+}
 
 const FEE_RATES = { basic: 0.15, good: 0.12, premium: 0.1 };
 
@@ -596,21 +599,46 @@ for (const p of partners) {
 
 /* ---------------------------------------------------------------- 저장 */
 
-const db = {
-  users,
-  partners,
-  requests,
-  quotes,
-  orders,
-  reviews,
-  sessions: [],
-  settings: { feeRates: { ...FEE_RATES }, escrowHoldDays: 3, autoConfirmDays: 7 },
-};
+const sql = postgres(DATABASE_URL, { transform: postgres.camel, prepare: false });
 
-fs.mkdirSync(DATA_DIR, { recursive: true });
-fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2), "utf8");
+// jsonb 컬럼은 명시적으로 직렬화해야 한다.
+const partnerRows = partners.map((p) => ({ ...p, bankAccount: sql.json(p.bankAccount) }));
+const reviewRows = reviews.map((r) => ({ ...r, scores: sql.json(r.scores) }));
 
-console.log(`✅ 시드 완료 → ${DB_FILE}`);
-console.log(`   업체 ${partners.length}곳 · 요청 ${requests.length}건 · 견적 ${quotes.length}건 · 주문 ${orders.length}건 · 후기 ${reviews.length}건`);
-console.log(`   로그인: customer@demo.kr / partner@demo.kr / admin@demo.kr  (비밀번호: ${PASSWORD})`);
+/** 대량 삽입은 나눠서 보낸다 (파라미터 개수 한도 회피) */
+async function insertAll(table, rows, chunk = 500) {
+  for (let i = 0; i < rows.length; i += chunk) {
+    await sql`insert into ${sql(table)} ${sql(rows.slice(i, i + chunk))}`;
+  }
+}
+
+try {
+  // 외래키 때문에 순서가 중요하다. truncate ... cascade 로 한 번에 비운다.
+  await sql`truncate table reviews, orders, quotes, cleaning_requests, sessions, partners, users restart identity cascade`;
+
+  await insertAll("users", users);
+  await insertAll("partners", partnerRows);
+  await insertAll("cleaning_requests", requests);
+  await insertAll("quotes", quotes);
+  await insertAll("orders", orders);
+  await insertAll("reviews", reviewRows);
+
+  await sql`
+    update settings set
+      fee_rates = ${sql.json(FEE_RATES)}, escrow_hold_days = 3, auto_confirm_days = 7
+    where id = 1`;
+
+  // 시드가 쓴 코드 번호 뒤부터 이어지도록 시퀀스를 맞춘다.
+  await sql`select setval('request_code_seq', ${Math.max(requests.length, 1)})`;
+  await sql`select setval('order_code_seq', ${Math.max(orders.length, 1)})`;
+
+  console.log("✅ 시드 완료");
+  console.log(
+    `   업체 ${partners.length}곳 · 요청 ${requests.length}건 · 견적 ${quotes.length}건 · 주문 ${orders.length}건 · 후기 ${reviews.length}건`,
+  );
+  console.log(`   로그인: customer@demo.kr / partner@demo.kr / admin@demo.kr  (비밀번호: ${PASSWORD})`);
+} finally {
+  await sql.end();
+}
+
 void admin;

@@ -12,16 +12,22 @@
 
 ## 빠르게 실행하기
 
+PostgreSQL 이 필요합니다. 접속 정보를 `.env.local` 에 넣으세요.
+
 ```bash
+cp .env.example .env.local     # DATABASE_URL 을 본인 환경에 맞게 수정
 npm install
-npm run dev          # data/db.json 이 없으면 데모 데이터를 자동 생성합니다
+psql "$DATABASE_URL" -f supabase/migrations/0001_init.sql   # 스키마 생성
+npm run seed                   # 데모 데이터 적재 (기존 데이터는 지워집니다)
+npm run dev
 # http://localhost:3000
 ```
 
-데모 데이터를 다시 만들려면:
+테스트:
 
 ```bash
-npm run seed         # data/db.json 을 덮어씁니다
+npm run typecheck
+npx playwright test            # 실행 전에 DB를 시드 상태로 되돌립니다
 ```
 
 ### 데모 계정 (비밀번호 공통: `cheongso1234`)
@@ -124,10 +130,12 @@ src/
     ├── fees.ts               # 등급별 수수료율, 정산액 계산, 등급 재평가
     ├── service.ts            # 요청·견적·주문·리뷰 도메인 로직
     ├── auth.ts               # scrypt 비밀번호, 쿠키 세션
-    └── db.ts                 # JSON 파일 저장소 (읽기/쓰기/원자적 교체)
+    └── db.ts                 # Postgres 어댑터 (커넥션, 트랜잭션, 행 매퍼)
 ```
 
 - **상태 변경은 전부 서버 액션**을 거칩니다. 클라이언트에서 직접 저장소를 만지는 경로가 없습니다.
+- **여러 행을 바꾸는 작업은 트랜잭션**입니다. 견적 선택은 주문 생성·낙찰 처리·나머지 견적 미선정·요청 상태 변경을 한 번에 커밋합니다.
+- 앱이 의존하던 불변식을 **DB 제약으로도 막습니다**: 요청·업체당 열린 견적 1개, 요청당 결제 대기 주문 1개 (부분 유니크 인덱스).
 - **권한 검사는 도메인 로직 안**(`service.ts`)에도 있습니다. 액션이 뚫려도 남의 주문을 결제할 수 없습니다.
 - `estimate.ts` / `fees.ts` 는 순수 함수라 서버·클라이언트 양쪽에서 같은 계산을 씁니다.
   (견적 폼에서 실시간으로 보이는 금액과 서버가 저장하는 금액이 어긋나지 않습니다.)
@@ -140,7 +148,6 @@ src/
 
 | 지금 | 운영 |
 | --- | --- |
-| `lib/db.ts` JSON 파일 | PostgreSQL + Prisma/Drizzle. `service.ts` 의 함수 시그니처는 그대로 두고 어댑터만 교체 |
 | 모의 결제 (`payOrder`) | 토스페이먼츠·PortOne 등 PG 연동 + 웹훅으로 결제 확정. 에스크로 정산은 지급대행 계약 필요 |
 | 없음 | 알림톡/SMS (견적 도착, 작업 D-1, 확인 요청), 이메일 |
 | 수동 심사 | 국세청 사업자 진위확인 API, 보험 증권 파일 업로드·검수 |
@@ -155,4 +162,4 @@ src/
 
 ## 기술 스택
 
-Next.js 15 (App Router, 서버 액션) · React 19 · TypeScript · Tailwind CSS v4 · 외부 DB/런타임 의존성 없음
+Next.js 15 (App Router, 서버 액션) · React 19 · TypeScript · Tailwind CSS v4 · PostgreSQL (postgres.js) · Playwright

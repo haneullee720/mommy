@@ -20,7 +20,7 @@ export async function submitQuoteAction(_prev: ActionState, fd: FormData): Promi
 
   const requestId = str(fd, "requestId");
   try {
-    submitQuote({
+    await submitQuote({
       requestId,
       partnerId: ctx.partner.id,
       amount,
@@ -43,7 +43,7 @@ export async function startWorkAction(_prev: ActionState, fd: FormData): Promise
   const ctx = await currentPartner();
   if (!ctx) return { error: "로그인이 필요합니다." };
   try {
-    startWork(str(fd, "orderId"), ctx.partner.id);
+    await startWork(str(fd, "orderId"), ctx.partner.id);
   } catch (err) {
     return { error: toMessage(err) };
   }
@@ -56,7 +56,7 @@ export async function reportDoneAction(_prev: ActionState, fd: FormData): Promis
   const ctx = await currentPartner();
   if (!ctx) return { error: "로그인이 필요합니다." };
   try {
-    reportDone(str(fd, "orderId"), ctx.partner.id);
+    await reportDone(str(fd, "orderId"), ctx.partner.id);
   } catch (err) {
     return { error: toMessage(err) };
   }
@@ -71,7 +71,7 @@ export async function replyReviewAction(_prev: ActionState, fd: FormData): Promi
   const reply = str(fd, "reply");
   if (reply.length < 5) return { error: "답변을 5자 이상 작성해 주세요." };
   try {
-    replyToReview(str(fd, "reviewId"), ctx.partner.id, reply);
+    await replyToReview(str(fd, "reviewId"), ctx.partner.id, reply);
   } catch (err) {
     return { error: toMessage(err) };
   }

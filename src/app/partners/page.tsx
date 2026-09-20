@@ -22,7 +22,7 @@ export default async function PartnersPage({
   const service = sp.service as ServiceSlug | undefined;
   const region = sp.region;
 
-  const partners = listPartners({ service, region });
+  const partners = await listPartners({ service, region });
 
   const qs = (patch: Record<string, string | undefined>) => {
     const params = new URLSearchParams();

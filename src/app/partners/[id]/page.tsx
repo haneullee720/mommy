@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getPartner, getUser, listReviewsByPartner } from "@/lib/service";
+import { getPartner, getUsersByIds, listReviewsByPartner } from "@/lib/service";
 import { SERVICE_MAP } from "@/lib/catalog";
 import { TIER_LABEL } from "@/lib/fees";
 import { dateFull } from "@/lib/format";
@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
-  const p = getPartner(id);
+  const p = await getPartner(id);
   return p
     ? { title: `${p.companyName} 업체 정보`, description: p.intro.slice(0, 120) }
     : { title: "업체 정보" };
@@ -19,11 +19,12 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function PartnerDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const partner = getPartner(id);
+  const partner = await getPartner(id);
   if (!partner) notFound();
 
-  const allReviews = listReviewsByPartner(partner.id);
+  const allReviews = await listReviewsByPartner(partner.id);
   const reviews = allReviews.slice(0, 12);
+  const authors = await getUsersByIds(reviews.map((r) => r.customerId));
   const avg = (key: "kindness" | "detail" | "punctuality") =>
     allReviews.length ? (allReviews.reduce((s, r) => s + r.scores[key], 0) / allReviews.length).toFixed(1) : "-";
 
@@ -106,7 +107,7 @@ export default async function PartnerDetailPage({ params }: { params: Promise<{ 
                 </div>
                 <ul className="mt-4 space-y-3">
                   {reviews.map((r) => {
-                    const author = getUser(r.customerId);
+                    const author = authors.get(r.customerId);
                     return (
                       <li key={r.id} className="card p-5">
                         <div className="flex flex-wrap items-center gap-2">

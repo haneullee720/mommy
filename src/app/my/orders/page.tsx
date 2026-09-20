@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { requireUser } from "@/lib/auth";
-import { getPartner, getRequest, listOrdersByCustomer } from "@/lib/service";
+import { getPartnersByIds, getRequestsByIds, listOrdersByCustomer } from "@/lib/service";
 import { SERVICE_MAP } from "@/lib/catalog";
 import { dateFull, won } from "@/lib/format";
 import { EmptyState, LinkButton, OrderStatusBadge } from "@/components/ui";
@@ -11,7 +11,11 @@ export const dynamic = "force-dynamic";
 
 export default async function OrdersPage() {
   const user = await requireUser("customer");
-  const orders = listOrdersByCustomer(user.id);
+  const orders = await listOrdersByCustomer(user.id);
+  const [requests, partners] = await Promise.all([
+    getRequestsByIds(orders.map((o) => o.requestId)),
+    getPartnersByIds(orders.map((o) => o.partnerId)),
+  ]);
 
   return (
     <div className="space-y-6">
@@ -30,8 +34,8 @@ export default async function OrdersPage() {
       ) : (
         <ul className="space-y-3">
           {orders.map((o) => {
-            const req = getRequest(o.requestId);
-            const partner = getPartner(o.partnerId);
+            const req = requests.get(o.requestId);
+            const partner = partners.get(o.partnerId);
             return (
               <li key={o.id}>
                 <Link href={`/my/orders/${o.id}`} className="card block p-5 transition hover:border-brand-300 hover:shadow-soft">

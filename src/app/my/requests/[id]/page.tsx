@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { requireUser } from "@/lib/auth";
-import { getOrderByRequest, getPartner, getRequest, listQuotes } from "@/lib/service";
+import { getOrderByRequest, getPartnersByIds, getRequest, listQuotes } from "@/lib/service";
 import { OPTION_MAP, PROPERTY_LABEL, SERVICE_MAP } from "@/lib/catalog";
 import { manwon, timeAgo, untilDeadline, won } from "@/lib/format";
 import { Alert, Badge, EmptyState, LinkButton, RequestStatusBadge, Stars, TierBadge } from "@/components/ui";
@@ -23,19 +23,20 @@ export default async function RequestDetailPage({
   const sp = await searchParams;
   const user = await requireUser("customer");
 
-  const req = getRequest(id);
+  const req = await getRequest(id);
   if (!req || req.customerId !== user.id) notFound();
 
-  const order = getOrderByRequest(req.id);
+  const order = await getOrderByRequest(req.id);
   if (order && order.status !== "pending_payment") redirect(`/my/orders/${order.id}`);
 
-  const quotes = listQuotes(req.id);
+  const quotes = await listQuotes(req.id);
+  const partners = await getPartnersByIds(quotes.map((q) => q.partnerId));
   const def = SERVICE_MAP[req.service];
   const cheapest = quotes.length ? Math.min(...quotes.map((q) => q.amount)) : 0;
   const bestRated = quotes.length
     ? quotes.reduce((best, q) => {
-        const bp = getPartner(best.partnerId);
-        const cp = getPartner(q.partnerId);
+        const bp = partners.get(best.partnerId);
+        const cp = partners.get(q.partnerId);
         return (cp?.rating ?? 0) > (bp?.rating ?? 0) ? q : best;
       })
     : null;
@@ -121,7 +122,7 @@ export default async function RequestDetailPage({
         ) : (
           <ul className="space-y-4">
             {quotes.map((q) => {
-              const p = getPartner(q.partnerId);
+              const p = partners.get(q.partnerId);
               if (!p) return null;
               const isCheapest = q.amount === cheapest;
               const isBestRated = bestRated?.id === q.id && p.rating > 0;

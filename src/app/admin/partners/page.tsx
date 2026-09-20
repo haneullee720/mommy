@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { readDB } from "@/lib/db";
+import { getUsersByIds, listAllPartners } from "@/lib/service";
 import { SERVICE_MAP } from "@/lib/catalog";
 import { dateFull } from "@/lib/format";
 import { Badge, Stars, TierBadge } from "@/components/ui";
@@ -11,12 +11,9 @@ export const dynamic = "force-dynamic";
 const STATUS_TONE = { pending: "amber", approved: "green", suspended: "red" } as const;
 const STATUS_LABEL = { pending: "심사 대기", approved: "승인", suspended: "정지" } as const;
 
-export default function AdminPartnersPage() {
-  const db = readDB();
-  const partners = db.partners.slice().sort((a, b) => {
-    const order = { pending: 0, approved: 1, suspended: 2 };
-    return order[a.status] - order[b.status] || b.createdAt.localeCompare(a.createdAt);
-  });
+export default async function AdminPartnersPage() {
+  const partners = await listAllPartners();
+  const owners = await getUsersByIds(partners.map((p) => p.userId));
 
   return (
     <div className="space-y-6">
@@ -29,7 +26,7 @@ export default function AdminPartnersPage() {
 
       <ul className="space-y-3">
         {partners.map((p) => {
-          const user = db.users.find((u) => u.id === p.userId);
+          const user = owners.get(p.userId);
           return (
             <li key={p.id} className="card p-5">
               <div className="flex flex-wrap items-center gap-2">

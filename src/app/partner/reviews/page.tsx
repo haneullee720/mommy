@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { currentPartner } from "@/lib/auth";
-import { getUser, listReviewsByPartner } from "@/lib/service";
+import { getUsersByIds, listReviewsByPartner } from "@/lib/service";
 import { dateFull } from "@/lib/format";
 import { EmptyState, Stars } from "@/components/ui";
 import { ReviewReplyForm } from "@/components/review-reply";
@@ -13,8 +13,9 @@ export default async function PartnerReviewsPage() {
   const ctx = await currentPartner();
   if (!ctx) redirect("/partner-signup");
 
-  const allReviews = listReviewsByPartner(ctx.partner.id);
+  const allReviews = await listReviewsByPartner(ctx.partner.id);
   const reviews = allReviews.slice(0, 25);
+  const authors = await getUsersByIds(reviews.map((r) => r.customerId));
   const avg = (key: "kindness" | "detail" | "punctuality") =>
     allReviews.length ? (allReviews.reduce((s, r) => s + r.scores[key], 0) / allReviews.length).toFixed(1) : "-";
 
@@ -50,7 +51,7 @@ export default async function PartnerReviewsPage() {
       ) : (
         <ul className="space-y-3">
           {reviews.map((r) => {
-            const author = getUser(r.customerId);
+            const author = authors.get(r.customerId);
             return (
               <li key={r.id} className="card p-5">
                 <div className="flex flex-wrap items-center gap-2">

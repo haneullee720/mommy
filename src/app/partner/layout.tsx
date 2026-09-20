@@ -3,7 +3,7 @@ import { currentUser, currentPartner } from "@/lib/auth";
 import { DashNav } from "@/components/dash-nav";
 import { TierBadge } from "@/components/ui";
 import { TIER_LABEL } from "@/lib/fees";
-import { readDB } from "@/lib/db";
+import { getSettings } from "@/lib/service";
 
 const NAV = [
   { href: "/partner", label: "대시보드", icon: "📊" },
@@ -23,7 +23,7 @@ export default async function PartnerLayout({ children }: { children: React.Reac
   const ctx = await currentPartner();
   if (!ctx) redirect("/partner-signup");
 
-  const feeRate = readDB().settings.feeRates[ctx.partner.tier];
+  const feeRate = (await getSettings()).feeRates[ctx.partner.tier];
 
   return (
     <div className="bg-ink-50/40">

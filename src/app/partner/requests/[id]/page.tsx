@@ -2,8 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { currentPartner } from "@/lib/auth";
-import { getRequest, listQuotes } from "@/lib/service";
-import { readDB } from "@/lib/db";
+import { getRequest, getSettings, listQuotes } from "@/lib/service";
 import { OPTION_MAP, PROPERTY_LABEL, SERVICE_MAP } from "@/lib/catalog";
 import { manwon, maskAddress, timeAgo, untilDeadline, won } from "@/lib/format";
 import { Alert, Badge } from "@/components/ui";
@@ -17,13 +16,12 @@ export default async function PartnerRequestDetail({ params }: { params: Promise
   const ctx = await currentPartner();
   if (!ctx) redirect("/partner-signup");
 
-  const req = getRequest(id);
+  const req = await getRequest(id);
   if (!req) notFound();
 
-  const db = readDB();
-  const feeRate = db.settings.feeRates[ctx.partner.tier];
+  const feeRate = (await getSettings()).feeRates[ctx.partner.tier];
   const def = SERVICE_MAP[req.service];
-  const others = listQuotes(req.id);
+  const others = await listQuotes(req.id);
   const mine = others.find((q) => q.partnerId === ctx.partner.id) ?? null;
   const competitorAmounts = others.filter((q) => q.partnerId !== ctx.partner.id).map((q) => q.amount);
 

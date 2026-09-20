@@ -5,7 +5,7 @@ import { LinkButton, SectionHeading, Stars, TierBadge, Badge } from "@/component
 import { SERVICES, SERVICE_MAP } from "@/lib/catalog";
 import { listPartners, listRecentReviews, platformStats, readOpenFeed } from "@/lib/home";
 import { manwon, timeAgo, untilDeadline } from "@/lib/format";
-import { getUser } from "@/lib/service";
+import { getUsersByIds } from "@/lib/service";
 
 export const dynamic = "force-dynamic";
 
@@ -61,11 +61,15 @@ const FAQS = [
   },
 ];
 
-export default function HomePage() {
-  const stats = platformStats();
-  const partners = listPartners().slice(0, 4);
-  const reviews = listRecentReviews(3);
-  const feed = readOpenFeed(6);
+export default async function HomePage() {
+  const [stats, allPartners, reviews, feed] = await Promise.all([
+    platformStats(),
+    listPartners(),
+    listRecentReviews(3),
+    readOpenFeed(6),
+  ]);
+  const partners = allPartners.slice(0, 4);
+  const reviewAuthors = await getUsersByIds(reviews.map((r) => r.customerId));
 
   return (
     <>
@@ -320,7 +324,7 @@ export default function HomePage() {
             <SectionHeading eyebrow="REVIEWS" title="실제 결제한 고객만 남긴 후기" desc="작업이 완료된 건에 대해서만 후기를 쓸 수 있습니다." />
             <div className="mt-10 grid gap-4 md:grid-cols-3">
               {reviews.map((r) => {
-                const author = getUser(r.customerId);
+                const author = reviewAuthors.get(r.customerId);
                 return (
                   <figure key={r.id} className="card flex h-full flex-col p-6">
                     <Stars rating={r.rating} size={16} />

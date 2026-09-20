@@ -2,8 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { requireUser } from "@/lib/auth";
-import { getOrder, getPartner, getRequest, getUser, listReviewsByPartner } from "@/lib/service";
-import { readDB } from "@/lib/db";
+import { getOrder, getPartner, getRequest, getUser, countReviewsByPartner, getReviewByOrder } from "@/lib/service";
 import { OPTION_MAP, PROPERTY_LABEL, SERVICE_MAP } from "@/lib/catalog";
 import { dateFull, maskPhone, won } from "@/lib/format";
 import { Alert, Badge, LinkButton, OrderStatusBadge, Stars, TierBadge } from "@/components/ui";
@@ -24,17 +23,19 @@ export default async function OrderDetailPage({
   const sp = await searchParams;
   const user = await requireUser("customer");
 
-  const order = getOrder(orderId);
+  const order = await getOrder(orderId);
   if (!order || order.customerId !== user.id) notFound();
 
-  const req = getRequest(order.requestId);
-  const partner = getPartner(order.partnerId);
+  const req = await getRequest(order.requestId);
+  const partner = await getPartner(order.partnerId);
   if (!req || !partner) notFound();
 
-  const partnerUser = getUser(partner.userId);
+  const partnerUser = await getUser(partner.userId);
   const def = SERVICE_MAP[req.service];
-  const myReview = readDB().reviews.find((r) => r.orderId === order.id);
-  const partnerReviews = listReviewsByPartner(partner.id).length;
+  const [myReview, partnerReviews] = await Promise.all([
+    getReviewByOrder(order.id),
+    countReviewsByPartner(partner.id),
+  ]);
 
   return (
     <div className="space-y-6">

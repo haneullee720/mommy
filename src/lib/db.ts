@@ -1,92 +1,63 @@
 import "server-only";
-import fs from "node:fs";
-import os from "node:os";
-import path from "node:path";
-import { DEFAULT_FEE_RATES } from "./fees";
-import type { DB } from "./types";
+import postgres from "postgres";
+import type {
+  CleaningRequest,
+  Order,
+  Partner,
+  Quote,
+  Review,
+  Settings,
+  User,
+} from "./types";
 
 /**
- * 파일 기반 JSON 저장소.
- * 도메인 로직이 이 모듈의 인터페이스에만 의존하므로,
- * 운영 단계에서 Postgres/Prisma 어댑터로 교체해도 상위 코드는 그대로 둘 수 있다.
+ * Postgres 저장소.
+ *
+ * 도메인 로직(src/lib/service.ts)이 이 모듈의 인터페이스에만 의존하므로,
+ * 다른 DB로 옮기더라도 상위 코드는 그대로 둘 수 있다.
+ *
+ * 컬럼명은 snake_case, 앱은 camelCase — postgres 드라이버의 camel 변환이 양방향으로 처리한다.
+ * 매퍼가 하는 일은 timestamptz(Date) → ISO 문자열 변환뿐이다.
+ * 앱 전체가 시각을 ISO 문자열로 다루기 때문에(localeCompare 정렬 포함) 여기서 형식을 고정한다.
  */
 
-/**
- * 쓰기 가능한 데이터 경로를 고른다.
- * 서버리스(Vercel 등)는 프로젝트 디렉터리가 읽기 전용이므로 임시 디렉터리를 쓴다.
- * 임시 디렉터리의 데이터는 인스턴스가 재활용되면 사라지므로 데모 용도로만 유효하다.
- */
-function resolveDataDir(): string {
-  if (process.env.CM_DATA_DIR) return process.env.CM_DATA_DIR;
-  if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
-    return path.join(os.tmpdir(), "cheongsomoa");
+export type Sql = postgres.Sql<Record<string, unknown>>;
+export type Db = Sql | postgres.TransactionSql<Record<string, unknown>>;
+
+declare global {
+  // eslint-disable-next-line no-var
+  var __cheongsomoaSql: Sql | undefined;
+}
+
+export function db(): Sql {
+  if (globalThis.__cheongsomoaSql) return globalThis.__cheongsomoaSql;
+
+  const url = process.env.DATABASE_URL;
+  if (!url) {
+    throw new Error(
+      "DATABASE_URL 환경변수가 없습니다. 로컬은 .env.local, 배포는 프로젝트 환경변수를 확인하세요.",
+    );
   }
-  return path.join(process.cwd(), "data");
+
+  globalThis.__cheongsomoaSql = postgres(url, {
+    // 서버리스는 인스턴스마다 커넥션을 잡으므로 1개로 제한한다.
+    max: process.env.VERCEL ? 1 : 10,
+    idle_timeout: 20,
+    connect_timeout: 10,
+    // 트랜잭션 풀러(pgbouncer) 뒤에서는 prepared statement 를 쓸 수 없다.
+    prepare: false,
+    transform: postgres.camel,
+  });
+
+  return globalThis.__cheongsomoaSql;
 }
 
-const DATA_DIR = resolveDataDir();
-const DB_FILE = path.join(DATA_DIR, "db.json");
-
-/** 배포 번들에 함께 실리는 읽기 전용 초기 스냅샷 (빌드 시 scripts/seed.mjs 가 생성) */
-const SEED_FILE = path.join(process.cwd(), "data", "db.json");
-
-const EMPTY: DB = {
-  users: [],
-  partners: [],
-  requests: [],
-  quotes: [],
-  orders: [],
-  reviews: [],
-  sessions: [],
-  settings: {
-    feeRates: { ...DEFAULT_FEE_RATES },
-    escrowHoldDays: 3,
-    autoConfirmDays: 7,
-  },
-};
-
-let cache: DB | null = null;
-let cacheMtime = 0;
-
-function ensureDir() {
-  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+/** 여러 행을 원자적으로 바꿔야 하는 작업을 트랜잭션으로 감싼다. */
+export function tx<T>(fn: (t: Db) => Promise<T>): Promise<T> {
+  return db().begin((t) => fn(t)) as Promise<T>;
 }
 
-export function readDB(): DB {
-  ensureDir();
-  if (!fs.existsSync(DB_FILE)) {
-    // 초기 스냅샷이 있으면 그것으로 시작하고, 없으면 빈 상태로 만든다.
-    const initial =
-      SEED_FILE !== DB_FILE && fs.existsSync(SEED_FILE)
-        ? fs.readFileSync(SEED_FILE, "utf8")
-        : JSON.stringify(EMPTY, null, 2);
-    fs.writeFileSync(DB_FILE, initial, "utf8");
-  }
-  const mtime = fs.statSync(DB_FILE).mtimeMs;
-  if (cache && mtime === cacheMtime) return cache;
-  const raw = fs.readFileSync(DB_FILE, "utf8");
-  const parsed = JSON.parse(raw) as Partial<DB>;
-  cache = { ...structuredClone(EMPTY), ...parsed } as DB;
-  cacheMtime = mtime;
-  return cache;
-}
-
-export function writeDB(db: DB): void {
-  ensureDir();
-  const tmp = `${DB_FILE}.${process.pid}.tmp`;
-  fs.writeFileSync(tmp, JSON.stringify(db, null, 2), "utf8");
-  fs.renameSync(tmp, DB_FILE);
-  cache = db;
-  cacheMtime = fs.statSync(DB_FILE).mtimeMs;
-}
-
-/** 읽기 → 수정 → 저장을 한 번에. */
-export function mutate<T>(fn: (db: DB) => T): T {
-  const db = structuredClone(readDB());
-  const result = fn(db);
-  writeDB(db);
-  return result;
-}
+/* ------------------------------------------------------------------ 식별자 */
 
 export function uid(prefix: string): string {
   return `${prefix}_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
@@ -99,4 +70,137 @@ export function makeCode(prefix: string, seq: number): string {
   const mm = String(d.getMonth() + 1).padStart(2, "0");
   const dd = String(d.getDate()).padStart(2, "0");
   return `${prefix}-${yy}${mm}${dd}-${String(seq).padStart(4, "0")}`;
+}
+
+/** 시퀀스에서 번호를 받아 코드를 만든다. 동시 접수에도 번호가 겹치지 않는다. */
+export async function nextCode(kind: "request" | "order", t: Db = db()): Promise<string> {
+  const rows =
+    kind === "request"
+      ? await t`select nextval('request_code_seq')::int as n`
+      : await t`select nextval('order_code_seq')::int as n`;
+  return makeCode(kind === "request" ? "CM" : "ORD", rows[0].n as number);
+}
+
+/* ------------------------------------------------------------------ 매퍼 */
+
+type Row = Record<string, unknown>;
+
+const iso = (v: unknown): string => (v instanceof Date ? v.toISOString() : String(v ?? ""));
+const isoOrNull = (v: unknown): string | null => (v == null ? null : iso(v));
+
+export const toUser = (r: Row): User => ({
+  id: r.id as string,
+  role: r.role as User["role"],
+  name: r.name as string,
+  email: r.email as string,
+  phone: r.phone as string,
+  passwordHash: r.passwordHash as string,
+  createdAt: iso(r.createdAt),
+});
+
+export const toPartner = (r: Row): Partner => ({
+  id: r.id as string,
+  userId: r.userId as string,
+  companyName: r.companyName as string,
+  bizNo: r.bizNo as string,
+  ceoName: r.ceoName as string,
+  regions: (r.regions as string[]) ?? [],
+  services: (r.services as Partner["services"]) ?? [],
+  intro: r.intro as string,
+  since: r.since as number,
+  crewSize: r.crewSize as number,
+  hasInsurance: r.hasInsurance as boolean,
+  certifications: (r.certifications as string[]) ?? [],
+  status: r.status as Partner["status"],
+  tier: r.tier as Partner["tier"],
+  rating: r.rating as number,
+  reviewCount: r.reviewCount as number,
+  completedJobs: r.completedJobs as number,
+  responseMinutes: r.responseMinutes as number,
+  bankAccount: r.bankAccount as Partner["bankAccount"],
+  createdAt: iso(r.createdAt),
+});
+
+export const toRequest = (r: Row): CleaningRequest => ({
+  id: r.id as string,
+  code: r.code as string,
+  customerId: r.customerId as string,
+  service: r.service as CleaningRequest["service"],
+  propertyType: r.propertyType as CleaningRequest["propertyType"],
+  areaPyeong: r.areaPyeong as number,
+  region: r.region as string,
+  district: r.district as string,
+  addressDetail: r.addressDetail as string,
+  preferredDate: r.preferredDate as string,
+  dateFlexible: r.dateFlexible as boolean,
+  options: (r.options as string[]) ?? [],
+  description: r.description as string,
+  photoCount: r.photoCount as number,
+  contactName: r.contactName as string,
+  contactPhone: r.contactPhone as string,
+  estimateMin: r.estimateMin as number,
+  estimateMax: r.estimateMax as number,
+  status: r.status as CleaningRequest["status"],
+  createdAt: iso(r.createdAt),
+  expiresAt: iso(r.expiresAt),
+});
+
+export const toQuote = (r: Row): Quote => ({
+  id: r.id as string,
+  requestId: r.requestId as string,
+  partnerId: r.partnerId as string,
+  amount: r.amount as number,
+  crewSize: r.crewSize as number,
+  workHours: r.workHours as number,
+  availableDate: r.availableDate as string,
+  includes: (r.includes as string[]) ?? [],
+  message: r.message as string,
+  warrantyDays: r.warrantyDays as number,
+  status: r.status as Quote["status"],
+  createdAt: iso(r.createdAt),
+});
+
+export const toOrder = (r: Row): Order => ({
+  id: r.id as string,
+  code: r.code as string,
+  requestId: r.requestId as string,
+  quoteId: r.quoteId as string,
+  customerId: r.customerId as string,
+  partnerId: r.partnerId as string,
+  amount: r.amount as number,
+  feeRate: r.feeRate as number,
+  feeAmount: r.feeAmount as number,
+  payoutAmount: r.payoutAmount as number,
+  status: r.status as Order["status"],
+  paymentMethod: r.paymentMethod as string,
+  paidAt: isoOrNull(r.paidAt),
+  startedAt: isoOrNull(r.startedAt),
+  completedAt: isoOrNull(r.completedAt),
+  settledAt: isoOrNull(r.settledAt),
+  scheduledDate: r.scheduledDate as string,
+  createdAt: iso(r.createdAt),
+});
+
+export const toReview = (r: Row): Review => ({
+  id: r.id as string,
+  orderId: r.orderId as string,
+  customerId: r.customerId as string,
+  partnerId: r.partnerId as string,
+  rating: r.rating as number,
+  scores: r.scores as Review["scores"],
+  content: r.content as string,
+  reply: (r.reply as string | null) ?? null,
+  createdAt: iso(r.createdAt),
+});
+
+export const toSettings = (r: Row): Settings => ({
+  feeRates: r.feeRates as Settings["feeRates"],
+  escrowHoldDays: r.escrowHoldDays as number,
+  autoConfirmDays: r.autoConfirmDays as number,
+});
+
+/** 수수료 정책. 모든 주문 생성 경로가 이 값을 읽는다. */
+export async function getSettings(t: Db = db()): Promise<Settings> {
+  const rows = await t`select * from settings where id = 1`;
+  return toSettings(rows[0]);
 }

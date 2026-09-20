@@ -28,7 +28,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
   const def = SERVICE_MAP[slug as ServiceSlug];
   if (!def) notFound();
 
-  const partners = listPartners({ service: slug as ServiceSlug }).slice(0, 6);
+  const partners = (await listPartners({ service: slug as ServiceSlug })).slice(0, 6);
   const others = SERVICES.filter((s) => s.slug !== def.slug).slice(0, 4);
 
   const table = SIZES.map((size) => ({

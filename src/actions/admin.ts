@@ -2,22 +2,19 @@
 
 import { revalidatePath } from "next/cache";
 import { requireUser } from "@/lib/auth";
-import { mutate } from "@/lib/db";
+import { db } from "@/lib/db";
 import { confirmAndSettle } from "@/lib/service";
 import { type ActionState, num, str, toMessage } from "@/lib/form";
 import type { PartnerStatus } from "@/lib/types";
 
 export async function setPartnerStatusAction(_prev: ActionState, fd: FormData): Promise<ActionState> {
   try {
-    const admin = await requireUser("admin");
-    void admin;
-    const partnerId = str(fd, "partnerId");
-    const status = str(fd, "status") as PartnerStatus;
-    mutate((db) => {
-      const p = db.partners.find((x) => x.id === partnerId);
-      if (!p) throw new Error("PARTNER_NOT_FOUND");
-      p.status = status;
-    });
+    await requireUser("admin");
+    const rows = await db()`
+      update partners set status = ${str(fd, "status") as PartnerStatus}
+      where id = ${str(fd, "partnerId")}
+      returning id`;
+    if (!rows[0]) throw new Error("PARTNER_NOT_FOUND");
   } catch (err) {
     return { error: toMessage(err) };
   }
@@ -31,12 +28,16 @@ export async function updateSettingsAction(_prev: ActionState, fd: FormData): Pr
     const basic = num(fd, "basic", 15) / 100;
     const good = num(fd, "good", 12) / 100;
     const premium = num(fd, "premium", 10) / 100;
-    if ([basic, good, premium].some((r) => r < 0 || r > 0.5)) return { error: "수수료율은 0~50% 사이여야 합니다." };
-    mutate((db) => {
-      db.settings.feeRates = { basic, good, premium };
-      db.settings.escrowHoldDays = Math.max(0, num(fd, "escrowHoldDays", 3));
-      db.settings.autoConfirmDays = Math.max(1, num(fd, "autoConfirmDays", 7));
-    });
+    if ([basic, good, premium].some((r) => r < 0 || r > 0.5)) {
+      return { error: "수수료율은 0~50% 사이여야 합니다." };
+    }
+    const sql = db();
+    await sql`
+      update settings set
+        fee_rates = ${sql.json({ basic, good, premium })},
+        escrow_hold_days = ${Math.max(0, num(fd, "escrowHoldDays", 3))},
+        auto_confirm_days = ${Math.max(1, num(fd, "autoConfirmDays", 7))}
+      where id = 1`;
   } catch (err) {
     return { error: toMessage(err) };
   }
@@ -47,7 +48,7 @@ export async function updateSettingsAction(_prev: ActionState, fd: FormData): Pr
 export async function forceSettleAction(_prev: ActionState, fd: FormData): Promise<ActionState> {
   try {
     const admin = await requireUser("admin");
-    confirmAndSettle(str(fd, "orderId"), admin.id, true);
+    await confirmAndSettle(str(fd, "orderId"), admin.id, true);
   } catch (err) {
     return { error: toMessage(err) };
   }

@@ -35,7 +35,7 @@ export async function createRequestAction(_prev: ActionState, fd: FormData): Pro
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return { error: "이메일 형식이 올바르지 않습니다." };
     if (password.length < 8) return { error: "비밀번호는 8자 이상이어야 합니다." };
     try {
-      user = createUser({ role: "customer", name: contactName, email, phone: contactPhone, password });
+      user = await createUser({ role: "customer", name: contactName, email, phone: contactPhone, password });
     } catch (err) {
       return { error: `${toMessage(err)} 로그인 후 다시 시도해 주세요.` };
     }
@@ -48,7 +48,7 @@ export async function createRequestAction(_prev: ActionState, fd: FormData): Pro
 
   let requestId: string;
   try {
-    const req = createRequest({
+    const req = await createRequest({
       customerId: user.id,
       service,
       propertyType: (str(fd, "propertyType") || "apartment") as PropertyType,
@@ -76,7 +76,7 @@ export async function cancelRequestAction(_prev: ActionState, fd: FormData): Pro
   const user = await currentUser();
   if (!user) return { error: "로그인이 필요합니다." };
   try {
-    cancelRequest(str(fd, "requestId"), user.id);
+    await cancelRequest(str(fd, "requestId"), user.id);
   } catch (err) {
     return { error: toMessage(err) };
   }

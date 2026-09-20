@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PartnerSignupForm } from "./partner-form";
-import { readDB } from "@/lib/db";
+import { getSettings } from "@/lib/service";
 import { TIER_LABEL, TIER_RULE } from "@/lib/fees";
 import { Badge } from "@/components/ui";
 
@@ -18,8 +18,8 @@ const BENEFITS = [
   { emoji: "🎯", title: "우리 지역만 알림", desc: "담당 지역과 취급 종목에 맞는 요청만 골라서 받아봅니다." },
 ];
 
-export default function PartnerSignupPage() {
-  const rates = readDB().settings.feeRates;
+export default async function PartnerSignupPage() {
+  const { feeRates: rates } = await getSettings();
 
   return (
     <div className="bg-ink-50/40">

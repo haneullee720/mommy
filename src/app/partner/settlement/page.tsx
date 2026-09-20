@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { currentPartner } from "@/lib/auth";
-import { listOrdersByPartner, getRequest } from "@/lib/service";
-import { readDB } from "@/lib/db";
+import { getRequestsByIds, getSettings, listOrdersByPartner } from "@/lib/service";
 import { SERVICE_MAP } from "@/lib/catalog";
 import { TIER_LABEL, TIER_RULE } from "@/lib/fees";
 import { dateFull, won } from "@/lib/format";
@@ -16,10 +15,10 @@ export default async function SettlementPage() {
   if (!ctx) redirect("/partner-signup");
   const { partner } = ctx;
 
-  const db = readDB();
-  const rates = db.settings.feeRates;
-  const allOrders = listOrdersByPartner(partner.id).filter((o) => o.paidAt);
-  const orders = allOrders;
+  const { feeRates: rates } = await getSettings();
+  const orders = (await listOrdersByPartner(partner.id)).filter((o) => o.paidAt);
+  const shown = orders.slice(0, 30);
+  const requests = await getRequestsByIds(shown.map((o) => o.requestId));
 
   const pending = orders.filter((o) => ["escrow", "in_progress", "completed"].includes(o.status));
   const settled = orders.filter((o) => o.status === "settled");
@@ -107,8 +106,8 @@ export default async function SettlementPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-ink-100">
-                {orders.slice(0, 30).map((o) => {
-                  const req = getRequest(o.requestId);
+                {shown.map((o) => {
+                  const req = requests.get(o.requestId);
                   return (
                     <tr key={o.id} className="text-[13px]">
                       <td className="tnum px-4 py-3 font-semibold text-ink-700">{o.code}</td>
