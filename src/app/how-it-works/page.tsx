@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 const CUSTOMER: Step[] = [
   { icon: "document", title: "요청서 작성", note: "종류·평수·희망일만 입력하면 3분" },
-  { icon: "inbox", title: "견적 도착", note: "평균 5곳, 보통 30분 안에" },
+  { icon: "inbox", title: "견적 도착", note: "조건이 맞는 업체들이 보냅니다" },
   { icon: "scale", title: "비교 후 선택", note: "가격·평점·A/S를 한 화면에서" },
   { icon: "shield", title: "안전결제", note: "결제해야 주소가 공개됩니다" },
 ];

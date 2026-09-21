@@ -17,7 +17,7 @@ export const dynamic = "force-dynamic";
 
 const STEPS: Step[] = [
   { icon: "document", title: "요청서 작성", note: "3분이면 끝납니다" },
-  { icon: "inbox", title: "견적 도착", note: "평균 5곳이 보냅니다" },
+  { icon: "inbox", title: "견적 도착", note: "여러 업체가 보냅니다" },
   { icon: "scale", title: "비교 후 선택", note: "가격·후기·A/S를 한 화면에서" },
   { icon: "shield", title: "안전결제", note: "확인 후에 업체로 지급" },
 ];
@@ -27,6 +27,9 @@ const FAQS = [
   { q: "선결제한 돈은 언제 업체에 넘어가나요?", a: "작업이 끝나고 고객이 '작업 확인'을 누른 뒤 넘어갑니다.\n그전까지는 청소모아가 예치합니다. 7일 동안 확인이 없으면 자동 확정됩니다." },
   { q: "청소가 마음에 들지 않으면요?", a: "작업 확인 전에 재작업을 요청하세요. 모든 계약에 최소 7일의 무상 A/S가 포함됩니다.\n협의가 안 되면 청소모아가 예치금을 쥔 채로 조정합니다." },
 ];
+
+// Tailwind 는 소스에 그대로 적힌 클래스만 만들어 내므로 조합이 아닌 표로 둔다.
+const STAT_COLS: Record<number, string> = { 1: "grid-cols-1", 2: "grid-cols-2", 3: "grid-cols-3" };
 
 export default async function HomePage() {
   const [stats, allPartners, reviews, feed] = await Promise.all([
@@ -40,6 +43,15 @@ export default async function HomePage() {
   const [lead] = reviews;
   const sampleBeforeAfter = isGenerated("before") || isGenerated("after");
 
+  // 실적 숫자는 실제 데이터가 있을 때만 보여준다.
+  // 없는 만족도·견적 수를 대신 채워 넣으면 손님이 그 숫자를 믿고 업체를 고르게 된다.
+  const heroStats: { v: string; l: string }[] = [];
+  if (stats.avgQuotesPerRequest > 0)
+    heroStats.push({ v: `${stats.avgQuotesPerRequest}개`, l: "요청당 평균 견적" });
+  if (stats.avgRating > 0) heroStats.push({ v: `${stats.avgRating}점`, l: "평균 만족도" });
+  if (stats.completedCount > 0)
+    heroStats.push({ v: `${stats.completedCount.toLocaleString("ko-KR")}건`, l: "누적 완료" });
+
   return (
     <>
       {/* ---------------------------------------------------------- 히어로 */}
@@ -48,7 +60,9 @@ export default async function HomePage() {
           <div className="animate-rise">
             <p className="t-eyebrow flex items-center gap-2">
               <span className="inline-block h-1 w-1 rounded-full bg-brand-600" />
-              지금 {stats.partnerCount}개 업체 대기중
+              {stats.partnerCount > 0
+                ? `지금 ${stats.partnerCount}개 업체 대기중`
+                : "청소 업체 등록을 받고 있습니다"}
             </p>
             <h1 className="t-display mt-6 text-ink-900">
               청소 견적,
@@ -68,19 +82,17 @@ export default async function HomePage() {
         </div>
 
         <div className="container-page mt-14">
-          <dl className="grid grid-cols-3 border-y border-ink-100 py-7">
-            {[
-              { v: `${stats.avgQuotesPerRequest || 5}개`, l: "요청당 평균 견적" },
-              { v: `${stats.avgRating || 4.8}점`, l: "평균 만족도" },
-              { v: `${stats.completedCount.toLocaleString("ko-KR")}건`, l: "누적 완료" },
-            ].map((s, i) => (
-              <div key={s.l} className={i > 0 ? "border-l border-ink-100 pl-6 sm:pl-10" : ""}>
-                <dt className="tnum text-[26px] font-bold leading-none tracking-[-0.03em] text-ink-900 sm:text-[32px]">{s.v}</dt>
-                <dd className="t-caption mt-2.5">{s.l}</dd>
-              </div>
-            ))}
-          </dl>
-          <div className="mt-8">
+          {heroStats.length > 0 && (
+            <dl className={`grid border-y border-ink-100 py-7 ${STAT_COLS[heroStats.length]}`}>
+              {heroStats.map((s, i) => (
+                <div key={s.l} className={i > 0 ? "border-l border-ink-100 pl-6 sm:pl-10" : ""}>
+                  <dt className="tnum text-[26px] font-bold leading-none tracking-[-0.03em] text-ink-900 sm:text-[32px]">{s.v}</dt>
+                  <dd className="t-caption mt-2.5">{s.l}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+          <div className={heroStats.length > 0 ? "mt-8" : ""}>
             <QuickEstimate />
           </div>
         </div>
