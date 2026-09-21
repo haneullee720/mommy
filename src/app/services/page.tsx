@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { SERVICES } from "@/lib/catalog";
 import { manwon } from "@/lib/format";
 import { Icon } from "@/components/icons";
+import { Media } from "@/components/media";
 import { Badge, LinkButton, SectionHeading } from "@/components/ui";
 
 export const metadata: Metadata = {
@@ -29,7 +30,12 @@ export default function ServicesPage() {
       <div className="container-page pb-24">
         <div className="border-t border-ink-100">
           {SERVICES.map((s) => (
-            <section key={s.slug} className="grid gap-8 border-b border-ink-100 py-12 lg:grid-cols-[1fr_300px] lg:gap-16">
+            <section
+              key={s.slug}
+              className="grid gap-8 border-b border-ink-100 py-12 lg:grid-cols-[260px_1fr_280px] lg:gap-12"
+            >
+              <Media name={s.slug} alt={`${s.name} 시공 현장`} className="rounded" />
+
               <div>
                 <div className="flex items-center gap-3">
                   <Icon name={s.icon} className="h-6 w-6 text-ink-400" />

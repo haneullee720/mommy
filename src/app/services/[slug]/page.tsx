@@ -9,6 +9,7 @@ import { Badge, LinkButton, Stars, TierBadge } from "@/components/ui";
 import { Faq } from "@/components/faq";
 import type { ServiceSlug } from "@/lib/types";
 import { Icon } from "@/components/icons";
+import { Media } from "@/components/media";
 
 export const dynamic = "force-dynamic";
 
@@ -65,7 +66,9 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
               </div>
             </div>
 
-            <div className="card p-6">
+            <div className="card overflow-hidden">
+              <Media name={def.slug} alt={`${def.name} 시공 현장`} />
+              <div className="p-6">
               <p className="text-[13px] font-bold text-ink-400">기준 단가</p>
               <p className="tnum mt-1 text-[26px] font-bold text-ink-900">
                 {def.unit === "month" ? "월 " : "평당 "}
@@ -82,6 +85,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
                   </li>
                 ))}
               </ul>
+              </div>
             </div>
           </div>
         </div>

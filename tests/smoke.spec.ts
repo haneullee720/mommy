@@ -24,8 +24,9 @@ test.describe("공개 페이지", () => {
   test("랜딩 통계가 DB 값으로 채워진다", async ({ page }) => {
     await page.goto("/");
     // 시드에 업체 8곳이 승인 상태로 들어 있다. 0 이면 DB 연결이 끊긴 것.
-    await expect(page.getByText(/지금 \d+개 업체가 견적 대기중/)).toBeVisible();
-    const badge = await page.getByText(/지금 \d+개 업체가 견적 대기중/).innerText();
+    // 문구가 바뀌어도 깨지지 않도록 숫자 부분만 본다.
+    await expect(page.getByText(/지금 \d+개 업체/)).toBeVisible();
+    const badge = await page.getByText(/지금 \d+개 업체/).innerText();
     expect(Number(badge.match(/\d+/)![0])).toBeGreaterThan(0);
   });
 
