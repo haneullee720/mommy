@@ -10,10 +10,13 @@ import { cn } from "@/lib/cn";
 export function BeforeAfter({
   before,
   after,
+  sample = false,
   className,
 }: {
   before: React.ReactNode;
   after: React.ReactNode;
+  /** AI 생성 이미지를 쓰는 경우 — 시공 결과를 주장하는 자리라 반드시 밝힌다 */
+  sample?: boolean;
   className?: string;
 }) {
   const [pos, setPos] = useState(50);
@@ -50,6 +53,11 @@ export function BeforeAfter({
       <span className="pointer-events-none absolute right-4 top-4 rounded bg-brand-600 px-2.5 py-1 text-[11.5px] font-semibold text-white">
         청소 후
       </span>
+      {sample && (
+        <span className="pointer-events-none absolute bottom-4 right-4 rounded bg-ink-900/70 px-2 py-1 text-[11px] font-semibold text-white backdrop-blur-sm">
+          예시 이미지 · 실제 시공 결과가 아닙니다
+        </span>
+      )}
 
       <div className="pointer-events-none absolute inset-y-0 w-0.5 bg-white" style={{ left: `${pos}%` }}>
         <span className="absolute top-1/2 grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-ink-200 bg-white shadow-lift">

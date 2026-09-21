@@ -2,7 +2,6 @@ import Link from "next/link";
 import { QuickEstimate } from "@/components/quick-estimate";
 import { Faq } from "@/components/faq";
 import { Media } from "@/components/media";
-import { Illustration } from "@/components/illustrations";
 import { BeforeAfter } from "@/components/before-after";
 import { EscrowFlow } from "@/components/escrow-flow";
 import { FeeBar } from "@/components/fee-bar";
@@ -11,6 +10,7 @@ import { Icon } from "@/components/icons";
 import { LinkButton, Rating, Row, SectionHeading, TierBadge } from "@/components/ui";
 import { SERVICES, SERVICE_MAP } from "@/lib/catalog";
 import { getUsersByIds, listPartners, listRecentReviews, platformStats, readOpenFeed } from "@/lib/home";
+import { isGenerated } from "@/lib/media";
 import { manwon, timeAgo, untilDeadline } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -38,6 +38,7 @@ export default async function HomePage() {
   const partners = allPartners.slice(0, 4);
   const reviewAuthors = await getUsersByIds(reviews.map((r) => r.customerId));
   const [lead] = reviews;
+  const sampleBeforeAfter = isGenerated("before") || isGenerated("after");
 
   return (
     <>
@@ -122,8 +123,9 @@ export default async function HomePage() {
         <div className="container-page grid items-center gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
           <BeforeAfter
             className="rounded border border-ink-100"
-            before={<Illustration name="before" />}
-            after={<Illustration name="after" />}
+            sample={sampleBeforeAfter}
+            before={<Media name="before" alt="청소 전 상태" fill showBadge={false} />}
+            after={<Media name="after" alt="청소 후 상태" fill showBadge={false} />}
           />
           <div>
             <p className="t-eyebrow">Before / After</p>
@@ -295,6 +297,15 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ---------------------------------------------------------- 고지 */}
+      {sampleBeforeAfter && (
+        <div className="container-page">
+          <p className="t-caption border-t border-ink-100 pt-6">
+            카테고리 이미지는 예시이며 실제 시공 결과와 다를 수 있습니다.
+          </p>
+        </div>
+      )}
 
       {/* ---------------------------------------------------------- 마지막 CTA */}
       <section className="section-sm border-t border-ink-100">

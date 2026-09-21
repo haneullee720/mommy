@@ -14,9 +14,11 @@ import path from "node:path";
  */
 
 const DIR = path.join(process.cwd(), "public", "images");
+const MANIFEST = path.join(DIR, "generated.json");
 const EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp", ".avif"];
 
 let cache: Map<string, string> | null = null;
+let generated: Set<string> | null = null;
 
 function manifest(): Map<string, string> {
   if (cache) return cache;
@@ -43,4 +45,21 @@ export function photoSrc(name: string): string | null {
 /** 현재 등록된 사진 수 (README·점검용) */
 export function photoCount(): number {
   return manifest().size;
+}
+
+/**
+ * AI 로 생성한 이미지인지.
+ * scripts/generate-images.mjs 가 generated.json 에 키를 기록한다.
+ * 실제 시공 사진으로 바꾸고 그 키를 지우면 "예시 이미지" 표기가 사라진다.
+ */
+export function isGenerated(name: string): boolean {
+  if (!generated) {
+    try {
+      const parsed: unknown = JSON.parse(fs.readFileSync(MANIFEST, "utf8"));
+      generated = new Set(Array.isArray(parsed) ? (parsed as string[]) : []);
+    } catch {
+      generated = new Set();
+    }
+  }
+  return generated.has(name);
 }

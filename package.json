@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "seed": "node --env-file-if-exists=.env.local scripts/seed.mjs"
+    "seed": "node --env-file-if-exists=.env.local scripts/seed.mjs",
+    "images": "node --env-file-if-exists=.env.local scripts/generate-images.mjs"
   },
   "dependencies": {
     "next": "^15.5.25",
