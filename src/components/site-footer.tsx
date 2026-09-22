@@ -57,7 +57,7 @@ export function SiteFooter() {
             해당 업체에 있습니다. 다만 안전결제 예치금 보관과 분쟁 조정은 청소모아가 직접 처리합니다.
           </p>
           <p className="mt-4 text-[12.5px] text-ink-300">
-            © {new Date().getFullYear()} CheongsoMoa · 데모 목적의 샘플 데이터가 포함되어 있습니다.
+            © {new Date().getFullYear()} CheongsoMoa
           </p>
         </div>
       </div>
