@@ -28,7 +28,7 @@ export default async function NewRequestPage({
         <div className="mb-8 max-w-2xl">
           <h1 className="text-[28px] font-bold leading-tight text-ink-900 sm:text-[34px]">견적 요청서 작성</h1>
           <p className="mt-2 text-[15px] text-ink-500">
-            작성은 3분, 견적은 보통 <strong className="text-ink-800">30분 안</strong>에 도착합니다. 비교와 취소는 언제든 무료입니다.
+            작성은 3분이면 끝납니다. 요청은 <strong className="text-ink-800">3일간</strong> 열려 있고, 비교와 취소는 언제든 무료입니다.
           </p>
         </div>
         <RequestForm
