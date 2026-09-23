@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { LoginForm } from "./login-form";
-import { DemoAccounts } from "@/components/demo-accounts";
 
 export const metadata: Metadata = { title: "로그인" };
 
@@ -14,7 +13,6 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         <div className="card mt-6 p-6 shadow-soft">
           <LoginForm next={next ?? ""} />
         </div>
-        <DemoAccounts />
       </div>
     </div>
   );
