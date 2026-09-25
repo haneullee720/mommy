@@ -4,14 +4,9 @@
 export type Role = "customer" | "partner" | "admin";
 
 export type ServiceSlug =
-  | "move-in"       // 입주청소
-  | "move-out"      // 이사(퇴거)청소
-  | "stairs"        // 계단/복도청소
-  | "office"        // 사무실청소
-  | "commercial"    // 상가/매장청소
-  | "construction"  // 준공(신축)청소
-  | "home-regular"  // 가정 정기청소
-  | "special";      // 특수청소(곰팡이/폐기물 등)
+  | "move-in"  // 입주청소
+  | "stairs"   // 계단/복도청소
+  | "office";  // 상가·사무실청소
 
 export type PropertyType = "apartment" | "villa" | "officetel" | "house" | "office" | "store" | "building" | "etc";
 

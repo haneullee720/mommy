@@ -27,7 +27,7 @@ ChatGPT 웹에 직접 붙여넣고 싶을 때만 아래를 쓰세요.
 크기 1536x1024 · 저장 파일명 `hero.webp` (또는 `.jpg` / `.png`)
 
 ```
-A freshly cleaned Korean apartment living room. Sunlight streams through a large window onto a spotless floor. A simple low sofa and one potted plant, everything neatly arranged. Photorealistic interior photograph. Bright natural daylight, no people, minimal and tidy composition. Warm off-white palette with one or two muted deep-green accents. Eye-level 35mm lens, soft realistic shadows. No text, no logos, no watermark, no wide-angle distortion, no over-processed HDR.
+A freshly cleaned Korean apartment living room. Sunlight streams through a large window onto a spotless floor. A simple low sofa and one potted plant, everything neatly arranged. Photorealistic interior photograph. Bright natural daylight, no people, minimal and tidy composition. Bright off-white and pale blue palette with one or two clear blue accents. Eye-level 35mm lens, soft realistic shadows. No text, no logos, no watermark, no wide-angle distortion, no over-processed HDR.
 ```
 
 ## `move-in` — 입주청소 — 가구 없는 빈집
@@ -35,15 +35,7 @@ A freshly cleaned Korean apartment living room. Sunlight streams through a large
 크기 1024x1024 · 저장 파일명 `move-in.webp` (또는 `.jpg` / `.png`)
 
 ```
-An empty Korean apartment room with no furniture at all, immaculate flooring, spotless window frames and sills, just after a move-in cleaning. Photorealistic interior photograph. Bright natural daylight, no people, minimal and tidy composition. Warm off-white palette with one or two muted deep-green accents. Eye-level 35mm lens, soft realistic shadows. No text, no logos, no watermark, no wide-angle distortion, no over-processed HDR.
-```
-
-## `move-out` — 이사청소 — 이삿짐 박스가 놓인 빈 방
-
-크기 1024x1024 · 저장 파일명 `move-out.webp` (또는 `.jpg` / `.png`)
-
-```
-An empty Korean apartment room with a few stacked cardboard moving boxes against one wall. The floor is swept clean, the room is otherwise bare. Photorealistic interior photograph. Bright natural daylight, no people, minimal and tidy composition. Warm off-white palette with one or two muted deep-green accents. Eye-level 35mm lens, soft realistic shadows. No text, no logos, no watermark, no wide-angle distortion, no over-processed HDR.
+An empty Korean apartment room with no furniture at all, immaculate flooring, spotless window frames and sills, just after a move-in cleaning. Photorealistic interior photograph. Bright natural daylight, no people, minimal and tidy composition. Bright off-white and pale blue palette with one or two clear blue accents. Eye-level 35mm lens, soft realistic shadows. No text, no logos, no watermark, no wide-angle distortion, no over-processed HDR.
 ```
 
 ## `stairs` — 계단청소 — 공동주택 계단·복도
@@ -51,47 +43,15 @@ An empty Korean apartment room with a few stacked cardboard moving boxes against
 크기 1024x1024 · 저장 파일명 `stairs.webp` (또는 `.jpg` / `.png`)
 
 ```
-A clean stairwell and corridor of a Korean low-rise residential building. Spotless steps and handrail, dry floor, daylight from a corridor window. Photorealistic interior photograph. Bright natural daylight, no people, minimal and tidy composition. Warm off-white palette with one or two muted deep-green accents. Eye-level 35mm lens, soft realistic shadows. No text, no logos, no watermark, no wide-angle distortion, no over-processed HDR.
+A clean stairwell and corridor of a Korean low-rise residential building. Spotless steps and handrail, dry floor, daylight from a corridor window. Photorealistic interior photograph. Bright natural daylight, no people, minimal and tidy composition. Bright off-white and pale blue palette with one or two clear blue accents. Eye-level 35mm lens, soft realistic shadows. No text, no logos, no watermark, no wide-angle distortion, no over-processed HDR.
 ```
 
-## `office` — 사무실청소 — 정돈된 책상 열
+## `office` — 상가·사무실청소 — 정돈된 업무 공간
 
 크기 1024x1024 · 저장 파일명 `office.webp` (또는 `.jpg` / `.png`)
 
 ```
-A tidy small office interior with a row of empty desks and monitors, clean floor, window blinds letting in daylight. Photorealistic interior photograph. Bright natural daylight, no people, minimal and tidy composition. Warm off-white palette with one or two muted deep-green accents. Eye-level 35mm lens, soft realistic shadows. No text, no logos, no watermark, no wide-angle distortion, no over-processed HDR.
-```
-
-## `commercial` — 상가·매장청소 — 영업 전 카페 홀
-
-크기 1024x1024 · 저장 파일명 `commercial.webp` (또는 `.jpg` / `.png`)
-
-```
-The interior of a small cafe before opening hours. Chairs neatly placed at wooden tables, the counter wiped down, the floor clean and slightly reflective. Photorealistic interior photograph. Bright natural daylight, no people, minimal and tidy composition. Warm off-white palette with one or two muted deep-green accents. Eye-level 35mm lens, soft realistic shadows. No text, no logos, no watermark, no wide-angle distortion, no over-processed HDR.
-```
-
-## `construction` — 준공청소 — 인테리어 직후 현장
-
-크기 1024x1024 · 저장 파일명 `construction.webp` (또는 `.jpg` / `.png`)
-
-```
-A newly finished Korean apartment interior right after renovation. A protective floor sheet partially rolled up, a step ladder and neatly stacked materials to one side, fine dust already cleared. Photorealistic interior photograph. Bright natural daylight, no people, minimal and tidy composition. Warm off-white palette with one or two muted deep-green accents. Eye-level 35mm lens, soft realistic shadows. No text, no logos, no watermark, no wide-angle distortion, no over-processed HDR.
-```
-
-## `home-regular` — 가정 정기청소 — 생활감 있는 깔끔한 거실
-
-크기 1024x1024 · 저장 파일명 `home-regular.webp` (또는 `.jpg` / `.png`)
-
-```
-A lived-in but very tidy Korean apartment living room. A folded blanket on the sofa, a small plant on a side table, clean floor, warm afternoon light. Photorealistic interior photograph. Bright natural daylight, no people, minimal and tidy composition. Warm off-white palette with one or two muted deep-green accents. Eye-level 35mm lens, soft realistic shadows. No text, no logos, no watermark, no wide-angle distortion, no over-processed HDR.
-```
-
-## `special` — 특수청소 — 전문 장비
-
-크기 1024x1024 · 저장 파일명 `special.webp` (또는 `.jpg` / `.png`)
-
-```
-Professional cleaning equipment — a compact sprayer unit and two canisters — placed on the floor of an empty neutral interior room. Photorealistic interior photograph. Bright natural daylight, no people, minimal and tidy composition. Warm off-white palette with one or two muted deep-green accents. Eye-level 35mm lens, soft realistic shadows. No text, no logos, no watermark, no wide-angle distortion, no over-processed HDR.
+A tidy Korean commercial interior just after cleaning: a row of clean office desks with monitors on the left and a bright cafe-style counter area on the right, polished floor, large windows. No people. Photorealistic interior photograph. Bright natural daylight, no people, minimal and tidy composition. Bright off-white and pale blue palette with one or two clear blue accents. Eye-level 35mm lens, soft realistic shadows. No text, no logos, no watermark, no wide-angle distortion, no over-processed HDR.
 ```
 
 ## `after` — 청소 후 (먼저 생성할 것)
@@ -99,7 +59,7 @@ Professional cleaning equipment — a compact sprayer unit and two canisters —
 크기 1536x1024 · 저장 파일명 `after.webp` (또는 `.jpg` / `.png`)
 
 ```
-A Korean apartment room, spotless and bright after a deep cleaning. Clean floor, clean walls, sunlight from a window on the right. Viewed from the room corner at eye level. Photorealistic interior photograph. Bright natural daylight, no people, minimal and tidy composition. Warm off-white palette with one or two muted deep-green accents. Eye-level 35mm lens, soft realistic shadows. No text, no logos, no watermark, no wide-angle distortion, no over-processed HDR.
+A Korean apartment room, spotless and bright after a deep cleaning. Clean floor, clean walls, sunlight from a window on the right. Viewed from the room corner at eye level. Photorealistic interior photograph. Bright natural daylight, no people, minimal and tidy composition. Bright off-white and pale blue palette with one or two clear blue accents. Eye-level 35mm lens, soft realistic shadows. No text, no logos, no watermark, no wide-angle distortion, no over-processed HDR.
 ```
 
 ## `before` — 청소 전 (after 와 같은 구도여야 함)
@@ -107,5 +67,5 @@ A Korean apartment room, spotless and bright after a deep cleaning. Clean floor,
 크기 1536x1024 · 저장 파일명 `before.webp` (또는 `.jpg` / `.png`)
 
 ```
-The SAME Korean apartment room as a matching 'after' photo, but before cleaning: dusty floor, smudges and marks on the walls, dull flat lighting, some scattered debris in the corner. Identical camera position, identical composition and framing, viewed from the room corner at eye level with a window on the right. Photorealistic interior photograph. Bright natural daylight, no people, minimal and tidy composition. Warm off-white palette with one or two muted deep-green accents. Eye-level 35mm lens, soft realistic shadows. No text, no logos, no watermark, no wide-angle distortion, no over-processed HDR.
+The SAME Korean apartment room as a matching 'after' photo, but before cleaning: dusty floor, smudges and marks on the walls, dull flat lighting, some scattered debris in the corner. Identical camera position, identical composition and framing, viewed from the room corner at eye level with a window on the right. Photorealistic interior photograph. Bright natural daylight, no people, minimal and tidy composition. Bright off-white and pale blue palette with one or two clear blue accents. Eye-level 35mm lens, soft realistic shadows. No text, no logos, no watermark, no wide-angle distortion, no over-processed HDR.
 ```

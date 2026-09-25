@@ -28,7 +28,7 @@ const MODEL = process.env.OPENAI_IMAGE_MODEL || "gpt-image-1";
 const STYLE = [
   "Photorealistic interior photograph.",
   "Bright natural daylight, no people, minimal and tidy composition.",
-  "Warm off-white palette with one or two muted deep-green accents.",
+  "Bright off-white and pale blue palette with one or two clear blue accents.",
   "Eye-level 35mm lens, soft realistic shadows.",
   "No text, no logos, no watermark, no wide-angle distortion, no over-processed HDR.",
 ].join(" ");
@@ -49,13 +49,6 @@ const SPECS = [
       "An empty Korean apartment room with no furniture at all, immaculate flooring, spotless window frames and sills, just after a move-in cleaning.",
   },
   {
-    key: "move-out",
-    size: "1024x1024",
-    note: "이사청소 — 이삿짐 박스가 놓인 빈 방",
-    prompt:
-      "An empty Korean apartment room with a few stacked cardboard moving boxes against one wall. The floor is swept clean, the room is otherwise bare.",
-  },
-  {
     key: "stairs",
     size: "1024x1024",
     note: "계단청소 — 공동주택 계단·복도",
@@ -65,37 +58,9 @@ const SPECS = [
   {
     key: "office",
     size: "1024x1024",
-    note: "사무실청소 — 정돈된 책상 열",
+    note: "상가·사무실청소 — 정돈된 업무 공간",
     prompt:
-      "A tidy small office interior with a row of empty desks and monitors, clean floor, window blinds letting in daylight.",
-  },
-  {
-    key: "commercial",
-    size: "1024x1024",
-    note: "상가·매장청소 — 영업 전 카페 홀",
-    prompt:
-      "The interior of a small cafe before opening hours. Chairs neatly placed at wooden tables, the counter wiped down, the floor clean and slightly reflective.",
-  },
-  {
-    key: "construction",
-    size: "1024x1024",
-    note: "준공청소 — 인테리어 직후 현장",
-    prompt:
-      "A newly finished Korean apartment interior right after renovation. A protective floor sheet partially rolled up, a step ladder and neatly stacked materials to one side, fine dust already cleared.",
-  },
-  {
-    key: "home-regular",
-    size: "1024x1024",
-    note: "가정 정기청소 — 생활감 있는 깔끔한 거실",
-    prompt:
-      "A lived-in but very tidy Korean apartment living room. A folded blanket on the sofa, a small plant on a side table, clean floor, warm afternoon light.",
-  },
-  {
-    key: "special",
-    size: "1024x1024",
-    note: "특수청소 — 전문 장비",
-    prompt:
-      "Professional cleaning equipment — a compact sprayer unit and two canisters — placed on the floor of an empty neutral interior room.",
+      "A tidy Korean commercial interior just after cleaning: a row of clean office desks with monitors on the left and a bright cafe-style counter area on the right, polished floor, large windows. No people.",
   },
   {
     key: "after",

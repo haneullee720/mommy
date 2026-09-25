@@ -55,7 +55,7 @@ const partners = [];
 const PARTNER_SEED = [
   {
     email: "partner@demo.kr", ceo: "장수현", company: "클린메이트 서울",
-    biz: "214-81-33021", regions: ["서울", "경기"], services: ["move-in", "move-out", "office", "construction"],
+    biz: "214-81-33021", regions: ["서울", "경기"], services: ["move-in", "office"],
     intro: "입주·준공청소 전문 9년차. 새시 분리 세척과 후드 내부까지 기본 포함하며, 작업 전후 사진 리포트를 모든 고객에게 보내드립니다.",
     since: 2016, crew: 12, insurance: true, certs: ["소독업 신고 완료", "배상책임보험 1억", "친환경 인증 약품 사용"],
     tier: "premium", rating: 4.9, reviewCount: 148, completed: 412, response: 12, phone: "010-7788-1122",
@@ -63,7 +63,7 @@ const PARTNER_SEED = [
   },
   {
     email: "sparkle@demo.kr", ceo: "윤태경", company: "스파클 하우스",
-    biz: "312-86-44190", regions: ["서울"], services: ["move-in", "home-regular", "special"],
+    biz: "312-86-44190", regions: ["서울"], services: ["move-in"],
     intro: "여성 팀장 전담제로 운영합니다. 아이·반려동물이 있는 집 전문이며, 친환경 약품만 사용합니다.",
     since: 2019, crew: 7, insurance: true, certs: ["배상책임보험 5천만원", "아토피 안심 약품"],
     tier: "good", rating: 4.7, reviewCount: 62, completed: 187, response: 23, phone: "010-8899-2233",
@@ -71,7 +71,7 @@ const PARTNER_SEED = [
   },
   {
     email: "stairs@demo.kr", ceo: "한동석", company: "우리동네 계단관리",
-    biz: "105-92-77813", regions: ["서울", "인천"], services: ["stairs", "office", "commercial"],
+    biz: "105-92-77813", regions: ["서울", "인천"], services: ["stairs", "office"],
     intro: "빌라·오피스텔 계단 정기 관리 전문. 월 단위 도급 계약으로 관리비를 평균 20% 낮춰드립니다.",
     since: 2014, crew: 18, insurance: true, certs: ["건물위생관리업 등록", "배상책임보험 1억"],
     tier: "premium", rating: 4.8, reviewCount: 96, completed: 318, response: 31, phone: "010-9900-3344",
@@ -79,7 +79,7 @@ const PARTNER_SEED = [
   },
   {
     email: "office@demo.kr", ceo: "서정민", company: "데일리오피스 클린",
-    biz: "220-88-10245", regions: ["서울", "경기"], services: ["office", "commercial", "stairs"],
+    biz: "220-88-10245", regions: ["서울", "경기"], services: ["office", "stairs"],
     intro: "사무실 야간·새벽 청소 전문. 업무에 지장 없는 시간대에 상주·정기 인력을 배치합니다.",
     since: 2018, crew: 24, insurance: true, certs: ["배상책임보험 1억", "위생교육 이수"],
     tier: "good", rating: 4.6, reviewCount: 54, completed: 142, response: 18, phone: "010-1122-4455",
@@ -87,7 +87,7 @@ const PARTNER_SEED = [
   },
   {
     email: "newclean@demo.kr", ceo: "오현우", company: "새집처럼 청소",
-    biz: "418-30-55672", regions: ["경기", "인천"], services: ["move-in", "move-out", "construction"],
+    biz: "418-30-55672", regions: ["경기", "인천"], services: ["move-in", "stairs"],
     intro: "경기·인천 입주청소 전담. 준공 후 미세먼지 3회 제거 공정을 표준으로 운영합니다.",
     since: 2021, crew: 6, insurance: true, certs: ["배상책임보험 5천만원"],
     tier: "good", rating: 4.5, reviewCount: 31, completed: 88, response: 27, phone: "010-2233-5566",
@@ -95,23 +95,23 @@ const PARTNER_SEED = [
   },
   {
     email: "busan@demo.kr", ceo: "강민석", company: "해운대 클린스토리",
-    biz: "617-22-90013", regions: ["부산"], services: ["move-in", "office", "commercial", "home-regular"],
+    biz: "617-22-90013", regions: ["부산"], services: ["move-in", "office"],
     intro: "부산 전 지역 당일 방문 가능. 상가·매장 기름때 제거에 강점이 있습니다.",
     since: 2017, crew: 9, insurance: true, certs: ["배상책임보험 5천만원"],
     tier: "good", rating: 4.6, reviewCount: 44, completed: 121, response: 35, phone: "010-3344-6677",
     bank: { bank: "부산", number: "101-2233-4455-01", holder: "클린스토리" },
   },
   {
-    email: "special@demo.kr", ceo: "문가온", company: "리셋 특수청소",
-    biz: "511-19-30028", regions: ["서울", "경기", "인천"], services: ["special", "move-out"],
-    intro: "곰팡이 제거, 흡연 냄새 탈취, 유품 정리 전문. 작업 전 현장 실사 후 확정 견적을 드립니다.",
-    since: 2015, crew: 5, insurance: true, certs: ["폐기물처리업 등록", "소독업 신고", "배상책임보험 1억"],
+    email: "reset@demo.kr", ceo: "문가온", company: "리셋 홈케어",
+    biz: "511-19-30028", regions: ["서울", "경기", "인천"], services: ["move-in", "stairs"],
+    intro: "입주청소와 공동주택 계단 정기 관리를 함께 맡습니다. 작업 전 현장 실사 후 확정 견적을 드립니다.",
+    since: 2015, crew: 5, insurance: true, certs: ["소독업 신고", "배상책임보험 1억"],
     tier: "basic", rating: 4.4, reviewCount: 17, completed: 58, response: 44, phone: "010-4455-7788",
-    bank: { bank: "우리", number: "1002-455-667788", holder: "리셋특수청소" },
+    bank: { bank: "우리", number: "1002-455-667788", holder: "리셋홈케어" },
   },
   {
     email: "fresh@demo.kr", ceo: "배유진", company: "프레시홈 클리닝",
-    biz: "703-45-11209", regions: ["경기"], services: ["home-regular", "move-in", "office"],
+    biz: "703-45-11209", regions: ["경기"], services: ["move-in", "office"],
     intro: "수원·용인·화성 정기청소 전문. 같은 담당자가 지속 방문하도록 배정합니다.",
     since: 2022, crew: 4, insurance: false, certs: [],
     tier: "basic", rating: 4.2, reviewCount: 9, completed: 24, response: 52, phone: "010-5566-8899",
@@ -166,7 +166,7 @@ const pStairs = byEmail("stairs@demo.kr");
 const pOffice = byEmail("office@demo.kr");
 const pNew = byEmail("newclean@demo.kr");
 const pBusan = byEmail("busan@demo.kr");
-const pSpecial = byEmail("special@demo.kr");
+const pReset = byEmail("reset@demo.kr");
 
 /* ---------------------------------------------------------------- 요청·견적·주문 */
 
@@ -278,7 +278,7 @@ addQuote(r1, pNew, {
   message: "새집처럼 청소입니다. 요청하신 일정에 바로 투입 가능합니다.\n32평 기준 3인 6시간으로 진행하며, 일정을 하루만 조율해 주시면 5% 더 낮춰드릴 수 있습니다.",
   warrantyDays: 7, daysAgo: 0, hoursAgo: 2,
 });
-addQuote(r1, pSpecial, {
+addQuote(r1, pReset, {
   amount: 495000, crewSize: 2, workHours: 8, includes: ["곰팡이 집중 제거", "살균·탈취 시공", "작업 전후 사진 리포트"],
   message: "리셋 특수청소입니다. 베란다 곰팡이는 표면 제거만으로는 재발합니다.\n저희는 실리콘 교체까지 포함해 재발을 막는 방식으로 시공하며, 30일 재발 보증을 드립니다.",
   warrantyDays: 30, daysAgo: 0, hoursAgo: 1,
@@ -306,7 +306,7 @@ addOrder(r2, q2, {
 
 /* --- 3. 데모 고객의 완료 대기 건 (업체가 완료 보고 → 고객 확인 필요) --- */
 const r3 = addRequest({
-  customerId: customer.id, service: "move-out", propertyType: "villa", areaPyeong: 18,
+  customerId: customer.id, service: "move-in", propertyType: "villa", areaPyeong: 18,
   region: "서울", district: "마포구", addressDetail: "월드컵로 88, 302호",
   preferredDate: day(-2), dateFlexible: true, options: ["waste"],
   description: "퇴거 청소입니다. 소형 가구 2점 폐기 부탁드립니다.",
@@ -372,7 +372,7 @@ addQuote(r5, pOffice, {
 });
 
 const r6 = addRequest({
-  customerId: c3.id, service: "construction", propertyType: "store", areaPyeong: 28,
+  customerId: c3.id, service: "office", propertyType: "store", areaPyeong: 28,
   region: "경기", district: "성남시", addressDetail: "분당구 판교역로 166, 1층",
   preferredDate: day(3), dateFlexible: false, options: ["waste", "window"],
   description: "카페 인테리어 완료 후 준공청소입니다. 보양재와 실리콘 자국 제거 필요합니다.",
@@ -386,21 +386,21 @@ addQuote(r6, pNew, {
 });
 
 const r7 = addRequest({
-  customerId: c4.id, service: "special", propertyType: "apartment", areaPyeong: 24,
+  customerId: c4.id, service: "stairs", propertyType: "villa", areaPyeong: 24,
   region: "서울", district: "노원구", addressDetail: "동일로 1400, 502호",
   preferredDate: day(5), dateFlexible: true, options: ["mold", "sterilize"],
   description: "이전 세입자 흡연으로 냄새가 심합니다. 벽지 교체 전 탈취 시공 가능할까요?",
   contactName: "최지우", contactPhone: "010-5678-9012",
   estimateMin: 570000, estimateMax: 1200000, status: "open", daysAgo: 0, hoursAgo: 14,
 });
-addQuote(r7, pSpecial, {
+addQuote(r7, pReset, {
   amount: 680000, crewSize: 2, workHours: 10, includes: ["살균·탈취 시공", "곰팡이 집중 제거", "작업 전후 사진 리포트"],
   message: "리셋 특수청소입니다. 흡연 냄새는 벽지 교체 전 오존·광촉매 시공을 병행해야 재발하지 않습니다.\n현장 실사 후 확정 견적을 드리며, 탈취 미흡 시 1회 무상 재시공해 드립니다.",
   warrantyDays: 30, daysAgo: 0, hoursAgo: 11,
 });
 
 const r8 = addRequest({
-  customerId: c5.id, service: "commercial", propertyType: "store", areaPyeong: 22,
+  customerId: c5.id, service: "office", propertyType: "store", areaPyeong: 22,
   region: "부산", district: "해운대구", addressDetail: "구남로 20, 2층",
   preferredDate: day(2), dateFlexible: true, options: [],
   description: "식당 주방 기름때 제거 위주로 부탁드립니다. 영업 종료 후 22시 이후 가능합니다.",
@@ -427,12 +427,6 @@ const REVIEW_POOL = {
     "욕실 물때가 심했는데 깨끗하게 없어졌어요. 곰팡이도 다시 안 올라옵니다.",
     "약속 시간보다 일찍 오셨고, 마무리 점검도 같이 돌면서 해주셨습니다.",
   ],
-  "move-out": [
-    "보증금 문제없이 잘 마무리했습니다. 집주인도 만족하셨어요.",
-    "잔짐 정리랑 폐기물 배출까지 한 번에 해결됐습니다. 따로 부를 필요가 없었어요.",
-    "퇴거 전날 급하게 요청드렸는데 바로 잡아주셔서 감사했습니다.",
-    "전체적으로 깔끔했는데 베란다 배수구는 조금 아쉬웠습니다. 말씀드리니 바로 다시 봐주셨어요.",
-  ],
   stairs: [
     "매주 같은 분이 오셔서 관리해주십니다. 입주민 민원이 확실히 줄었습니다.",
     "오전 일찍 오셔서 통행에 방해가 없습니다. 난간까지 매번 닦아주세요.",
@@ -444,26 +438,9 @@ const REVIEW_POOL = {
     "탕비실이랑 화장실 관리가 눈에 띄게 좋아졌습니다. 직원들 반응이 좋아요.",
     "책상 위 집기를 건드리지 않고 정확히 표면만 닦아주셔서 좋았습니다.",
     "담당자가 바뀌어도 인수인계가 잘 되어 있어 품질 편차가 없습니다.",
-  ],
-  commercial: [
     "주방 기름때가 심했는데 깔끔하게 정리해주셨습니다. 시간 약속도 정확했어요.",
     "영업 종료 후 들어오셔서 다음 날 오픈에 전혀 지장이 없었습니다.",
     "홀 바닥 왁스까지 새로 해주셔서 매장이 훨씬 밝아 보입니다.",
-  ],
-  construction: [
-    "준공 먼지가 정말 심했는데 3회 나눠서 제거해주셨어요.",
-    "실리콘 자국이랑 보양재 테이프 자국까지 다 제거해주셨습니다.",
-    "팀장님이 체크리스트 들고 다니면서 확인하시더라고요. 믿음이 갔습니다.",
-  ],
-  "home-regular": [
-    "아이 둘 키우는 집인데 친환경 약품 쓰신다고 해서 믿고 맡겼습니다.",
-    "정리 정돈까지 해주셔서 퇴근하고 오면 집이 늘 깔끔합니다.",
-    "같은 분이 계속 오셔서 우리 집 사정을 잘 아십니다. 편해요.",
-  ],
-  special: [
-    "곰팡이가 다시 올라오지 않는지 2주 뒤에 연락까지 주셨습니다. 값어치 합니다.",
-    "흡연 냄새가 정말 심했는데 시공 후에는 거의 안 납니다.",
-    "유품 정리를 조심스럽게 진행해주셔서 감사했습니다.",
   ],
 };
 
@@ -474,7 +451,7 @@ const DISTRICTS = {
   부산: ["해운대구", "수영구", "남구", "동래구", "부산진구"],
 };
 
-const AREA_BY_SERVICE = { "move-in": [18, 42], "move-out": [12, 32], stairs: [24, 70], office: [25, 90], commercial: [14, 45], construction: [20, 60], "home-regular": [16, 40], special: [12, 34] };
+const AREA_BY_SERVICE = { "move-in": [18, 42], stairs: [24, 70], office: [25, 90] };
 
 /** 목표 평점에 수렴하는 개별 별점 배열 */
 function makeRatings(count, target) {
@@ -499,7 +476,7 @@ const HISTORY = [
   { p: pOffice, jobs: 38, reviewed: 22, target: 4.7 },
   { p: pBusan, jobs: 31, reviewed: 18, target: 4.7 },
   { p: pNew, jobs: 23, reviewed: 13, target: 4.6 },
-  { p: pSpecial, jobs: 16, reviewed: 9, target: 4.4 },
+  { p: pReset, jobs: 16, reviewed: 9, target: 4.4 },
   { p: byEmail("fresh@demo.kr"), jobs: 7, reviewed: 4, target: 4.2 },
 ];
 
@@ -527,14 +504,14 @@ for (const h of HISTORY) {
     const daysAgo = 11 + Math.round(((h.jobs - i) / h.jobs) * 320);
 
     const req = addRequest({
-      customerId: cust.id, service, propertyType: service === "office" ? "office" : service === "commercial" ? "store" : "apartment",
+      customerId: cust.id, service, propertyType: service === "office" ? "office" : service === "stairs" ? "villa" : "apartment",
       areaPyeong: area, region, district, addressDetail: "상세주소 (완료 건)",
       preferredDate: day(-daysAgo + 4), dateFlexible: true, options: [],
       description: "", contactName: cust.name, contactPhone: cust.phone,
       estimateMin: 0, estimateMax: 0, status: "settled", daysAgo,
     });
 
-    const unit = { "move-in": 14000, "move-out": 11000, stairs: 3000, office: 6500, commercial: 11000, construction: 17000, "home-regular": 9000, special: 26000 }[service];
+    const unit = { "move-in": 14000, stairs: 3000, office: 8500 }[service];
     const amount = Math.max(120000, Math.round((unit * area) / 10000) * 10000);
     req.estimateMin = Math.round(amount * 0.88);
     req.estimateMax = Math.round(amount * 1.24);

@@ -57,23 +57,6 @@ const MoveIn = (
   </Scene>
 );
 
-const MoveOut = (
-  <Scene>
-    <rect x={0} y={212} width={400} height={88} fill={C.floor} stroke="none" />
-    <path d="M0 212h400" />
-    {/* 쌓인 이사 박스 */}
-    <rect x={64} y={136} width={116} height={76} fill={C.soft} />
-    <path d="M122 136v76" stroke={C.brand} />
-    <rect x={82} y={80} width={80} height={56} fill="#fff" />
-    <path d="M122 80v56" stroke={C.brand} />
-    <rect x={198} y={154} width={88} height={58} fill="#fff" />
-    <path d="M242 154v58" stroke={C.brand} />
-    {/* 테이프 롤 */}
-    <circle cx={330} cy={192} r={22} fill={C.brandSoft} />
-    <circle cx={330} cy={192} r={8} fill={C.bg} />
-  </Scene>
-);
-
 const Stairs = (
   <Scene>
     {/* 계단 단면 */}
@@ -106,78 +89,6 @@ const Office = (
     {/* 휴지통 */}
     <path d="M330 194h34l-4 42h-26z" fill="#fff" />
     <path d="M326 194h42" />
-  </Scene>
-);
-
-const Commercial = (
-  <Scene>
-    <rect x={0} y={244} width={400} height={56} fill={C.floor} stroke="none" />
-    <path d="M0 244h400" />
-    {/* 차양 */}
-    <path d="M44 96h312l-18 42H62z" fill={C.brandSoft} />
-    <path d="M110 96l-10 42M176 96l-10 42M242 96l-10 42M308 96l-10 42" stroke={C.brand} strokeWidth={1.8} />
-    {/* 간판 */}
-    <rect x={128} y={48} width={144} height={36} fill="#fff" />
-    {/* 매장 전면 */}
-    <rect x={62} y={138} width={128} height={106} fill={C.light} />
-    <rect x={216} y={138} width={122} height={106} fill="#fff" />
-    <path d="M277 138v106" />
-    <circle cx={264} cy={196} r={4} fill={C.line} stroke="none" />
-  </Scene>
-);
-
-const Construction = (
-  <Scene>
-    <rect x={0} y={222} width={400} height={78} fill={C.floor} stroke="none" />
-    <path d="M0 222h400" />
-    {/* 보양 시트 */}
-    <path d="M28 244h190" stroke={C.mid} strokeDasharray="10 8" />
-    {/* 사다리 */}
-    <path d="M96 222 128 66M188 222 156 66" />
-    <path d="M120 186h48M128 148h40M136 110h32" />
-    {/* 페인트통과 롤러 */}
-    <path d="M244 180h46l-5 42h-36z" fill={C.brandSoft} />
-    <path d="M242 180h50" />
-    <path d="M330 222V138h22" />
-    <rect x={316} y={112} width={48} height={26} fill={C.brand} stroke={C.line} />
-  </Scene>
-);
-
-const HomeRegular = (
-  <Scene>
-    <rect x={0} y={216} width={400} height={84} fill={C.floor} stroke="none" />
-    <path d="M0 216h400" />
-    <Window x={246} y={46} w={112} h={96} />
-    {/* 소파 */}
-    <path d="M42 156h150v60H42z" fill="#fff" />
-    <path d="M42 176h150" />
-    <path d="M30 168h12v48H30zM192 168h12v48h-12z" fill={C.brandSoft} />
-    {/* 러그 */}
-    <ellipse cx={150} cy={252} rx={104} ry={22} fill={C.soft} />
-    {/* 화분 */}
-    <path d="M280 216v-34" />
-    <path d="M262 182h36l-5 34h-26z" fill={C.brandSoft} />
-    <path d="M280 182c0-20 12-30 26-30-2 20-10 30-26 30z" fill={C.brand} stroke={C.line} />
-  </Scene>
-);
-
-const Special = (
-  <Scene>
-    <rect x={0} y={226} width={400} height={74} fill={C.floor} stroke="none" />
-    <path d="M0 226h400" />
-    {/* 곰팡이 벽면 */}
-    <rect x={40} y={52} width={148} height={174} fill="#fff" />
-    <circle cx={78} cy={98} r={11} fill={C.mid} stroke="none" />
-    <circle cx={106} cy={124} r={7} fill={C.mid} stroke="none" />
-    <circle cx={72} cy={144} r={6} fill={C.mid} stroke="none" />
-    <circle cx={134} cy={92} r={5} fill={C.mid} stroke="none" />
-    {/* 분사 장비 */}
-    <rect x={252} y={140} width={68} height={86} fill={C.brandSoft} />
-    <path d="M252 164h68" />
-    <path d="M286 140v-24h34" />
-    <path d="M320 98h30v22h-30z" fill={C.brand} stroke={C.line} />
-    {/* 분사 표시 */}
-    <path d="M226 104h-18M232 88l-16-8M232 120l-16 8" stroke={C.brand} />
   </Scene>
 );
 
@@ -235,13 +146,8 @@ const After = (
 
 const SERVICE_SCENES: Record<ServiceSlug, React.ReactNode> = {
   "move-in": MoveIn,
-  "move-out": MoveOut,
   stairs: Stairs,
   office: Office,
-  commercial: Commercial,
-  construction: Construction,
-  "home-regular": HomeRegular,
-  special: Special,
 };
 
 export type IllustrationName = ServiceSlug | "hero" | "before" | "after";

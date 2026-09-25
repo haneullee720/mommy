@@ -148,7 +148,7 @@ export default async function HomePage() {
             desc="공간에 맞는 맞춤형 청소 서비스로 더 깨끗한 일상을 만들어드립니다."
           />
 
-          <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {SERVICES.map((s) => (
               <li key={s.slug}>
                 <Link href={`/services/${s.slug}`} className="card card-hover group block h-full overflow-hidden">
