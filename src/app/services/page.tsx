@@ -34,7 +34,7 @@ export default function ServicesPage() {
               key={s.slug}
               className="grid gap-8 border-b border-ink-100 py-12 lg:grid-cols-[260px_1fr_280px] lg:gap-12"
             >
-              <Media name={s.slug} alt={`${s.name} 시공 현장`} className="rounded" />
+              <Media name={s.slug} alt={`${s.name} 대상 공간`} className="rounded" />
 
               <div>
                 <div className="flex items-center gap-3">

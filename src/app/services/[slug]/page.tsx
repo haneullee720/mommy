@@ -67,7 +67,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
             </div>
 
             <div className="card overflow-hidden">
-              <Media name={def.slug} alt={`${def.name} 시공 현장`} />
+              <Media name={def.slug} alt={`${def.name} 대상 공간`} />
               <div className="p-6">
               <p className="text-[13px] font-bold text-ink-400">기준 단가</p>
               <p className="tnum mt-1 text-[26px] font-bold text-ink-900">

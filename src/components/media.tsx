@@ -5,6 +5,9 @@ import { Illustration, type IllustrationName } from "./illustrations";
 /**
  * 이미지 자리.
  * public/images/<name>.jpg 가 있으면 사진을, 없으면 같은 이름의 일러스트를 그린다.
+ *
+ * alt 는 장면을 그대로 적는다. 카테고리 사진에 "시공 현장" 같은 말을 쓰면
+ * 우리가 실제로 작업한 곳이라는 주장이 되므로 쓰지 않는다.
  */
 export function Media({
   name,
