@@ -24,7 +24,7 @@ export function EscrowFlow({ tone = "light" }: { tone?: "light" | "dark" }) {
               aria-hidden
               className={cn(
                 "absolute left-[23px] top-12 h-[calc(100%-16px)] w-px lg:left-12 lg:top-6 lg:h-px lg:w-[calc(100%-56px)]",
-                dark ? "bg-white/20" : "bg-ink-200",
+                dark ? "bg-white/35" : "bg-ink-200",
               )}
             />
           )}
@@ -33,10 +33,10 @@ export function EscrowFlow({ tone = "light" }: { tone?: "light" | "dark" }) {
               "relative z-10 grid h-12 w-12 shrink-0 place-items-center rounded-full border",
               n.highlight
                 ? dark
-                  ? "border-brand-300 bg-brand-300 text-ink-900"
+                  ? "border-white bg-white text-brand-700"
                   : "border-brand-600 bg-brand-600 text-white"
                 : dark
-                  ? "border-white/25 bg-ink-900 text-ink-300"
+                  ? "border-white/40 bg-white/15 text-white"
                   : "border-ink-200 bg-white text-ink-500",
             )}
           >
@@ -44,7 +44,7 @@ export function EscrowFlow({ tone = "light" }: { tone?: "light" | "dark" }) {
           </span>
           <div className="lg:mt-5">
             <p className={cn("text-[15px] font-semibold", dark ? "text-white" : "text-ink-900")}>{n.label}</p>
-            <p className={cn("mt-1 text-[13px]", dark ? "text-ink-400" : "text-ink-500")}>{n.sub}</p>
+            <p className={cn("mt-1 text-[13px]", dark ? "text-brand-100" : "text-ink-500")}>{n.sub}</p>
           </div>
         </li>
       ))}

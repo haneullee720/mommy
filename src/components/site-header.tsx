@@ -17,7 +17,7 @@ export async function SiteHeader() {
   const home = user?.role === "partner" ? "/partner" : user?.role === "admin" ? "/admin" : "/my";
 
   return (
-    <header className="sticky top-0 z-50 border-b border-ink-100 bg-ink-25/90 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 border-b border-ink-100 bg-white/90 backdrop-blur-md">
       <div className="container-page flex h-[72px] items-center justify-between gap-6">
         <div className="flex items-center gap-10">
           <Logo />
@@ -26,7 +26,7 @@ export async function SiteHeader() {
               <Link
                 key={l.href}
                 href={l.href}
-                className="text-[14px] font-medium text-ink-500 transition-colors hover:text-ink-900"
+                className="text-[14px] font-semibold text-ink-600 transition-colors hover:text-brand-600"
               >
                 {l.label}
               </Link>
@@ -53,7 +53,7 @@ export async function SiteHeader() {
           )}
           <Link
             href="/request/new"
-            className="hidden h-10 items-center rounded-md bg-ink-900 px-4 text-[14px] font-semibold text-white transition-colors hover:bg-brand-700 sm:inline-flex"
+            className="hidden h-10 items-center rounded-xl bg-brand-600 px-4 text-[14px] font-bold text-white shadow-soft transition-colors hover:bg-brand-700 sm:inline-flex"
           >
             무료 견적받기
           </Link>

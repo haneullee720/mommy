@@ -9,14 +9,14 @@ import type { ServiceSlug } from "@/lib/types";
  */
 
 const C = {
-  bg: "#F2F0EC",
-  floor: "#E6E4E0",
-  soft: "#D9D6D1",
-  mid: "#B4B2AE",
-  line: "#26262A",
-  brand: "#1C5C46",
-  brandSoft: "#BFCFC6",
-  light: "#FBF6E8",
+  bg: "#EFF7FF",
+  floor: "#DBECFE",
+  soft: "#D7DFEB",
+  mid: "#B4C0D3",
+  line: "#1F2B3D",
+  brand: "#1B73E8",
+  brandSoft: "#BFDFFE",
+  light: "#F7FBFF",
 };
 
 function Scene({ children, viewBox = "0 0 400 300" }: { children: React.ReactNode; viewBox?: string }) {
