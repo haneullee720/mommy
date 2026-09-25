@@ -78,7 +78,7 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <Media name="hero" alt="청소를 마친 밝은 거실" ratio="16 / 9" eager className="animate-rise rounded" />
+          <Media name="hero" alt="햇빛이 드는 거실에서 청소하는 모습" ratio="16 / 9" eager className="animate-rise rounded" />
         </div>
 
         <div className="container-page mt-14">
